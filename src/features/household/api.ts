@@ -43,9 +43,22 @@ export async function createHousehold(name: string): Promise<Household> {
   return household
 }
 
+// crypto.randomUUID() only exists in a secure context (HTTPS or localhost);
+// on a plain-HTTP LAN address (e.g. testing from a phone against a dev
+// server) it's undefined. This doesn't need to be cryptographically random —
+// it's a short-lived code shared in person — so avoid the dependency.
+function randomCode(length: number): string {
+  const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789' // no 0/O/1/I
+  let code = ''
+  for (let i = 0; i < length; i++) {
+    code += alphabet[Math.floor(Math.random() * alphabet.length)]
+  }
+  return code
+}
+
 /** Generates a short-lived invite code for the caller's household. */
 export async function createInvite(householdId: string): Promise<string> {
-  const code = crypto.randomUUID().slice(0, 8).toUpperCase()
+  const code = randomCode(8)
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
 
   const { error } = await supabase
