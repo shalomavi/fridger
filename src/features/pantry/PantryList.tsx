@@ -17,11 +17,7 @@ export function PantryList({ householdId }: { householdId: string }) {
           className="flex items-center justify-between rounded-lg bg-slate-800 px-4 py-3"
         >
           <span className="text-slate-100">{item.name}</span>
-          {(item.quantity || item.unit) && (
-            <span className="text-sm text-slate-500">
-              {item.quantity ?? ''} {item.unit ?? ''}
-            </span>
-          )}
+          {item.amount && <span className="text-sm text-slate-500">{item.amount}</span>}
         </li>
       ))}
     </ul>

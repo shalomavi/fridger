@@ -47,8 +47,9 @@ splitting). One concern per file under `features/*`.
 - Never bypass RLS from the client. The Edge Function is the only place that
   may run with elevated privilege, and it must check household membership
   itself before touching anything.
-- No unit-conversion table. No ingredient taxonomy. `quantity`/`unit` are
-  free text and nullable — do not build validation that forces a number.
+- No unit-conversion table. No ingredient taxonomy. `amount` is a single
+  free-text field, nullable, no number+unit split — do not build validation
+  that forces a number or a unit picker.
 - Name normalization is `lowercase + trim + collapse whitespace`, nothing
   more. Do not add English singularization/stemming — it corrupts Hebrew
   input, and this app takes mixed Hebrew/English entry.

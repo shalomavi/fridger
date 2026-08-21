@@ -11,7 +11,8 @@ export function useShoppingList(householdId: string) {
   const query = useQuery({ queryKey: key, queryFn: () => listShoppingItems(householdId) })
 
   const addItem = useMutation({
-    mutationFn: (name: string) => addShoppingItem(householdId, name),
+    mutationFn: ({ name, amount }: { name: string; amount?: string }) =>
+      addShoppingItem(householdId, name, amount),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 

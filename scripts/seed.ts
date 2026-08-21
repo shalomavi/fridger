@@ -23,35 +23,34 @@ if (!url || !serviceKey) {
 
 const supabase = createClient(url, serviceKey)
 
-const items: { name: string; quantity: number | null; unit: string | null }[] = [
-  { name: 'Chicken breast', quantity: 500, unit: 'g' },
-  { name: 'עגבניות', quantity: 6, unit: null },
-  { name: 'Milk', quantity: 1, unit: 'L' },
-  { name: 'ביצים', quantity: 12, unit: null },
-  { name: 'Rice', quantity: 1, unit: 'kg' },
-  { name: 'מלפפון', quantity: 4, unit: null },
-  { name: 'Onion', quantity: 3, unit: null },
-  { name: 'שמן זית', quantity: null, unit: null },
-  { name: 'Garlic', quantity: 1, unit: 'head' },
-  { name: 'גבינה צהובה', quantity: 200, unit: 'g' },
-  { name: 'Pasta', quantity: 500, unit: 'g' },
-  { name: 'לחם', quantity: 1, unit: 'loaf' },
-  { name: 'Butter', quantity: 200, unit: 'g' },
-  { name: 'תפוחי אדמה', quantity: 5, unit: null },
-  { name: 'Bell pepper', quantity: 2, unit: null },
-  { name: 'יוגורט', quantity: 4, unit: null },
-  { name: 'Canned tomatoes', quantity: 2, unit: 'cans' },
-  { name: 'קמח', quantity: 1, unit: 'kg' },
-  { name: 'Lemon', quantity: 3, unit: null },
-  { name: 'תבלינים מעורבים', quantity: null, unit: null },
+const items: { name: string; amount: string | null }[] = [
+  { name: 'Chicken breast', amount: '500g' },
+  { name: 'עגבניות', amount: '6' },
+  { name: 'Milk', amount: '1L' },
+  { name: 'ביצים', amount: '12' },
+  { name: 'Rice', amount: '1kg' },
+  { name: 'מלפפון', amount: '4' },
+  { name: 'Onion', amount: '3' },
+  { name: 'שמן זית', amount: null },
+  { name: 'Garlic', amount: '1 head' },
+  { name: 'גבינה צהובה', amount: '200g' },
+  { name: 'Pasta', amount: '500g' },
+  { name: 'לחם', amount: '1 loaf' },
+  { name: 'Butter', amount: '200g' },
+  { name: 'תפוחי אדמה', amount: '5' },
+  { name: 'Bell pepper', amount: '2' },
+  { name: 'יוגורט', amount: '4' },
+  { name: 'Canned tomatoes', amount: '2 cans' },
+  { name: 'קמח', amount: '1kg' },
+  { name: 'Lemon', amount: '3' },
+  { name: 'תבלינים מעורבים', amount: null },
 ]
 
 async function main() {
   const rows = items.map((item) => ({
     household_id: householdId,
     name: item.name,
-    quantity: item.quantity,
-    unit: item.unit,
+    amount: item.amount,
     status: 'available' as const,
   }))
 

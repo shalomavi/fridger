@@ -9,15 +9,13 @@ export type PurchasableItem = {
   id: string
   household_id: string
   name: string
-  quantity: number | null
-  unit: string | null
+  amount: string | null
 }
 
 export type NewPantryItem = {
   household_id: string
   name: string
-  quantity: number | null
-  unit: string | null
+  amount: string | null
   source_item_id: string
   status: 'available'
 }
@@ -26,8 +24,7 @@ export function purchaseItem(item: PurchasableItem): NewPantryItem {
   return {
     household_id: item.household_id,
     name: item.name,
-    quantity: item.quantity,
-    unit: item.unit,
+    amount: item.amount,
     source_item_id: item.id,
     status: 'available',
   }

@@ -5,8 +5,7 @@ export type ShoppingItem = {
   id: string
   household_id: string
   name: string
-  quantity: number | null
-  unit: string | null
+  amount: string | null
   status: 'pending' | 'purchased'
   added_by: string | null
   purchased_at: string | null
@@ -23,8 +22,12 @@ export async function listShoppingItems(householdId: string): Promise<ShoppingIt
   return data
 }
 
-/** Free text only — quantity/unit are deliberately not asked for up front. See CLAUDE.md. */
-export async function addShoppingItem(householdId: string, name: string): Promise<void> {
+/** `amount` is free text and optional — no unit picker, no number parsing. See CLAUDE.md. */
+export async function addShoppingItem(
+  householdId: string,
+  name: string,
+  amount?: string,
+): Promise<void> {
   const {
     data: { user },
   } = await supabase.auth.getUser()
@@ -32,6 +35,7 @@ export async function addShoppingItem(householdId: string, name: string): Promis
   const { error } = await supabase.from('shopping_items').insert({
     household_id: householdId,
     name: name.trim(),
+    amount: amount?.trim() || null,
     added_by: user?.id ?? null,
   })
   if (error) throw error
