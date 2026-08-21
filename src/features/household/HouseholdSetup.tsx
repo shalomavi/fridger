@@ -2,6 +2,18 @@ import { useState } from 'react'
 import { createHousehold, joinHousehold } from './api'
 import { useInvalidateHousehold } from './useHousehold'
 
+// PostgrestError isn't `instanceof Error`, so pull its message out explicitly
+// rather than falling back to a generic string that hides the real cause.
+function describeError(e: unknown): string {
+  console.error('HouseholdSetup error:', e)
+  if (e instanceof Error) return e.message
+  if (e && typeof e === 'object') {
+    const anyE = e as Record<string, unknown>
+    return String(anyE.message ?? anyE.error_description ?? anyE.hint ?? JSON.stringify(e))
+  }
+  return String(e)
+}
+
 /** Shown once, to whichever of the two users signs up first (create) and
  * second (join with the code the first user shares). */
 export function HouseholdSetup() {
@@ -19,7 +31,7 @@ export function HouseholdSetup() {
       await createHousehold(name.trim() || 'Our household')
       invalidate()
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Something went wrong')
+      setError(describeError(e))
     } finally {
       setBusy(false)
     }
@@ -32,7 +44,7 @@ export function HouseholdSetup() {
       await joinHousehold(code)
       invalidate()
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Something went wrong')
+      setError(describeError(e))
     } finally {
       setBusy(false)
     }
