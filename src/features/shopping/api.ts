@@ -1,4 +1,5 @@
 import { supabase } from '@/shared/supabase'
+import { purchaseItem } from '@/domain/purchaseItem'
 
 export type ShoppingItem = {
   id: string
@@ -36,13 +37,38 @@ export async function addShoppingItem(householdId: string, name: string): Promis
   if (error) throw error
 }
 
-export async function setShoppingItemStatus(
-  id: string,
-  status: ShoppingItem['status'],
-): Promise<void> {
+/**
+ * The shopping -> pantry transition (§1/§3 of the plan): the shopping row is
+ * kept, marked purchased, for history — a new pantry row is created rather
+ * than the old one being moved.
+ */
+export async function markPurchased(item: ShoppingItem): Promise<void> {
+  const { error: pantryError } = await supabase.from('pantry_items').insert(purchaseItem(item))
+  if (pantryError) throw pantryError
+
   const { error } = await supabase
     .from('shopping_items')
-    .update({ status, purchased_at: status === 'purchased' ? new Date().toISOString() : null })
-    .eq('id', id)
+    .update({ status: 'purchased', purchased_at: new Date().toISOString() })
+    .eq('id', item.id)
+  if (error) throw error
+}
+
+/**
+ * Undo a mis-tap. Only removes the pantry row if it's still untouched
+ * ('available') — if it's already been consumed, the shopping item stays
+ * purchased rather than silently reviving something that's gone.
+ */
+export async function undoPurchase(item: ShoppingItem): Promise<void> {
+  const { error: pantryError } = await supabase
+    .from('pantry_items')
+    .delete()
+    .eq('source_item_id', item.id)
+    .eq('status', 'available')
+  if (pantryError) throw pantryError
+
+  const { error } = await supabase
+    .from('shopping_items')
+    .update({ status: 'pending', purchased_at: null })
+    .eq('id', item.id)
   if (error) throw error
 }
