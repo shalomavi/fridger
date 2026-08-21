@@ -1,4 +1,5 @@
 import { supabase } from '@/shared/supabase'
+import type { Language } from '@/shared/i18n'
 
 export type Meal = {
   name: string
@@ -15,10 +16,11 @@ export type SuggestResponse = {
 
 export async function suggestMeals(
   householdId: string,
+  lang: Language,
   regenerate = false,
 ): Promise<SuggestResponse> {
   const { data, error } = await supabase.functions.invoke('suggest-meals', {
-    body: { householdId, regenerate },
+    body: { householdId, lang, regenerate },
   })
   if (error) throw error
   return data

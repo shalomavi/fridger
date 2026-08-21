@@ -2,8 +2,10 @@ import { BrowserRouter, Routes, Route, Navigate, NavLink, Outlet } from 'react-r
 import { useSession, signOut } from '@/features/auth/useSession'
 import { LoginForm } from '@/features/auth/LoginForm'
 import { useHousehold, type Household } from '@/features/household/useHousehold'
+import { useLanguage } from '@/features/household/useLanguage'
 import { HouseholdSetup } from '@/features/household/HouseholdSetup'
 import { InviteButton } from '@/features/household/InviteButton'
+import { LanguageToggle } from '@/features/household/LanguageToggle'
 import { ShoppingList } from '@/features/shopping/ShoppingList'
 import { PantryList } from '@/features/pantry/PantryList'
 import { MealsScreen } from '@/features/meals/MealsScreen'
@@ -15,16 +17,21 @@ function tabClass({ isActive }: { isActive: boolean }) {
 }
 
 function Layout({ household, email }: { household: Household; email: string | undefined }) {
+  const { lang, t } = useLanguage()
+
   return (
-    <div className="min-h-dvh bg-slate-900 p-6 text-slate-100">
-      <header className="mb-6 flex items-start justify-between">
+    <div dir={lang === 'he' ? 'rtl' : 'ltr'} className="min-h-dvh bg-slate-900 p-6 text-slate-100">
+      <header className="mb-6 flex items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-teal-400">{household.name}</h1>
           <p className="text-xs text-slate-500">{email}</p>
         </div>
-        <button onClick={() => signOut()} className="text-sm text-slate-400">
-          Sign out
-        </button>
+        <div className="flex flex-col items-end gap-2">
+          <LanguageToggle />
+          <button onClick={() => signOut()} className="text-sm text-slate-400">
+            {t('signOut')}
+          </button>
+        </div>
       </header>
 
       <div className="mb-6">
@@ -33,13 +40,13 @@ function Layout({ household, email }: { household: Household; email: string | un
 
       <nav className="mb-6 flex gap-2">
         <NavLink to="/" end className={tabClass}>
-          Shopping list
+          {t('tabShopping')}
         </NavLink>
         <NavLink to="/pantry" className={tabClass}>
-          Pantry
+          {t('tabPantry')}
         </NavLink>
         <NavLink to="/meals" className={tabClass}>
-          Meals
+          {t('tabMeals')}
         </NavLink>
       </nav>
 
