@@ -3,12 +3,14 @@ import { suggestMeals, type Meal } from './api'
 import { listPantryItems, consumeItem } from '@/features/pantry/api'
 import { pantryQueryKey } from '@/features/pantry/usePantry'
 import { matchUsedIngredients } from '@/domain/matchIngredients'
+import type { Language } from '@/shared/i18n'
 
 export function useSuggestions(householdId: string) {
   const queryClient = useQueryClient()
 
   const suggest = useMutation({
-    mutationFn: (regenerate: boolean) => suggestMeals(householdId, regenerate),
+    mutationFn: ({ regenerate, lang }: { regenerate: boolean; lang: Language }) =>
+      suggestMeals(householdId, lang, regenerate),
   })
 
   const cookedThis = useMutation({

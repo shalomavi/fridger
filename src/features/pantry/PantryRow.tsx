@@ -1,13 +1,17 @@
 import { useRef, useState } from 'react'
 import type { PantryItem } from './api'
+import { useLanguage } from '@/features/household/useLanguage'
 
 const SWIPE_THRESHOLD = 72
 
 /**
  * Swipe left to consume, or tap the "Used" button — the swipe alone isn't
- * accessible input, so both exist and do the same thing.
+ * accessible input, so both exist and do the same thing. The gesture stays
+ * a physical left-drag in both languages; only the label text follows the
+ * language setting (RTL mirrors the whole layout, but not this gesture).
  */
 export function PantryRow({ item, onConsume }: { item: PantryItem; onConsume: () => void }) {
+  const { t } = useLanguage()
   const [dragX, setDragX] = useState(0)
   const dragging = useRef<{ startX: number } | null>(null)
 
@@ -35,7 +39,7 @@ export function PantryRow({ item, onConsume }: { item: PantryItem; onConsume: ()
   return (
     <li className="relative overflow-hidden rounded-lg">
       <div className="absolute inset-0 flex items-center justify-end bg-rose-700 px-4 text-sm text-white">
-        Used
+        {t('used')}
       </div>
       <div
         onPointerDown={onPointerDown}
@@ -52,7 +56,7 @@ export function PantryRow({ item, onConsume }: { item: PantryItem; onConsume: ()
             onClick={onConsume}
             className="rounded-md bg-slate-700 px-2 py-1 text-xs text-slate-300"
           >
-            Used
+            {t('used')}
           </button>
         </div>
       </div>

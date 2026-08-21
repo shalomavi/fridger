@@ -2,8 +2,10 @@ import { useState } from 'react'
 import { useSuggestions } from './useSuggestions'
 import { SuggestionCard } from './SuggestionCard'
 import type { Meal } from './api'
+import { useLanguage } from '@/features/household/useLanguage'
 
 export function MealsScreen({ householdId }: { householdId: string }) {
+  const { t, lang } = useLanguage()
   const { suggest, cookedThis } = useSuggestions(householdId)
   const [cookedName, setCookedName] = useState<string | null>(null)
 
@@ -15,30 +17,24 @@ export function MealsScreen({ householdId }: { householdId: string }) {
   return (
     <div className="space-y-6">
       <button
-        onClick={() => suggest.mutate(false)}
+        onClick={() => suggest.mutate({ regenerate: false, lang })}
         disabled={suggest.isPending}
         className="w-full rounded-lg bg-teal-600 py-3 font-medium text-white disabled:opacity-50"
       >
-        {suggest.isPending ? 'Thinking…' : 'Suggest a meal'}
+        {suggest.isPending ? t('thinking') : t('suggestAMeal')}
       </button>
 
-      {suggest.isError && (
-        <p className="text-sm text-rose-400">
-          Couldn't get suggestions right now. Try again in a moment.
-        </p>
-      )}
+      {suggest.isError && <p className="text-sm text-rose-400">{t('suggestError')}</p>}
 
       {suggest.data?.fallback && (
-        <p className="text-sm text-amber-400">
-          Couldn't reach the AI — here are a few staples instead.
-        </p>
+        <p className="text-sm text-amber-400">{t('fallbackNotice')}</p>
       )}
 
       {suggest.data?.cached && (
         <p className="text-xs text-slate-500">
-          Same as last time — your pantry hasn't changed.{' '}
-          <button onClick={() => suggest.mutate(true)} className="underline">
-            Get new ideas
+          {t('cachedNotice')}{' '}
+          <button onClick={() => suggest.mutate({ regenerate: true, lang })} className="underline">
+            {t('getNewIdeas')}
           </button>
         </p>
       )}

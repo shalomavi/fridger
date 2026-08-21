@@ -1,6 +1,7 @@
 import { supabase } from '@/shared/supabase'
 
-export type Household = { id: string; name: string }
+export type Language = 'en' | 'he'
+export type Household = { id: string; name: string; language: Language }
 
 /** The caller's household, or null if they haven't created/joined one yet. */
 export async function getMyHousehold(): Promise<Household | null> {
@@ -14,11 +15,17 @@ export async function getMyHousehold(): Promise<Household | null> {
 
   const { data: household, error } = await supabase
     .from('households')
-    .select('id, name')
+    .select('id, name, language')
     .eq('id', membership.household_id)
     .single()
   if (error) throw error
   return household
+}
+
+/** Shared setting — both members see the app and get suggestions in the same language. */
+export async function setHouseholdLanguage(householdId: string, language: Language): Promise<void> {
+  const { error } = await supabase.from('households').update({ language }).eq('id', householdId)
+  if (error) throw error
 }
 
 /** Creates a household and makes the current user its first (owner) member. */
@@ -31,7 +38,7 @@ export async function createHousehold(name: string): Promise<Household> {
   const { data: household, error } = await supabase
     .from('households')
     .insert({ name, created_by: user.id })
-    .select('id, name')
+    .select('id, name, language')
     .single()
   if (error) throw error
 
@@ -99,7 +106,7 @@ export async function joinHousehold(code: string): Promise<Household> {
 
   const { data: household, error: householdError } = await supabase
     .from('households')
-    .select('id, name')
+    .select('id, name, language')
     .eq('id', invite.household_id)
     .single()
   if (householdError) throw householdError

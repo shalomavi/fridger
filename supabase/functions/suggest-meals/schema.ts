@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+export type Language = 'en' | 'he'
+
 export const MealSchema = z.object({
   name: z.string().min(1),
   uses: z.array(z.string()),
@@ -22,11 +24,12 @@ export function normalizeName(raw: string): string {
   return raw.trim().toLowerCase().replace(/\s+/g, ' ')
 }
 
-/** Cache key: the sorted set of normalized pantry names, not the full
- * contents — buying one onion shouldn't invalidate every suggestion. */
-export async function pantryHash(pantryNames: string[]): Promise<string> {
+/** Cache key: the sorted set of normalized pantry names plus the language —
+ * buying one onion shouldn't invalidate every suggestion, but switching
+ * language must, or you'd get back yesterday's language's answer. */
+export async function pantryHash(pantryNames: string[], lang: Language): Promise<string> {
   const normalized = [...new Set(pantryNames.map(normalizeName))].sort()
-  const bytes = new TextEncoder().encode(normalized.join('|'))
+  const bytes = new TextEncoder().encode(`${lang}|${normalized.join('|')}`)
   const digest = await crypto.subtle.digest('SHA-256', bytes)
   return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('')
 }

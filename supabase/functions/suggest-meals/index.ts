@@ -5,7 +5,7 @@ import '@supabase/functions-js/edge-runtime.d.ts'
 import { createClient } from '@supabase/supabase-js'
 import { callGemini } from './gemini.ts'
 import { FALLBACK_MEALS } from './prompt.ts'
-import { SuggestionsSchema, pantryHash } from './schema.ts'
+import { SuggestionsSchema, pantryHash, type Language } from './schema.ts'
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
@@ -37,10 +37,12 @@ Deno.serve(async (req) => {
 
   let householdId: string
   let regenerate = false
+  let lang: Language = 'en'
   try {
     const body = await req.json()
     householdId = body.householdId
     regenerate = Boolean(body.regenerate)
+    if (body.lang === 'he' || body.lang === 'en') lang = body.lang
     if (!householdId) throw new Error('missing householdId')
   } catch {
     return json({ error: 'Expected JSON body with householdId' }, 400)
@@ -90,7 +92,7 @@ Deno.serve(async (req) => {
   if (pantryError) return json({ error: 'Could not read pantry' }, 500)
 
   const pantryNames = (pantryRows ?? []).map((r) => r.name as string)
-  const hash = await pantryHash(pantryNames)
+  const hash = await pantryHash(pantryNames, lang)
 
   if (!regenerate) {
     const { data: cached } = await admin
@@ -118,12 +120,12 @@ Deno.serve(async (req) => {
 
   let payload: { meals: unknown[]; fallback: boolean }
   try {
-    const raw = await callGemini(GEMINI_API_KEY, pantryNames, recentMealNames)
+    const raw = await callGemini(GEMINI_API_KEY, pantryNames, recentMealNames, lang)
     const parsed = SuggestionsSchema.parse(raw)
     payload = { meals: parsed.meals, fallback: false }
   } catch (err) {
     console.error('Gemini call/parse failed, falling back:', err)
-    payload = { meals: FALLBACK_MEALS, fallback: true }
+    payload = { meals: FALLBACK_MEALS[lang], fallback: true }
   }
 
   await admin

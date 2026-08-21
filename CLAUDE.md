@@ -58,6 +58,13 @@ splitting). One concern per file under `features/*`.
 - Don't build a real rule-based recipe engine as the LLM fallback. The
   fallback is a fixed list of ~3 staples, or an honest "try again" — see the
   plan, §5.
+- Language is per-household (`households.language`, 'en'|'he'), not per-user
+  or browser-detected. UI copy lives in `src/shared/i18n.ts` (one flat
+  dictionary) — read it with `useLanguage()` from the household feature, not
+  a new i18n library. Auth/household-setup screens run before a household
+  exists and stay English-only by design. In the LLM prompt, `uses` must stay
+  the pantry's exact strings regardless of language — translating them would
+  break `matchUsedIngredients()`'s exact-match "cooked this" deduction.
 
 ## Build order
 

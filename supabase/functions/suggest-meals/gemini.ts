@@ -1,4 +1,5 @@
 import { SYSTEM_INSTRUCTION, buildPrompt } from './prompt.ts'
+import type { Language } from './schema.ts'
 
 const MODEL = 'gemini-2.5-flash'
 
@@ -32,6 +33,7 @@ export async function callGemini(
   apiKey: string,
   pantryNames: string[],
   recentMealNames: string[],
+  lang: Language,
 ): Promise<unknown> {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`
 
@@ -40,7 +42,7 @@ export async function callGemini(
     headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
     body: JSON.stringify({
       systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
-      contents: [{ parts: [{ text: buildPrompt(pantryNames, recentMealNames) }] }],
+      contents: [{ parts: [{ text: buildPrompt(pantryNames, recentMealNames, lang) }] }],
       generationConfig: {
         responseMimeType: 'application/json',
         responseSchema: RESPONSE_SCHEMA,
