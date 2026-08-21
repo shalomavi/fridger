@@ -67,6 +67,7 @@ export function PantryRow({
           />
           <button
             onClick={onConsume}
+            onPointerDown={(e) => e.stopPropagation()}
             className="rounded-md bg-slate-700 px-2 py-1 text-xs text-slate-300"
           >
             {t('used')}
