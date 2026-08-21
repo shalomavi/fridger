@@ -36,6 +36,10 @@ If you only enforce two things in review, enforce these.
   is done.
 - `npx vitest run` — domain unit tests.
 - `npx supabase ...` — CLI for migrations/functions (once linked).
+- `npm run build && netlify deploy --prod --dir=dist` — deploy to production
+  (https://fridger-app.netlify.app). Frontend only; the Edge Function
+  deploys separately via `npx supabase functions deploy suggest-meals`, and
+  migrations via `npx supabase db push`.
 
 ## Size limits
 
