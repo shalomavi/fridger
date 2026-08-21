@@ -35,7 +35,7 @@ export function AmountEditor({
       <button
         onClick={startEditing}
         onPointerDown={(e) => e.stopPropagation()}
-        className="text-sm text-slate-500 underline decoration-dotted underline-offset-2"
+        className="text-sm text-text-subtle underline decoration-dotted underline-offset-2"
       >
         {amount || placeholder}
       </button>
@@ -57,7 +57,7 @@ export function AmountEditor({
         }
         if (e.key === 'Escape') setEditing(false)
       }}
-      className="w-20 rounded bg-slate-700 px-2 py-0.5 text-sm text-slate-100 outline-none"
+      className="w-20 rounded bg-surface-muted px-2 py-0.5 text-sm text-text outline-none"
     />
   )
 }

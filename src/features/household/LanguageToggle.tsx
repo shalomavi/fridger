@@ -10,13 +10,13 @@ export function LanguageToggle() {
   const { lang, setLanguage } = useLanguage()
 
   return (
-    <div className="flex overflow-hidden rounded-lg border border-slate-700 text-xs">
+    <div className="flex overflow-hidden rounded-lg border border-surface-muted text-xs">
       {OPTIONS.map((opt) => (
         <button
           key={opt.value}
           onClick={() => setLanguage.mutate(opt.value)}
           disabled={setLanguage.isPending}
-          className={`px-2 py-1 ${lang === opt.value ? 'bg-teal-600 text-white' : 'text-slate-400'}`}
+          className={`px-2 py-1 ${lang === opt.value ? 'bg-primary text-white' : 'text-text-muted'}`}
         >
           {opt.label}
         </button>

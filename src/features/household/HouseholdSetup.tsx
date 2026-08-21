@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { createHousehold, joinHousehold } from './api'
 import { useInvalidateHousehold } from './useHousehold'
+import { Button } from '@/shared/ui/Button'
+import { statusTextClass } from '@/shared/ui/Badge'
 
 // PostgrestError isn't `instanceof Error`, so pull its message out explicitly
 // rather than falling back to a generic string that hides the real cause.
@@ -51,26 +53,20 @@ export function HouseholdSetup() {
   }
 
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-slate-900 p-6">
-      <div className="w-full max-w-sm space-y-4 text-slate-100">
-        <h1 className="text-center text-2xl font-semibold text-teal-400">
+    <div className="flex min-h-dvh items-center justify-center bg-bg p-6">
+      <div className="w-full max-w-sm space-y-4 text-text">
+        <h1 className="text-center text-2xl font-semibold text-primary-accent">
           Set up your household
         </h1>
 
         {mode === 'choose' && (
           <div className="space-y-3">
-            <button
-              onClick={() => setMode('create')}
-              className="w-full rounded-lg bg-teal-600 py-3 font-medium text-white"
-            >
+            <Button onClick={() => setMode('create')} className="w-full py-3">
               Start a new household
-            </button>
-            <button
-              onClick={() => setMode('join')}
-              className="w-full rounded-lg bg-slate-800 py-3 font-medium text-slate-100"
-            >
+            </Button>
+            <Button variant="secondary" onClick={() => setMode('join')} className="w-full py-3">
               I have an invite code
-            </button>
+            </Button>
           </div>
         )}
 
@@ -80,15 +76,11 @@ export function HouseholdSetup() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Household name"
-              className="w-full rounded-lg bg-slate-800 px-4 py-3 outline-none focus:ring-2 focus:ring-teal-500"
+              className="w-full rounded-lg bg-surface px-4 py-3 outline-none focus:ring-2 focus:ring-primary-ring"
             />
-            <button
-              onClick={submitCreate}
-              disabled={busy}
-              className="w-full rounded-lg bg-teal-600 py-3 font-medium text-white disabled:opacity-50"
-            >
+            <Button onClick={submitCreate} disabled={busy} className="w-full py-3">
               {busy ? '…' : 'Create'}
-            </button>
+            </Button>
           </div>
         )}
 
@@ -99,25 +91,21 @@ export function HouseholdSetup() {
               onChange={(e) => setCode(e.target.value)}
               placeholder="Invite code"
               autoCapitalize="characters"
-              className="w-full rounded-lg bg-slate-800 px-4 py-3 uppercase outline-none focus:ring-2 focus:ring-teal-500"
+              className="w-full rounded-lg bg-surface px-4 py-3 uppercase outline-none focus:ring-2 focus:ring-primary-ring"
             />
-            <button
-              onClick={submitJoin}
-              disabled={busy || !code.trim()}
-              className="w-full rounded-lg bg-teal-600 py-3 font-medium text-white disabled:opacity-50"
-            >
+            <Button onClick={submitJoin} disabled={busy || !code.trim()} className="w-full py-3">
               {busy ? '…' : 'Join'}
-            </button>
+            </Button>
           </div>
         )}
 
         {mode !== 'choose' && (
-          <button onClick={() => setMode('choose')} className="w-full text-sm text-slate-400">
+          <button onClick={() => setMode('choose')} className="w-full text-sm text-text-muted">
             Back
           </button>
         )}
 
-        {error && <p className="text-sm text-rose-400">{error}</p>}
+        {error && <p className={`text-sm ${statusTextClass('danger')}`}>{error}</p>}
       </div>
     </div>
   )
