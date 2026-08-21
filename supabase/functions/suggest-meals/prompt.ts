@@ -16,6 +16,8 @@ export function buildPrompt(
   pantryNames: string[],
   recentMealNames: string[],
   lang: Language,
+  preferences: string | null,
+  expiringSoonNames: string[],
 ): string {
   const pantryList = pantryNames.length > 0 ? pantryNames.join(', ') : '(nothing logged yet)'
 
@@ -24,7 +26,16 @@ export function buildPrompt(
       ? `\n\nDon't repeat these recently suggested meals: ${recentMealNames.join(', ')}.`
       : ''
 
-  return `Pantry contents: ${pantryList}${avoidLine}
+  const expiringLine =
+    expiringSoonNames.length > 0
+      ? `\n\nThese are expiring soon — prefer meals that use them: ${expiringSoonNames.join(', ')}.`
+      : ''
+
+  const preferencesLine = preferences?.trim()
+    ? `\n\nHousehold preferences and restrictions — follow these strictly (e.g. allergies): ${preferences.trim()}`
+    : ''
+
+  return `Pantry contents: ${pantryList}${expiringLine}${preferencesLine}${avoidLine}
 
 Suggest 3 different meals. For each one, give:
 - name: the meal's name, written in ${LANGUAGE_NAME[lang]}

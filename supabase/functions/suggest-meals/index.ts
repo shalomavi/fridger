@@ -5,7 +5,7 @@ import '@supabase/functions-js/edge-runtime.d.ts'
 import { createClient } from '@supabase/supabase-js'
 import { callGemini } from './gemini.ts'
 import { FALLBACK_MEALS } from './prompt.ts'
-import { SuggestionsSchema, pantryHash, type Language } from './schema.ts'
+import { SuggestionsSchema, pantryHash, isExpiringSoon, type Language } from './schema.ts'
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
@@ -38,11 +38,13 @@ Deno.serve(async (req) => {
   let householdId: string
   let regenerate = false
   let lang: Language = 'en'
+  let preferences: string | null = null
   try {
     const body = await req.json()
     householdId = body.householdId
     regenerate = Boolean(body.regenerate)
     if (body.lang === 'he' || body.lang === 'en') lang = body.lang
+    if (typeof body.preferences === 'string') preferences = body.preferences
     if (!householdId) throw new Error('missing householdId')
   } catch {
     return json({ error: 'Expected JSON body with householdId' }, 400)
@@ -85,14 +87,17 @@ Deno.serve(async (req) => {
 
   const { data: pantryRows, error: pantryError } = await admin
     .from('pantry_items')
-    .select('name')
+    .select('name, expires_at')
     .eq('household_id', householdId)
     .eq('status', 'available')
     .limit(PANTRY_CAP)
   if (pantryError) return json({ error: 'Could not read pantry' }, 500)
 
   const pantryNames = (pantryRows ?? []).map((r) => r.name as string)
-  const hash = await pantryHash(pantryNames, lang)
+  const expiringSoonNames = (pantryRows ?? [])
+    .filter((r) => isExpiringSoon(r.expires_at as string | null))
+    .map((r) => r.name as string)
+  const hash = await pantryHash(pantryNames, lang, preferences)
 
   if (!regenerate) {
     const { data: cached } = await admin
@@ -120,7 +125,14 @@ Deno.serve(async (req) => {
 
   let payload: { meals: unknown[]; fallback: boolean }
   try {
-    const raw = await callGemini(GEMINI_API_KEY, pantryNames, recentMealNames, lang)
+    const raw = await callGemini(
+      GEMINI_API_KEY,
+      pantryNames,
+      recentMealNames,
+      lang,
+      preferences,
+      expiringSoonNames,
+    )
     const parsed = SuggestionsSchema.parse(raw)
     payload = { meals: parsed.meals, fallback: false }
   } catch (err) {

@@ -33,6 +33,13 @@ const dict = {
     alsoNeed: "You'll also need:",
     cookedThis: 'Cooked this',
     language: 'Language',
+    tabSettings: 'Settings',
+    preferencesLabel: 'Household preferences',
+    preferencesPlaceholder: 'Allergies, dislikes, kosher/vegetarian, "no oven"…',
+    save: 'Save',
+    expiryPlaceholder: '+ expiry',
+    expiresOn: 'Expires',
+    expiringSoon: 'Expiring soon',
   },
   he: {
     signOut: 'התנתקות',
@@ -59,6 +66,13 @@ const dict = {
     alsoNeed: 'תצטרכו גם:',
     cookedThis: 'בישלתי את זה',
     language: 'שפה',
+    tabSettings: 'הגדרות',
+    preferencesLabel: 'העדפות משק הבית',
+    preferencesPlaceholder: 'אלרגיות, מאכלים שלא אוהבים, כשר/צמחוני, "אין תנור"…',
+    save: 'שמירה',
+    expiryPlaceholder: '+ תפוגה',
+    expiresOn: 'בתוקף עד',
+    expiringSoon: 'עומד לפוג בקרוב',
   },
 } as const satisfies Record<Language, Record<string, string>>
 

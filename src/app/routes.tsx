@@ -9,6 +9,7 @@ import { LanguageToggle } from '@/features/household/LanguageToggle'
 import { ShoppingList } from '@/features/shopping/ShoppingList'
 import { PantryList } from '@/features/pantry/PantryList'
 import { MealsScreen } from '@/features/meals/MealsScreen'
+import { HouseholdPreferences } from '@/features/settings/HouseholdPreferences'
 
 function tabClass({ isActive }: { isActive: boolean }) {
   return `flex-1 rounded-lg py-2 text-center text-sm font-medium ${
@@ -48,6 +49,9 @@ function Layout({ household, email }: { household: Household; email: string | un
         <NavLink to="/meals" className={tabClass}>
           {t('tabMeals')}
         </NavLink>
+        <NavLink to="/settings" className={tabClass}>
+          {t('tabSettings')}
+        </NavLink>
       </nav>
 
       <Outlet />
@@ -72,6 +76,7 @@ function HomeScreen({ email }: { email: string | undefined }) {
         <Route path="/" element={<ShoppingList householdId={household.id} />} />
         <Route path="/pantry" element={<PantryList householdId={household.id} />} />
         <Route path="/meals" element={<MealsScreen householdId={household.id} />} />
+        <Route path="/settings" element={<HouseholdPreferences />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

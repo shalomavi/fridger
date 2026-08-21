@@ -1,7 +1,7 @@
 import { supabase } from '@/shared/supabase'
 
 export type Language = 'en' | 'he'
-export type Household = { id: string; name: string; language: Language }
+export type Household = { id: string; name: string; language: Language; preferences: string | null }
 
 /** The caller's household, or null if they haven't created/joined one yet. */
 export async function getMyHousehold(): Promise<Household | null> {
@@ -15,7 +15,7 @@ export async function getMyHousehold(): Promise<Household | null> {
 
   const { data: household, error } = await supabase
     .from('households')
-    .select('id, name, language')
+    .select('id, name, language, preferences')
     .eq('id', membership.household_id)
     .single()
   if (error) throw error
@@ -25,6 +25,18 @@ export async function getMyHousehold(): Promise<Household | null> {
 /** Shared setting — both members see the app and get suggestions in the same language. */
 export async function setHouseholdLanguage(householdId: string, language: Language): Promise<void> {
   const { error } = await supabase.from('households').update({ language }).eq('id', householdId)
+  if (error) throw error
+}
+
+/** Free text fed into the LLM prompt: allergies, dislikes, "no oven", etc. */
+export async function setHouseholdPreferences(
+  householdId: string,
+  preferences: string,
+): Promise<void> {
+  const { error } = await supabase
+    .from('households')
+    .update({ preferences: preferences.trim() || null })
+    .eq('id', householdId)
   if (error) throw error
 }
 
@@ -38,7 +50,7 @@ export async function createHousehold(name: string): Promise<Household> {
   const { data: household, error } = await supabase
     .from('households')
     .insert({ name, created_by: user.id })
-    .select('id, name, language')
+    .select('id, name, language, preferences')
     .single()
   if (error) throw error
 
@@ -106,7 +118,7 @@ export async function joinHousehold(code: string): Promise<Household> {
 
   const { data: household, error: householdError } = await supabase
     .from('households')
-    .select('id, name, language')
+    .select('id, name, language, preferences')
     .eq('id', invite.household_id)
     .single()
   if (householdError) throw householdError
