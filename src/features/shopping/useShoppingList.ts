@@ -1,5 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { addShoppingItem, listShoppingItems, markPurchased, undoPurchase, type ShoppingItem } from './api'
+import {
+  addShoppingItem,
+  listShoppingItems,
+  markPurchased,
+  undoPurchase,
+  updateShoppingItemAmount,
+  type ShoppingItem,
+} from './api'
 import { pantryQueryKey } from '@/features/pantry/usePantry'
 
 const queryKey = (householdId: string) => ['shopping-items', householdId] as const
@@ -41,5 +48,22 @@ export function useShoppingList(householdId: string) {
     },
   })
 
-  return { ...query, addItem, toggleItem }
+  const updateAmount = useMutation({
+    mutationFn: ({ id, amount }: { id: string; amount: string | null }) =>
+      updateShoppingItemAmount(id, amount),
+    onMutate: async ({ id, amount }) => {
+      await queryClient.cancelQueries({ queryKey: key })
+      const previous = queryClient.getQueryData<ShoppingItem[]>(key)
+      queryClient.setQueryData<ShoppingItem[]>(key, (items) =>
+        items?.map((i) => (i.id === id ? { ...i, amount } : i)),
+      )
+      return { previous }
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previous) queryClient.setQueryData(key, context.previous)
+    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
+  })
+
+  return { ...query, addItem, toggleItem, updateAmount }
 }

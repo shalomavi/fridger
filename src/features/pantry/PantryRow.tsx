@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import type { PantryItem } from './api'
 import { useLanguage } from '@/features/household/useLanguage'
+import { AmountEditor } from '@/shared/ui/AmountEditor'
 
 const SWIPE_THRESHOLD = 72
 
@@ -10,7 +11,15 @@ const SWIPE_THRESHOLD = 72
  * a physical left-drag in both languages; only the label text follows the
  * language setting (RTL mirrors the whole layout, but not this gesture).
  */
-export function PantryRow({ item, onConsume }: { item: PantryItem; onConsume: () => void }) {
+export function PantryRow({
+  item,
+  onConsume,
+  onUpdateAmount,
+}: {
+  item: PantryItem
+  onConsume: () => void
+  onUpdateAmount: (amount: string | null) => void
+}) {
   const { t } = useLanguage()
   const [dragX, setDragX] = useState(0)
   const dragging = useRef<{ startX: number } | null>(null)
@@ -51,7 +60,11 @@ export function PantryRow({ item, onConsume }: { item: PantryItem; onConsume: ()
       >
         <span className="text-slate-100">{item.name}</span>
         <div className="flex items-center gap-3">
-          {item.amount && <span className="text-sm text-slate-500">{item.amount}</span>}
+          <AmountEditor
+            amount={item.amount}
+            onSave={onUpdateAmount}
+            placeholder={t('amountPlaceholder')}
+          />
           <button
             onClick={onConsume}
             className="rounded-md bg-slate-700 px-2 py-1 text-xs text-slate-300"
