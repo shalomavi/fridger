@@ -28,3 +28,5 @@ All six planned slices are done: shared list, purchase→pantry, consume, LLM
 suggestions, household preferences/expiry, and polish (merging, offline
 reads). Plus a Hebrew/English language toggle and inline amount/expiry
 editing beyond the original plan. See `CLAUDE.md` for details.
+
+Verified: auto-deploy connected via GitHub 2026-08-21.
