@@ -30,7 +30,7 @@ export async function createHousehold(name: string): Promise<Household> {
 
   const { data: household, error } = await supabase
     .from('households')
-    .insert({ name })
+    .insert({ name, created_by: user.id })
     .select('id, name')
     .single()
   if (error) throw error
