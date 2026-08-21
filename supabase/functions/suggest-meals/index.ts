@@ -14,14 +14,25 @@ const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY')!
 const DAILY_LIMIT = 20
 const PANTRY_CAP = 60
 
+// The browser calls this cross-origin (the app's own domain -> the
+// functions.supabase.co domain), so every response — including the
+// preflight OPTIONS and every error path below — needs these headers, not
+// just the success path.
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+}
+
 function json(body: unknown, status = 200) {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...CORS_HEADERS },
   })
 }
 
 Deno.serve(async (req) => {
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS_HEADERS })
   if (req.method !== 'POST') return json({ error: 'POST only' }, 405)
 
   let householdId: string
