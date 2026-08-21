@@ -52,7 +52,7 @@ export function PantryRow({
 
   return (
     <li className="relative overflow-hidden rounded-lg">
-      <div className="absolute inset-0 flex items-center justify-end bg-rose-700 px-4 text-sm text-white">
+      <div className="absolute inset-0 flex items-center justify-end bg-danger-fill px-4 text-sm text-white">
         {t('used')}
       </div>
       <div
@@ -62,10 +62,10 @@ export function PantryRow({
         onPointerCancel={onPointerUp}
         style={{ transform: `translateX(${dragX}px)` }}
         className={`relative flex touch-pan-y flex-wrap items-center justify-between gap-x-3 gap-y-1 px-4 py-3 transition-transform ${
-          soon ? 'bg-slate-800 ring-1 ring-inset ring-amber-500/40' : 'bg-slate-800'
+          soon ? 'bg-surface ring-1 ring-inset ring-warning-ring/40' : 'bg-surface'
         }`}
       >
-        <span className="text-slate-100">{item.name}</span>
+        <span className="text-text">{item.name}</span>
         <div className="flex items-center gap-3">
           <ExpiryEditor
             expiresAt={item.expires_at}
@@ -80,7 +80,7 @@ export function PantryRow({
           <button
             onClick={onConsume}
             onPointerDown={(e) => e.stopPropagation()}
-            className="rounded-md bg-slate-700 px-2 py-1 text-xs text-slate-300"
+            className="rounded-md bg-surface-muted px-2 py-1 text-xs text-text-soft"
           >
             {t('used')}
           </button>

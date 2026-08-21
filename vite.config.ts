@@ -15,6 +15,8 @@ export default defineConfig({
         name: 'Fridger',
         short_name: 'Fridger',
         description: 'Shared shopping list, pantry, and meal ideas.',
+        // must match --color-primary / --color-bg in src/index.css (PWA
+        // manifest is outside CSS, so this can't reference the token directly)
         theme_color: '#0f766e',
         background_color: '#0f172a',
         display: 'standalone',

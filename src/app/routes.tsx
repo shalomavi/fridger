@@ -13,7 +13,7 @@ import { HouseholdPreferences } from '@/features/settings/HouseholdPreferences'
 
 function tabClass({ isActive }: { isActive: boolean }) {
   return `flex-1 rounded-lg py-2 text-center text-sm font-medium ${
-    isActive ? 'bg-teal-600 text-white' : 'bg-slate-800 text-slate-400'
+    isActive ? 'bg-primary text-white' : 'bg-surface text-text-muted'
   }`
 }
 
@@ -21,15 +21,15 @@ function Layout({ household, email }: { household: Household; email: string | un
   const { lang, t } = useLanguage()
 
   return (
-    <div dir={lang === 'he' ? 'rtl' : 'ltr'} className="min-h-dvh bg-slate-900 p-6 text-slate-100">
+    <div dir={lang === 'he' ? 'rtl' : 'ltr'} className="min-h-dvh bg-bg p-6 text-text">
       <header className="mb-6 flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-teal-400">{household.name}</h1>
-          <p className="text-xs text-slate-500">{email}</p>
+          <h1 className="text-2xl font-semibold text-primary-accent">{household.name}</h1>
+          <p className="text-xs text-text-subtle">{email}</p>
         </div>
         <div className="flex flex-col items-end gap-2">
           <LanguageToggle />
-          <button onClick={() => signOut()} className="text-sm text-slate-400">
+          <button onClick={() => signOut()} className="text-sm text-text-muted">
             {t('signOut')}
           </button>
         </div>
@@ -63,7 +63,7 @@ function HomeScreen({ email }: { email: string | undefined }) {
   const { data: household, isLoading } = useHousehold()
 
   if (isLoading) {
-    return <div className="min-h-dvh bg-slate-900" />
+    return <div className="min-h-dvh bg-bg" />
   }
 
   if (!household) {
@@ -87,7 +87,7 @@ export function AppRoutes() {
   const { session, loading } = useSession()
 
   if (loading) {
-    return <div className="min-h-dvh bg-slate-900" />
+    return <div className="min-h-dvh bg-bg" />
   }
 
   if (!session) {

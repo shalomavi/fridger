@@ -1,5 +1,33 @@
 @import 'tailwindcss';
 
+/* Semantic color tokens, aliased to Tailwind's built-in slate/teal/amber/rose
+ * scales so there's one source of truth. Dark-mode-only app (see
+ * color-scheme below), so no light-theme variants are needed. Generates
+ * utilities automatically: bg-bg, text-text, bg-primary, text-warning, etc. */
+@theme {
+  /* surfaces */
+  --color-bg: var(--color-slate-900);
+  --color-surface: var(--color-slate-800);
+  --color-surface-muted: var(--color-slate-700);
+
+  /* text */
+  --color-text: var(--color-slate-100);
+  --color-text-soft: var(--color-slate-300);
+  --color-text-muted: var(--color-slate-400);
+  --color-text-subtle: var(--color-slate-500);
+
+  /* brand / primary action */
+  --color-primary: var(--color-teal-600);
+  --color-primary-accent: var(--color-teal-400);
+  --color-primary-ring: var(--color-teal-500);
+
+  /* status */
+  --color-warning: var(--color-amber-400);
+  --color-warning-ring: var(--color-amber-500);
+  --color-danger: var(--color-rose-400);
+  --color-danger-fill: var(--color-rose-700);
+}
+
 :root {
   color-scheme: dark;
 }
@@ -12,6 +40,6 @@ body,
 
 body {
   margin: 0;
-  background: #0f172a;
+  background: var(--color-bg);
   overscroll-behavior-y: none;
 }

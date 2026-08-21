@@ -3,6 +3,7 @@ import { AddItemInput } from './AddItemInput'
 import type { ShoppingItem } from './api'
 import { useLanguage } from '@/features/household/useLanguage'
 import { AmountEditor } from '@/shared/ui/AmountEditor'
+import { Surface } from '@/shared/ui/Surface'
 
 function Row({
   item,
@@ -17,24 +18,24 @@ function Row({
 }) {
   const purchased = item.status === 'purchased'
   return (
-    <li className="flex items-center gap-2 rounded-lg bg-slate-800 pe-4">
+    <Surface as="li" className="flex items-center gap-2 pe-4">
       <button
         onClick={onToggle}
         className="flex flex-1 items-center gap-3 px-4 py-3 text-start"
       >
         <span
           className={`h-5 w-5 flex-none rounded-full border-2 ${
-            purchased ? 'border-teal-500 bg-teal-500' : 'border-slate-500'
+            purchased ? 'border-primary-ring bg-primary-ring' : 'border-text-subtle'
           }`}
         />
         <span
-          className={`flex-1 ${purchased ? 'text-slate-500 line-through' : 'text-slate-100'}`}
+          className={`flex-1 ${purchased ? 'text-text-subtle line-through' : 'text-text'}`}
         >
           {item.name}
         </span>
       </button>
       <AmountEditor amount={item.amount} onSave={onUpdateAmount} placeholder={amountPlaceholder} />
-    </li>
+    </Surface>
   )
 }
 
@@ -61,17 +62,17 @@ export function ShoppingList({ householdId }: { householdId: string }) {
     <div className="space-y-6">
       <AddItemInput onAdd={(name, amount) => addItem.mutate({ name, amount })} />
 
-      {isLoading && <p className="text-slate-500">{t('loading')}</p>}
+      {isLoading && <p className="text-text-subtle">{t('loading')}</p>}
 
       {!isLoading && pending.length === 0 && purchased.length === 0 && (
-        <p className="text-slate-500">{t('nothingOnList')}</p>
+        <p className="text-text-subtle">{t('nothingOnList')}</p>
       )}
 
       {pending.length > 0 && <ul className="space-y-2">{pending.map(row)}</ul>}
 
       {purchased.length > 0 && (
         <div>
-          <p className="mb-2 text-xs uppercase tracking-wide text-slate-500">{t('checkedOff')}</p>
+          <p className="mb-2 text-xs uppercase tracking-wide text-text-subtle">{t('checkedOff')}</p>
           <ul className="space-y-2">{purchased.map(row)}</ul>
         </div>
       )}

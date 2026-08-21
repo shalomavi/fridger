@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query'
 import { setHouseholdPreferences } from '@/features/household/api'
 import { useHousehold, useInvalidateHousehold } from '@/features/household/useHousehold'
 import { useLanguage } from '@/features/household/useLanguage'
+import { Button } from '@/shared/ui/Button'
 
 export function HouseholdPreferences() {
   const { t } = useLanguage()
@@ -29,7 +30,7 @@ export function HouseholdPreferences() {
 
   return (
     <div className="space-y-2">
-      <label className="block text-sm text-slate-400">{t('preferencesLabel')}</label>
+      <label className="block text-sm text-text-muted">{t('preferencesLabel')}</label>
       <textarea
         value={value}
         onChange={(e) => {
@@ -38,15 +39,11 @@ export function HouseholdPreferences() {
         }}
         placeholder={t('preferencesPlaceholder')}
         rows={4}
-        className="w-full resize-none rounded-lg bg-slate-800 px-4 py-3 text-slate-100 outline-none focus:ring-2 focus:ring-teal-500"
+        className="w-full resize-none rounded-lg bg-surface px-4 py-3 text-text outline-none focus:ring-2 focus:ring-primary-ring"
       />
-      <button
-        onClick={() => save.mutate(value)}
-        disabled={!dirty || save.isPending}
-        className="rounded-lg bg-teal-600 px-5 py-2 text-sm font-medium text-white disabled:opacity-50"
-      >
+      <Button onClick={() => save.mutate(value)} disabled={!dirty || save.isPending} className="px-5 py-2 text-sm">
         {save.isPending ? '…' : t('save')}
-      </button>
+      </Button>
     </div>
   )
 }

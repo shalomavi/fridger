@@ -6,10 +6,10 @@ export function PantryList({ householdId }: { householdId: string }) {
   const { t } = useLanguage()
   const { data: items, isLoading, consume, updateAmount, updateExpiry } = usePantry(householdId)
 
-  if (isLoading) return <p className="text-slate-500">{t('loading')}</p>
+  if (isLoading) return <p className="text-text-subtle">{t('loading')}</p>
 
   if (!items || items.length === 0) {
-    return <p className="text-slate-500">{t('pantryEmpty')}</p>
+    return <p className="text-text-subtle">{t('pantryEmpty')}</p>
   }
 
   return (

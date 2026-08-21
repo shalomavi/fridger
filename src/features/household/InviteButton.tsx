@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { createInvite } from './api'
 import { useLanguage } from './useLanguage'
+import { Surface } from '@/shared/ui/Surface'
 
 /** Generates a fresh invite code on demand and shows it for the partner to type in. */
 export function InviteButton({ householdId }: { householdId: string }) {
@@ -19,15 +20,15 @@ export function InviteButton({ householdId }: { householdId: string }) {
 
   if (code) {
     return (
-      <div className="rounded-lg bg-slate-800 px-4 py-3 text-center">
-        <p className="text-xs text-slate-400">{t('inviteShareHint')}</p>
-        <p className="text-2xl font-mono tracking-widest text-teal-400">{code}</p>
-      </div>
+      <Surface className="px-4 py-3 text-center">
+        <p className="text-xs text-text-muted">{t('inviteShareHint')}</p>
+        <p className="text-2xl font-mono tracking-widest text-primary-accent">{code}</p>
+      </Surface>
     )
   }
 
   return (
-    <button onClick={generate} disabled={busy} className="text-sm text-slate-400 underline">
+    <button onClick={generate} disabled={busy} className="text-sm text-text-muted underline">
       {busy ? '…' : t('invitePartner')}
     </button>
   )

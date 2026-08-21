@@ -4,6 +4,8 @@ import { SuggestionCard } from './SuggestionCard'
 import type { Meal } from './api'
 import { useLanguage } from '@/features/household/useLanguage'
 import { useHousehold } from '@/features/household/useHousehold'
+import { Button } from '@/shared/ui/Button'
+import { statusTextClass } from '@/shared/ui/Badge'
 
 export function MealsScreen({ householdId }: { householdId: string }) {
   const { t, lang } = useLanguage()
@@ -22,22 +24,18 @@ export function MealsScreen({ householdId }: { householdId: string }) {
 
   return (
     <div className="space-y-6">
-      <button
-        onClick={() => requestSuggestion(false)}
-        disabled={suggest.isPending}
-        className="w-full rounded-lg bg-teal-600 py-3 font-medium text-white disabled:opacity-50"
-      >
+      <Button onClick={() => requestSuggestion(false)} disabled={suggest.isPending} className="w-full py-3">
         {suggest.isPending ? t('thinking') : t('suggestAMeal')}
-      </button>
+      </Button>
 
-      {suggest.isError && <p className="text-sm text-rose-400">{t('suggestError')}</p>}
+      {suggest.isError && <p className={`text-sm ${statusTextClass('danger')}`}>{t('suggestError')}</p>}
 
       {suggestion.data?.fallback && (
-        <p className="text-sm text-amber-400">{t('fallbackNotice')}</p>
+        <p className={`text-sm ${statusTextClass('warning')}`}>{t('fallbackNotice')}</p>
       )}
 
       {suggestion.data?.cached && (
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-text-subtle">
           {t('cachedNotice')}{' '}
           <button onClick={() => requestSuggestion(true)} className="underline">
             {t('getNewIdeas')}
