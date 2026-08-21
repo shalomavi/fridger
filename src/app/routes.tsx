@@ -6,6 +6,7 @@ import { useLanguage } from '@/features/household/useLanguage'
 import { HouseholdSetup } from '@/features/household/HouseholdSetup'
 import { InviteButton } from '@/features/household/InviteButton'
 import { LanguageToggle } from '@/features/household/LanguageToggle'
+import { ThemeToggle } from '@/shared/ui/ThemeToggle'
 import { ShoppingList } from '@/features/shopping/ShoppingList'
 import { PantryList } from '@/features/pantry/PantryList'
 import { MealsScreen } from '@/features/meals/MealsScreen'
@@ -21,14 +22,20 @@ function Layout({ household, email }: { household: Household; email: string | un
   const { lang, t } = useLanguage()
 
   return (
-    <div dir={lang === 'he' ? 'rtl' : 'ltr'} className="min-h-dvh bg-bg p-6 text-text">
+    <div
+      dir={lang === 'he' ? 'rtl' : 'ltr'}
+      className={`min-h-dvh bg-bg p-6 text-text ${lang === 'he' ? 'font-ui-he' : 'font-ui-en'}`}
+    >
       <header className="mb-6 flex items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold text-primary-accent">{household.name}</h1>
           <p className="text-xs text-text-subtle">{email}</p>
         </div>
         <div className="flex flex-col items-end gap-2">
-          <LanguageToggle />
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <LanguageToggle />
+          </div>
           <button onClick={() => signOut()} className="text-sm text-text-muted">
             {t('signOut')}
           </button>

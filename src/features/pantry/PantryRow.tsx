@@ -24,7 +24,7 @@ export function PantryRow({
   onUpdateAmount: (amount: string | null) => void
   onUpdateExpiry: (expiresAt: string | null) => void
 }) {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
   const [dragX, setDragX] = useState(0)
   const dragging = useRef<{ startX: number } | null>(null)
   const soon = isExpiringSoon(item.expires_at)
@@ -65,7 +65,9 @@ export function PantryRow({
           soon ? 'bg-surface ring-1 ring-inset ring-warning-ring/40' : 'bg-surface'
         }`}
       >
-        <span className="text-text">{item.name}</span>
+        <span className={`text-text ${lang === 'he' ? 'font-list-he' : 'font-list-en'}`}>
+          {item.name}
+        </span>
         <div className="flex items-center gap-3">
           <ExpiryEditor
             expiresAt={item.expires_at}
