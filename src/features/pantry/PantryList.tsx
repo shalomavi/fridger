@@ -4,7 +4,7 @@ import { useLanguage } from '@/features/household/useLanguage'
 
 export function PantryList({ householdId }: { householdId: string }) {
   const { t } = useLanguage()
-  const { data: items, isLoading, consume } = usePantry(householdId)
+  const { data: items, isLoading, consume, updateAmount } = usePantry(householdId)
 
   if (isLoading) return <p className="text-slate-500">{t('loading')}</p>
 
@@ -15,7 +15,12 @@ export function PantryList({ householdId }: { householdId: string }) {
   return (
     <ul className="space-y-2">
       {items.map((item) => (
-        <PantryRow key={item.id} item={item} onConsume={() => consume.mutate(item.id)} />
+        <PantryRow
+          key={item.id}
+          item={item}
+          onConsume={() => consume.mutate(item.id)}
+          onUpdateAmount={(amount) => updateAmount.mutate({ id: item.id, amount })}
+        />
       ))}
     </ul>
   )
