@@ -27,7 +27,7 @@ export function LoginForm() {
   }
 
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-bg p-6">
+    <div className="flex min-h-dvh items-center justify-center bg-bg p-6 font-ui-en">
       <form onSubmit={onSubmit} className="w-full max-w-sm space-y-4">
         <h1 className="text-center text-3xl font-semibold text-primary-accent">Fridger</h1>
 

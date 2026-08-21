@@ -16,6 +16,7 @@ function Row({
   onUpdateAmount: (amount: string | null) => void
   amountPlaceholder: string
 }) {
+  const { lang } = useLanguage()
   const purchased = item.status === 'purchased'
   return (
     <Surface as="li" className="flex items-center gap-2 pe-4">
@@ -29,7 +30,9 @@ function Row({
           }`}
         />
         <span
-          className={`flex-1 ${purchased ? 'text-text-subtle line-through' : 'text-text'}`}
+          className={`flex-1 ${lang === 'he' ? 'font-list-he' : 'font-list-en'} ${
+            purchased ? 'text-text-subtle line-through' : 'text-text'
+          }`}
         >
           {item.name}
         </span>

@@ -1,34 +1,103 @@
 @import 'tailwindcss';
 
 /* Semantic color tokens, aliased to Tailwind's built-in slate/teal/amber/rose
- * scales so there's one source of truth. Dark-mode-only app (see
- * color-scheme below), so no light-theme variants are needed. Generates
- * utilities automatically: bg-bg, text-text, bg-primary, text-warning, etc. */
+ * scales so there's one source of truth. Values are declared once here as
+ * token *names* to generate utilities (bg-bg, text-text, bg-primary,
+ * text-warning, etc.); the actual light/dark values are assigned below,
+ * outside @theme, so they can be swapped at runtime by useTheme.ts. */
 @theme {
-  /* surfaces */
+  --color-bg: var(--color-slate-900);
+  --color-surface: var(--color-slate-800);
+  --color-surface-muted: var(--color-slate-700);
+  --color-text: var(--color-slate-100);
+  --color-text-soft: var(--color-slate-300);
+  --color-text-muted: var(--color-slate-400);
+  --color-text-subtle: var(--color-slate-500);
+  --color-primary: var(--color-teal-600);
+  --color-primary-accent: var(--color-teal-400);
+  --color-primary-ring: var(--color-teal-500);
+  --color-warning: var(--color-amber-400);
+  --color-warning-ring: var(--color-amber-500);
+  --color-danger: var(--color-rose-400);
+  --color-danger-fill: var(--color-rose-700);
+
+  /* fonts — UI chrome vs. list-item text, per language (see index.html for
+   * the Google Fonts <link>). Auth/setup screens are English-only, so they
+   * use --font-ui-en directly rather than switching on household language. */
+  --font-ui-he: 'Assistant', sans-serif;
+  --font-list-he: 'Gveret Levin', cursive;
+  --font-ui-en: 'Ubuntu', sans-serif;
+  --font-list-en: 'Caveat', cursive;
+}
+
+/* Light theme (default). Overridden by dark below, either via the OS/
+ * browser's prefers-color-scheme or an explicit choice from useTheme.ts,
+ * which sets data-theme="light" | "dark" on <html>. */
+:root {
+  --color-bg: var(--color-slate-50);
+  --color-surface: var(--color-white);
+  --color-surface-muted: var(--color-slate-200);
+
+  --color-text: var(--color-slate-900);
+  --color-text-soft: var(--color-slate-700);
+  --color-text-muted: var(--color-slate-500);
+  --color-text-subtle: var(--color-slate-400);
+
+  --color-primary: var(--color-teal-600);
+  --color-primary-accent: var(--color-teal-700);
+  --color-primary-ring: var(--color-teal-500);
+
+  --color-warning: var(--color-amber-600);
+  --color-warning-ring: var(--color-amber-500);
+  --color-danger: var(--color-rose-600);
+  --color-danger-fill: var(--color-rose-600);
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --color-bg: var(--color-slate-900);
+    --color-surface: var(--color-slate-800);
+    --color-surface-muted: var(--color-slate-700);
+
+    --color-text: var(--color-slate-100);
+    --color-text-soft: var(--color-slate-300);
+    --color-text-muted: var(--color-slate-400);
+    --color-text-subtle: var(--color-slate-500);
+
+    --color-primary: var(--color-teal-600);
+    --color-primary-accent: var(--color-teal-400);
+    --color-primary-ring: var(--color-teal-500);
+
+    --color-warning: var(--color-amber-400);
+    --color-warning-ring: var(--color-amber-500);
+    --color-danger: var(--color-rose-400);
+    --color-danger-fill: var(--color-rose-700);
+
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
   --color-bg: var(--color-slate-900);
   --color-surface: var(--color-slate-800);
   --color-surface-muted: var(--color-slate-700);
 
-  /* text */
   --color-text: var(--color-slate-100);
   --color-text-soft: var(--color-slate-300);
   --color-text-muted: var(--color-slate-400);
   --color-text-subtle: var(--color-slate-500);
 
-  /* brand / primary action */
   --color-primary: var(--color-teal-600);
   --color-primary-accent: var(--color-teal-400);
   --color-primary-ring: var(--color-teal-500);
 
-  /* status */
   --color-warning: var(--color-amber-400);
   --color-warning-ring: var(--color-amber-500);
   --color-danger: var(--color-rose-400);
   --color-danger-fill: var(--color-rose-700);
-}
 
-:root {
   color-scheme: dark;
 }
 
