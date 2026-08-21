@@ -6,7 +6,7 @@ import { useLanguage } from '@/features/household/useLanguage'
 
 export function MealsScreen({ householdId }: { householdId: string }) {
   const { t, lang } = useLanguage()
-  const { suggest, cookedThis } = useSuggestions(householdId)
+  const { suggestion, suggest, cookedThis } = useSuggestions(householdId)
   const [cookedName, setCookedName] = useState<string | null>(null)
 
   function onCookedThis(meal: Meal) {
@@ -26,11 +26,11 @@ export function MealsScreen({ householdId }: { householdId: string }) {
 
       {suggest.isError && <p className="text-sm text-rose-400">{t('suggestError')}</p>}
 
-      {suggest.data?.fallback && (
+      {suggestion.data?.fallback && (
         <p className="text-sm text-amber-400">{t('fallbackNotice')}</p>
       )}
 
-      {suggest.data?.cached && (
+      {suggestion.data?.cached && (
         <p className="text-xs text-slate-500">
           {t('cachedNotice')}{' '}
           <button onClick={() => suggest.mutate({ regenerate: true, lang })} className="underline">
@@ -39,9 +39,9 @@ export function MealsScreen({ householdId }: { householdId: string }) {
         </p>
       )}
 
-      {suggest.data && (
+      {suggestion.data && (
         <ul className="space-y-3">
-          {suggest.data.meals.map((meal) => (
+          {suggestion.data.meals.map((meal) => (
             <SuggestionCard
               key={meal.name}
               meal={meal}
