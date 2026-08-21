@@ -9,10 +9,13 @@ just the rules to enforce day to day.
 ## Stack
 
 React + Vite + TypeScript + Tailwind v4. TanStack Query for server state
-(polling via `refetchInterval`, not Supabase Realtime). Supabase for
-Postgres + Auth + RLS. **One** Supabase Edge Function (`supabase/functions/suggest-meals`)
-holds the Gemini key and does the LLM call — the only server-side code in
-this project. No FastAPI, no second backend.
+(polling via `refetchInterval`, not Supabase Realtime), persisted to
+localStorage via `@tanstack/react-query-persist-client` so the last-fetched
+data renders offline/on cold start — reads only; writes still need a live
+connection. Supabase for Postgres + Auth + RLS. **One** Supabase Edge
+Function (`supabase/functions/suggest-meals`) holds the Gemini key and does
+the LLM call — the only server-side code in this project. No FastAPI, no
+second backend.
 
 ## The two boundaries that matter
 
@@ -69,5 +72,6 @@ splitting). One concern per file under `features/*`.
 ## Build order
 
 Vertical slices (see the plan for detail): 0 skeleton → 1 shared list → 2
-purchase→pantry → 3 consume → 4 LLM suggestions → 5 preferences/expiry (done) → 6
-polish. One slice per session, commit at the end of each, `/clear` between.
+purchase→pantry → 3 consume → 4 LLM suggestions → 5 preferences/expiry → 6
+polish. All done. One slice per session, commit at the end of each, `/clear`
+between.

@@ -1,5 +1,7 @@
 import { supabase } from '@/shared/supabase'
 import { purchaseItem } from '@/domain/purchaseItem'
+import { isSameIngredient } from '@/domain/normalize'
+import { mergeAmount } from '@/domain/mergeAmount'
 
 export type ShoppingItem = {
   id: string
@@ -49,11 +51,35 @@ export async function updateShoppingItemAmount(id: string, amount: string | null
 /**
  * The shopping -> pantry transition (§1/§3 of the plan): the shopping row is
  * kept, marked purchased, for history — a new pantry row is created rather
- * than the old one being moved.
+ * than the old one being moved. If an available pantry row for the same
+ * ingredient already exists (you still had some milk and bought more), the
+ * amounts merge into that row instead of creating a second "Milk" entry —
+ * see domain/mergeAmount.ts.
+ *
+ * Known limitation: undoPurchase can only find a pantry row it created
+ * itself (matched by source_item_id). A mis-tap undo after a merge leaves
+ * the merged amount in the pantry rather than un-merging it — reversing a
+ * text join isn't well-defined, and this is a rare enough case (undo right
+ * after a merge-on-purchase) that it's not worth solving.
  */
 export async function markPurchased(item: ShoppingItem): Promise<void> {
-  const { error: pantryError } = await supabase.from('pantry_items').insert(purchaseItem(item))
-  if (pantryError) throw pantryError
+  const { data: available } = await supabase
+    .from('pantry_items')
+    .select('id, name, amount')
+    .eq('household_id', item.household_id)
+    .eq('status', 'available')
+  const match = (available ?? []).find((p) => isSameIngredient(p.name, item.name))
+
+  if (match) {
+    const { error } = await supabase
+      .from('pantry_items')
+      .update({ amount: mergeAmount(match.amount, item.amount) })
+      .eq('id', match.id)
+    if (error) throw error
+  } else {
+    const { error: pantryError } = await supabase.from('pantry_items').insert(purchaseItem(item))
+    if (pantryError) throw pantryError
+  }
 
   const { error } = await supabase
     .from('shopping_items')
