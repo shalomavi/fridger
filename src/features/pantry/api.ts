@@ -22,3 +22,13 @@ export async function listPantryItems(householdId: string): Promise<PantryItem[]
   if (error) throw error
   return data
 }
+
+/** The consume loop (§1 of the plan): what's actually gone stops being listed
+ * as if it's still in the fridge. Never deleted — kept for history. */
+export async function consumeItem(id: string): Promise<void> {
+  const { error } = await supabase
+    .from('pantry_items')
+    .update({ status: 'consumed', consumed_at: new Date().toISOString() })
+    .eq('id', id)
+  if (error) throw error
+}
