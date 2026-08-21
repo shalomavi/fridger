@@ -34,6 +34,8 @@ export async function callGemini(
   pantryNames: string[],
   recentMealNames: string[],
   lang: Language,
+  preferences: string | null,
+  expiringSoonNames: string[],
 ): Promise<unknown> {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`
 
@@ -42,7 +44,21 @@ export async function callGemini(
     headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
     body: JSON.stringify({
       systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
-      contents: [{ parts: [{ text: buildPrompt(pantryNames, recentMealNames, lang) }] }],
+      contents: [
+        {
+          parts: [
+            {
+              text: buildPrompt(
+                pantryNames,
+                recentMealNames,
+                lang,
+                preferences,
+                expiringSoonNames,
+              ),
+            },
+          ],
+        },
+      ],
       generationConfig: {
         responseMimeType: 'application/json',
         responseSchema: RESPONSE_SCHEMA,

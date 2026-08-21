@@ -23,8 +23,15 @@ export function useSuggestions(householdId: string) {
   })
 
   const suggest = useMutation({
-    mutationFn: ({ regenerate, lang }: { regenerate: boolean; lang: Language }) =>
-      suggestMeals(householdId, lang, regenerate),
+    mutationFn: ({
+      regenerate,
+      lang,
+      preferences,
+    }: {
+      regenerate: boolean
+      lang: Language
+      preferences: string | null
+    }) => suggestMeals(householdId, lang, preferences, regenerate),
     onSuccess: (data) => queryClient.setQueryData(key, data),
   })
 

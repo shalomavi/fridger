@@ -17,10 +17,11 @@ export type SuggestResponse = {
 export async function suggestMeals(
   householdId: string,
   lang: Language,
+  preferences: string | null,
   regenerate = false,
 ): Promise<SuggestResponse> {
   const { data, error } = await supabase.functions.invoke('suggest-meals', {
-    body: { householdId, lang, regenerate },
+    body: { householdId, lang, preferences, regenerate },
   })
   if (error) throw error
   return data

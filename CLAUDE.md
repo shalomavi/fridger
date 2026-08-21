@@ -69,5 +69,5 @@ splitting). One concern per file under `features/*`.
 ## Build order
 
 Vertical slices (see the plan for detail): 0 skeleton → 1 shared list → 2
-purchase→pantry → 3 consume → 4 LLM suggestions → 5 preferences/expiry → 6
+purchase→pantry → 3 consume → 4 LLM suggestions → 5 preferences/expiry (done) → 6
 polish. One slice per session, commit at the end of each, `/clear` between.

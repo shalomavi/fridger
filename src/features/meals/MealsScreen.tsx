@@ -3,9 +3,11 @@ import { useSuggestions } from './useSuggestions'
 import { SuggestionCard } from './SuggestionCard'
 import type { Meal } from './api'
 import { useLanguage } from '@/features/household/useLanguage'
+import { useHousehold } from '@/features/household/useHousehold'
 
 export function MealsScreen({ householdId }: { householdId: string }) {
   const { t, lang } = useLanguage()
+  const { data: household } = useHousehold()
   const { suggestion, suggest, cookedThis } = useSuggestions(householdId)
   const [cookedName, setCookedName] = useState<string | null>(null)
 
@@ -14,10 +16,14 @@ export function MealsScreen({ householdId }: { householdId: string }) {
     cookedThis.mutate(meal, { onSettled: () => setCookedName(null) })
   }
 
+  function requestSuggestion(regenerate: boolean) {
+    suggest.mutate({ regenerate, lang, preferences: household?.preferences ?? null })
+  }
+
   return (
     <div className="space-y-6">
       <button
-        onClick={() => suggest.mutate({ regenerate: false, lang })}
+        onClick={() => requestSuggestion(false)}
         disabled={suggest.isPending}
         className="w-full rounded-lg bg-teal-600 py-3 font-medium text-white disabled:opacity-50"
       >
@@ -33,7 +39,7 @@ export function MealsScreen({ householdId }: { householdId: string }) {
       {suggestion.data?.cached && (
         <p className="text-xs text-slate-500">
           {t('cachedNotice')}{' '}
-          <button onClick={() => suggest.mutate({ regenerate: true, lang })} className="underline">
+          <button onClick={() => requestSuggestion(true)} className="underline">
             {t('getNewIdeas')}
           </button>
         </p>

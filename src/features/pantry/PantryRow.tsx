@@ -2,6 +2,8 @@ import { useRef, useState } from 'react'
 import type { PantryItem } from './api'
 import { useLanguage } from '@/features/household/useLanguage'
 import { AmountEditor } from '@/shared/ui/AmountEditor'
+import { ExpiryEditor } from '@/shared/ui/ExpiryEditor'
+import { isExpiringSoon } from '@/domain/expiry'
 
 const SWIPE_THRESHOLD = 72
 
@@ -15,14 +17,17 @@ export function PantryRow({
   item,
   onConsume,
   onUpdateAmount,
+  onUpdateExpiry,
 }: {
   item: PantryItem
   onConsume: () => void
   onUpdateAmount: (amount: string | null) => void
+  onUpdateExpiry: (expiresAt: string | null) => void
 }) {
   const { t } = useLanguage()
   const [dragX, setDragX] = useState(0)
   const dragging = useRef<{ startX: number } | null>(null)
+  const soon = isExpiringSoon(item.expires_at)
 
   function onPointerDown(e: React.PointerEvent) {
     dragging.current = { startX: e.clientX }
@@ -56,10 +61,17 @@ export function PantryRow({
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
         style={{ transform: `translateX(${dragX}px)` }}
-        className="relative flex touch-pan-y items-center justify-between gap-3 bg-slate-800 px-4 py-3 transition-transform"
+        className={`relative flex touch-pan-y flex-wrap items-center justify-between gap-x-3 gap-y-1 px-4 py-3 transition-transform ${
+          soon ? 'bg-slate-800 ring-1 ring-inset ring-amber-500/40' : 'bg-slate-800'
+        }`}
       >
         <span className="text-slate-100">{item.name}</span>
         <div className="flex items-center gap-3">
+          <ExpiryEditor
+            expiresAt={item.expires_at}
+            onSave={onUpdateExpiry}
+            placeholder={t('expiryPlaceholder')}
+          />
           <AmountEditor
             amount={item.amount}
             onSave={onUpdateAmount}
