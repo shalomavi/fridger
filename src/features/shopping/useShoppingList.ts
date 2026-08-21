@@ -8,6 +8,8 @@ import {
   type ShoppingItem,
 } from './api'
 import { pantryQueryKey } from '@/features/pantry/usePantry'
+import { isSameIngredient } from '@/domain/normalize'
+import { mergeAmount } from '@/domain/mergeAmount'
 
 const queryKey = (householdId: string) => ['shopping-items', householdId] as const
 
@@ -18,8 +20,17 @@ export function useShoppingList(householdId: string) {
   const query = useQuery({ queryKey: key, queryFn: () => listShoppingItems(householdId) })
 
   const addItem = useMutation({
-    mutationFn: ({ name, amount }: { name: string; amount?: string }) =>
-      addShoppingItem(householdId, name, amount),
+    // Adding something already on the pending list (someone typed "milk"
+    // twice, or both of you added it) merges into that row instead of
+    // creating a duplicate — see domain/mergeAmount.ts.
+    mutationFn: ({ name, amount }: { name: string; amount?: string }) => {
+      const items = queryClient.getQueryData<ShoppingItem[]>(key)
+      const existing = items?.find((i) => i.status === 'pending' && isSameIngredient(i.name, name))
+      if (existing) {
+        return updateShoppingItemAmount(existing.id, mergeAmount(existing.amount, amount ?? null))
+      }
+      return addShoppingItem(householdId, name, amount)
+    },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 
