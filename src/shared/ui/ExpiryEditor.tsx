@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { isExpiringSoon } from '@/domain/expiry'
+import { isExpiringSoon, toDateInputValue, formatDateDisplay } from '@/domain/expiry'
 
 /** Same tap-to-edit pattern as AmountEditor, with a native date picker and
  * an amber highlight once the date is within the "expiring soon" window. */
@@ -27,7 +27,7 @@ export function ExpiryEditor({
           soon ? 'text-amber-400' : 'text-slate-500'
         }`}
       >
-        {expiresAt ?? placeholder}
+        {expiresAt ? formatDateDisplay(expiresAt) : placeholder}
       </button>
     )
   }
@@ -36,7 +36,7 @@ export function ExpiryEditor({
     <input
       type="date"
       autoFocus
-      defaultValue={expiresAt ?? ''}
+      defaultValue={toDateInputValue(expiresAt)}
       onClick={(e) => e.stopPropagation()}
       onPointerDown={(e) => e.stopPropagation()}
       onChange={(e) => {
