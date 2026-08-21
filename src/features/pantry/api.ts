@@ -4,8 +4,7 @@ export type PantryItem = {
   id: string
   household_id: string
   name: string
-  quantity: number | null
-  unit: string | null
+  amount: string | null
   status: 'available' | 'consumed'
   added_at: string
   consumed_at: string | null

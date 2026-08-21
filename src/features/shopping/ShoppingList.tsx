@@ -15,9 +15,12 @@ function Row({ item, onToggle }: { item: ShoppingItem; onToggle: () => void }) {
             purchased ? 'border-teal-500 bg-teal-500' : 'border-slate-500'
           }`}
         />
-        <span className={purchased ? 'text-slate-500 line-through' : 'text-slate-100'}>
+        <span
+          className={`flex-1 ${purchased ? 'text-slate-500 line-through' : 'text-slate-100'}`}
+        >
           {item.name}
         </span>
+        {item.amount && <span className="text-sm text-slate-500">{item.amount}</span>}
       </button>
     </li>
   )
@@ -31,7 +34,7 @@ export function ShoppingList({ householdId }: { householdId: string }) {
 
   return (
     <div className="space-y-6">
-      <AddItemInput onAdd={(name) => addItem.mutate(name)} />
+      <AddItemInput onAdd={(name, amount) => addItem.mutate({ name, amount })} />
 
       {isLoading && <p className="text-slate-500">Loading…</p>}
 
