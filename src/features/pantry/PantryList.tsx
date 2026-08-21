@@ -1,7 +1,8 @@
 import { usePantry } from './usePantry'
+import { PantryRow } from './PantryRow'
 
 export function PantryList({ householdId }: { householdId: string }) {
-  const { data: items, isLoading } = usePantry(householdId)
+  const { data: items, isLoading, consume } = usePantry(householdId)
 
   if (isLoading) return <p className="text-slate-500">Loading…</p>
 
@@ -12,13 +13,7 @@ export function PantryList({ householdId }: { householdId: string }) {
   return (
     <ul className="space-y-2">
       {items.map((item) => (
-        <li
-          key={item.id}
-          className="flex items-center justify-between rounded-lg bg-slate-800 px-4 py-3"
-        >
-          <span className="text-slate-100">{item.name}</span>
-          {item.amount && <span className="text-sm text-slate-500">{item.amount}</span>}
-        </li>
+        <PantryRow key={item.id} item={item} onConsume={() => consume.mutate(item.id)} />
       ))}
     </ul>
   )
