@@ -16,7 +16,7 @@ export function LanguageToggle() {
           key={opt.value}
           onClick={() => setLanguage.mutate(opt.value)}
           disabled={setLanguage.isPending}
-          className={`px-2 py-1 ${lang === opt.value ? 'bg-primary text-white' : 'text-text-muted'}`}
+          className={`px-2 py-1 ${lang === opt.value ? 'bg-primary text-white' : 'bg-surface text-text-muted'}`}
         >
           {opt.label}
         </button>
