@@ -134,3 +134,11 @@ body {
   background-attachment: fixed;
   overscroll-behavior-y: none;
 }
+
+/* Full-viewport app wrappers (Layout, loading states, auth/setup screens)
+ * paint over body, so they need the gradient directly rather than relying
+ * on the solid --color-bg fallback the bg-bg utility resolves to. */
+.bg-app {
+  background: var(--gradient-bg);
+  background-attachment: fixed;
+}
