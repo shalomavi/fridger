@@ -15,7 +15,7 @@ export function ThemeToggle() {
           key={opt.value}
           onClick={() => setTheme(opt.value)}
           aria-label={opt.value}
-          className={`px-2 py-1 ${theme === opt.value ? 'bg-primary text-white' : 'text-text-muted'}`}
+          className={`px-2 py-1 ${theme === opt.value ? 'bg-primary text-white' : 'bg-surface text-text-muted'}`}
         >
           {opt.label}
         </button>
