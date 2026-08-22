@@ -24,7 +24,7 @@ function Layout({ household, email }: { household: Household; email: string | un
   return (
     <div
       dir={lang === 'he' ? 'rtl' : 'ltr'}
-      className={`min-h-dvh bg-bg p-6 text-text ${lang === 'he' ? 'font-ui-he' : 'font-ui-en'}`}
+      className={`min-h-dvh bg-app p-6 text-text ${lang === 'he' ? 'font-ui-he' : 'font-ui-en'}`}
     >
       <header className="mb-6 flex items-start justify-between gap-4">
         <div>
@@ -70,7 +70,7 @@ function HomeScreen({ email }: { email: string | undefined }) {
   const { data: household, isLoading } = useHousehold()
 
   if (isLoading) {
-    return <div className="min-h-dvh bg-bg" />
+    return <div className="min-h-dvh bg-app" />
   }
 
   if (!household) {
@@ -94,7 +94,7 @@ export function AppRoutes() {
   const { session, loading } = useSession()
 
   if (loading) {
-    return <div className="min-h-dvh bg-bg" />
+    return <div className="min-h-dvh bg-app" />
   }
 
   if (!session) {
