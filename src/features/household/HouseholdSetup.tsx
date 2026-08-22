@@ -53,7 +53,7 @@ export function HouseholdSetup() {
   }
 
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-bg p-6 font-ui-en">
+    <div className="flex min-h-dvh items-center justify-center bg-app p-6 font-ui-en">
       <div className="w-full max-w-sm space-y-4 text-text">
         <h1 className="text-center text-2xl font-semibold text-primary-accent">
           Set up your household
