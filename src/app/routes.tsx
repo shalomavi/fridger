@@ -78,7 +78,7 @@ function HomeScreen({ email }: { email: string | undefined }) {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-5xl mx-auto">
       <Routes>
         <Route element={<Layout household={household} email={email} />}>
           <Route path="/" element={<ShoppingList householdId={household.id} />} />
