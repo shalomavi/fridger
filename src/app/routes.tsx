@@ -13,7 +13,7 @@ import { MealsScreen } from '@/features/meals/MealsScreen'
 import { HouseholdPreferences } from '@/features/settings/HouseholdPreferences'
 
 function tabClass({ isActive }: { isActive: boolean }) {
-  return `flex-1 rounded-lg py-2 text-center text-sm font-medium ${
+  return `flex flex-1 items-center justify-center rounded-lg py-2 text-center text-sm font-medium ${
     isActive ? 'bg-primary text-white' : 'bg-surface text-text-muted'
   }`
 }
