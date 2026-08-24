@@ -78,15 +78,17 @@ function HomeScreen({ email }: { email: string | undefined }) {
   }
 
   return (
-    <Routes>
-      <Route element={<Layout household={household} email={email} />}>
-        <Route path="/" element={<ShoppingList householdId={household.id} />} />
-        <Route path="/pantry" element={<PantryList householdId={household.id} />} />
-        <Route path="/meals" element={<MealsScreen householdId={household.id} />} />
-        <Route path="/settings" element={<HouseholdPreferences />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Route>
-    </Routes>
+    <div className="max-w-4xl mx-auto">
+      <Routes>
+        <Route element={<Layout household={household} email={email} />}>
+          <Route path="/" element={<ShoppingList householdId={household.id} />} />
+          <Route path="/pantry" element={<PantryList householdId={household.id} />} />
+          <Route path="/meals" element={<MealsScreen householdId={household.id} />} />
+          <Route path="/settings" element={<HouseholdPreferences />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Route>
+      </Routes>
+    </div>
   )
 }
 
