@@ -79,3 +79,5 @@ Vertical slices (see the plan for detail): 0 skeleton → 1 shared list → 2
 purchase→pantry → 3 consume → 4 LLM suggestions → 5 preferences/expiry → 6
 polish. All done. One slice per session, commit at the end of each, `/clear`
 between.
+
+dont add co-author to commits
