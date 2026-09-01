@@ -52,7 +52,15 @@ export function PantryRow({
 
   return (
     <li className="relative overflow-hidden rounded-lg">
-      <div className="absolute inset-0 flex items-center justify-end bg-danger-fill px-4 text-sm text-white">
+      {/* The reveal is a fixed physical left-drag in both languages (see
+       * the gesture note above), so it always uncovers on the physical
+       * right. `justify-end` is flow-relative and would flip to the left
+       * under the RTL `dir` the Hebrew layout sets, so this stays `dir="ltr"`
+       * to pin the label to the right regardless of language. */}
+      <div
+        dir="ltr"
+        className="absolute inset-0 flex items-center justify-end bg-danger-fill px-4 text-sm text-white"
+      >
         {t('used')}
       </div>
       <div
