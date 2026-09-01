@@ -26,17 +26,23 @@ function Layout({ household, email }: { household: Household; email: string | un
       dir={lang === 'he' ? 'rtl' : 'ltr'}
       className={`min-h-dvh bg-app p-6 text-text ${lang === 'he' ? 'font-ui-he' : 'font-ui-en'}`}
     >
-      <header className="mb-6 flex items-start justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-semibold text-primary-accent">{household.name}</h1>
-          <p className="text-xs text-text-subtle">{email}</p>
-        </div>
-        <div className="flex flex-col items-end gap-2">
-          <div className="flex items-center gap-2">
+      <header className="mb-6 flex flex-col gap-1">
+        {/* Title and toggles share one row so they vertically center against
+         * each other directly — pairing them against mismatched-height
+         * columns (title+email vs. toggles+sign-out) previously left the
+         * large title looking lower than the small toggle icons. */}
+        <div className="flex items-center justify-between gap-4">
+          <h1 className="min-w-0 truncate text-2xl font-semibold text-primary-accent">
+            {household.name}
+          </h1>
+          <div className="flex shrink-0 items-center gap-2">
             <ThemeToggle />
             <LanguageToggle />
           </div>
-          <button onClick={() => signOut()} className="text-sm text-text-muted">
+        </div>
+        <div className="flex items-center justify-between gap-4">
+          <p className="min-w-0 truncate text-xs text-text-subtle">{email}</p>
+          <button onClick={() => signOut()} className="shrink-0 text-sm text-text-muted">
             {t('signOut')}
           </button>
         </div>
