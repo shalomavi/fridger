@@ -51,7 +51,7 @@ For each meal, give:
 - uses: pantry ingredients it uses — copy these EXACTLY as spelled in the pantry list above, in their original
   language, do not translate or rewrite them, even though the rest of your answer is in ${LANGUAGE_NAME[lang]}
 - missing: any extra ingredients needed that aren't in the pantry (can be empty)
-- steps: 2-4 short steps to make it, including rough quantities sized for 2 people`
+- steps: 3-5 short steps to make it, including rough quantities sized for 2 people`
 }
 
 /** Shown when the LLM call fails or returns something that doesn't parse — fail closed,
