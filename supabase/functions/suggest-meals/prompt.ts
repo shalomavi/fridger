@@ -6,9 +6,14 @@ import type { Language } from './schema.ts'
 
 const LANGUAGE_NAME: Record<Language, string> = { en: 'English', he: 'Hebrew' }
 
-export const SYSTEM_INSTRUCTION = `You suggest simple home-cook meals based on what's in someone's pantry.
-Reply only with meals that are realistic to cook with mostly what's listed.
-It's fine to suggest 1-2 small extra ingredients that aren't listed, but call them out.
+export const SYSTEM_INSTRUCTION = `You suggest simple weeknight home-cook meals for a 2-person household, based on
+what's in their shared pantry.
+Reply only with meals realistic to cook in about 30 minutes with basic kitchen equipment, using mostly what's listed.
+It's fine to suggest 1-2 small extra ingredients that aren't listed, but call them out as missing.
+Prefer meals that use more of the listed pantry over ones that use only one or two items and leave the rest as
+missing — reducing pantry waste is the point of this feature.
+Make the 3 suggested meals genuinely different from each other — vary the main ingredient, cuisine, or dish type,
+not just the seasoning on the same base dish.
 Keep steps short and practical — a few sentences, not a full recipe. The pantry may include
 Hebrew and English ingredient names in the same list; that's expected, treat them as one list.`
 
@@ -32,17 +37,21 @@ export function buildPrompt(
       : ''
 
   const preferencesLine = preferences?.trim()
-    ? `\n\nHousehold preferences and restrictions — follow these strictly (e.g. allergies): ${preferences.trim()}`
+    ? `\n\nHousehold preferences and restrictions — follow these strictly (e.g. allergies), even if that means ` +
+      `ignoring an expiring-soon item above: ${preferences.trim()}`
     : ''
 
   return `Pantry contents: ${pantryList}${expiringLine}${preferencesLine}${avoidLine}
 
-Suggest 3 different meals. For each one, give:
-- name: the meal's name, written in ${LANGUAGE_NAME[lang]}
-- uses: pantry ingredients it uses — copy these EXACTLY as spelled in the pantry list above,
-  do not translate or rewrite them, even if the rest of your answer is in a different language
-- missing: any extra ingredients needed that aren't in the pantry (can be empty), written in ${LANGUAGE_NAME[lang]}
-- steps: 2-4 short steps to make it, written in ${LANGUAGE_NAME[lang]}`
+Suggest 3 different meals, with portions sized for 2 people. Except for "uses" (see below), write everything —
+name, missing, steps — in ${LANGUAGE_NAME[lang]}.
+
+For each meal, give:
+- name: the meal's name
+- uses: pantry ingredients it uses — copy these EXACTLY as spelled in the pantry list above, in their original
+  language, do not translate or rewrite them, even though the rest of your answer is in ${LANGUAGE_NAME[lang]}
+- missing: any extra ingredients needed that aren't in the pantry (can be empty)
+- steps: 2-4 short steps to make it, including rough quantities sized for 2 people`
 }
 
 /** Shown when the LLM call fails or returns something that doesn't parse — fail closed,
