@@ -1,0 +1,27 @@
+name: Deploy suggest-meals Edge Function
+
+# Mirrors the Netlify auto-deploy the frontend already has, but for the one
+# Supabase Edge Function (see CLAUDE.md — supabase/functions/suggest-meals
+# is the only server-side code in this project). Only runs when that
+# function's own files change, so unrelated frontend commits don't trigger
+# a deploy.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'supabase/functions/suggest-meals/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - run: supabase functions deploy suggest-meals --project-ref "$SUPABASE_PROJECT_ID"
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+          SUPABASE_PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
