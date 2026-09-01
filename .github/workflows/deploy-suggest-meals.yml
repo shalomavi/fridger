@@ -10,6 +10,7 @@ on:
     branches: [main]
     paths:
       - 'supabase/functions/suggest-meals/**'
+  workflow_dispatch: {} # allows manually re-running a deploy from the Actions tab / CLI
 
 jobs:
   deploy:
