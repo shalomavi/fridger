@@ -1,9 +1,12 @@
 type Variant = 'muted' | 'active'
 
-// Same two-layer trick as PizzaIcon, but the artwork itself (public/taco.svg,
-// the beige background stripped out) is loaded as an <img> rather than
-// inlined — it's a dense photorealistic trace, too big to embed as JSX
-// without bloating the JS bundle.
+// Same two-layer trick as PizzaIcon, but the artwork itself (public/taco.png)
+// is loaded as an <img> rather than inlined — it's a photo-quality trace, too
+// big to embed as JSX. It's a PNG rather than the original SVG because that
+// SVG built its background from color layers shared with the shell's own
+// shading (a posterized/quantized trace, not clean subject/background
+// layers), so removing the background couldn't be done by dropping colors —
+// it was cut out spatially from a render instead.
 export function TacoIcon({ variant, animationMs }: { variant: Variant; animationMs?: number }) {
   const style =
     variant === 'muted'
@@ -12,7 +15,7 @@ export function TacoIcon({ variant, animationMs }: { variant: Variant; animation
 
   return (
     <img
-      src="/taco.svg"
+      src="/taco.png"
       alt=""
       className="absolute inset-0 h-full w-full object-contain"
       style={style}
