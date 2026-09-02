@@ -6,7 +6,7 @@ import { BurgerIcon } from './BurgerIcon'
 type Kind = 'pizza' | 'burger' | 'taco'
 
 const ICONS: Kind[] = ['pizza', 'burger', 'taco']
-const STEP_MS = 1100
+const STEP_MS = 1800
 
 /** One food icon: a muted/grayscale layer with a full-color layer that
  * fills in over it, restarted (via the `key` the parent gives each icon)
