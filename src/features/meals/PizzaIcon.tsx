@@ -15,7 +15,7 @@ export function PizzaIcon({ variant, animationMs }: { variant: Variant; animatio
   const style =
     variant === 'muted'
       ? { filter: 'grayscale(1)', opacity: 0.4 }
-      : { animation: `icon-fill ${animationMs}ms ease-out forwards` }
+      : { animation: `icon-fill ${animationMs}ms linear forwards` }
 
   return (
     <svg viewBox="0 0 460 460" className="absolute inset-0 h-full w-full" style={style}>

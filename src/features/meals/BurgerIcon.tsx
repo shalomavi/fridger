@@ -24,7 +24,7 @@ export function BurgerIcon({ variant, animationMs }: { variant: Variant; animati
   const style =
     variant === 'muted'
       ? { filter: 'grayscale(1)', opacity: 0.4 }
-      : { animation: `icon-fill ${animationMs}ms ease-out forwards` }
+      : { animation: `icon-fill ${animationMs}ms linear forwards` }
 
   return (
     <svg viewBox="0 0 24 24" className="absolute inset-0 h-full w-full" style={style}>

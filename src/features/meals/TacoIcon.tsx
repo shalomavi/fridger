@@ -11,7 +11,7 @@ export function TacoIcon({ variant, animationMs }: { variant: Variant; animation
   const style =
     variant === 'muted'
       ? { filter: 'grayscale(1)', opacity: 0.4 }
-      : { animation: `icon-fill ${animationMs}ms ease-out forwards` }
+      : { animation: `icon-fill ${animationMs}ms linear forwards` }
 
   return (
     <img
