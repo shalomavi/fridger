@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useSuggestions } from './useSuggestions'
 import { SuggestionCard } from './SuggestionCard'
+import { MealLoader } from './MealLoader'
 import type { Meal } from './api'
 import { useLanguage } from '@/features/household/useLanguage'
 import { useHousehold } from '@/features/household/useHousehold'
@@ -24,8 +25,13 @@ export function MealsScreen({ householdId }: { householdId: string }) {
 
   return (
     <div className="space-y-6">
-      <Button onClick={() => requestSuggestion(false)} disabled={suggest.isPending} className="w-full py-3">
-        {suggest.isPending ? t('thinking') : t('suggestAMeal')}
+      <Button
+        onClick={() => requestSuggestion(false)}
+        disabled={suggest.isPending}
+        aria-label={suggest.isPending ? t('thinking') : undefined}
+        className="w-full py-3"
+      >
+        {suggest.isPending ? <MealLoader /> : t('suggestAMeal')}
       </Button>
 
       {suggest.isError && <p className={`text-sm ${statusTextClass('danger')}`}>{t('suggestError')}</p>}
