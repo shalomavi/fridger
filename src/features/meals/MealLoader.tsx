@@ -1,44 +1,26 @@
 import { useEffect, useState } from 'react'
 import { PizzaIcon } from './PizzaIcon'
+import { TacoIcon } from './TacoIcon'
 
 type Kind = 'pizza' | 'burger' | 'taco'
 
 const ICONS: Kind[] = ['pizza', 'burger', 'taco']
 const STEP_MS = 1100
 
-// Accent color each icon fills with once it's "cooking" — the base layer
-// underneath always renders muted/gray via text-text-subtle. Pizza is the
-// exception: it's a fully colored illustration (see PizzaIcon) rather than
-// a currentColor shape, so it isn't in this map.
-const ACCENT: Record<Exclude<Kind, 'pizza'>, string> = {
-  burger: '#a16207', // bun/patty brown
-  taco: '#dc2626', // tomato/salsa red
-}
+// Burger's accent color once it's "cooking" — the base layer underneath
+// always renders muted/gray via text-text-subtle. Pizza and taco are fully
+// colored illustrations (see PizzaIcon/TacoIcon) rather than currentColor
+// shapes, so they aren't drawn here.
+const BURGER_ACCENT = '#a16207' // bun/patty brown
 
-function IconShape({ kind }: { kind: Exclude<Kind, 'pizza'> }) {
-  switch (kind) {
-    case 'burger':
-      return (
-        <>
-          <path d="M3 8a2 2 0 0 1 2-2c1-2.2 3.2-4 7-4s6 1.8 7 4a2 2 0 0 1 2 2Z" />
-          <rect x="3" y="10.5" width="18" height="2.6" rx="1.3" />
-          <rect x="3" y="14.5" width="18" height="4.5" rx="2.25" />
-        </>
-      )
-    case 'taco':
-      return (
-        <>
-          {/* shell: a flat-topped half circle */}
-          <path d="M3 12A9 9 0 0 0 21 12Z" />
-          {/* filling spilling over the shell's flat rim, jagged like lettuce */}
-          <path d="M3 12 5 8 7 10.5 9 7 11 10.5 13 7 15 10.5 17 7 19 10.5 21 8 21 12Z" />
-          {/* tomato + onion bits, punched out as holes */}
-          <circle cx="9" cy="15" r="1" fill="var(--color-bg)" />
-          <circle cx="15" cy="14.5" r="1" fill="var(--color-bg)" />
-          <circle cx="12" cy="17.5" r="1" fill="var(--color-bg)" />
-        </>
-      )
-  }
+function BurgerShape() {
+  return (
+    <>
+      <path d="M3 8a2 2 0 0 1 2-2c1-2.2 3.2-4 7-4s6 1.8 7 4a2 2 0 0 1 2 2Z" />
+      <rect x="3" y="10.5" width="18" height="2.6" rx="1.3" />
+      <rect x="3" y="14.5" width="18" height="4.5" rx="2.25" />
+    </>
+  )
 }
 
 /** One food icon: a muted base silhouette with a colored layer that fills
@@ -54,18 +36,27 @@ function FoodIcon({ kind }: { kind: Kind }) {
     )
   }
 
+  if (kind === 'taco') {
+    return (
+      <div className="relative h-8 w-8" aria-hidden="true">
+        <TacoIcon variant="muted" />
+        <TacoIcon variant="active" animationMs={STEP_MS} />
+      </div>
+    )
+  }
+
   return (
     <div className="relative h-8 w-8" aria-hidden="true">
       <svg viewBox="0 0 24 24" className="absolute inset-0 h-full w-full text-text-subtle opacity-40">
-        <IconShape kind={kind} />
+        <BurgerShape />
       </svg>
       <svg
         viewBox="0 0 24 24"
-        fill={ACCENT[kind]}
+        fill={BURGER_ACCENT}
         className="absolute inset-0 h-full w-full"
         style={{ animation: `icon-fill ${STEP_MS}ms ease-out forwards` }}
       >
-        <IconShape kind={kind} />
+        <BurgerShape />
       </svg>
     </div>
   )
