@@ -18,8 +18,8 @@ function IconShape({ kind }: { kind: Kind }) {
     case 'pizza':
       return (
         <>
-          {/* slice with a scalloped crust edge instead of a flat base */}
-          <path d="M12 2 21.5 20 19 19.3 17.3 21 15.6 19.3 13.9 21 12.2 19.3 10.5 21 8.8 19.3 7.1 21 5.4 19.3 2.5 20Z" />
+          {/* clean triangular slice */}
+          <path d="M12 2 21.5 20H2.5Z" />
           {/* crust rim */}
           <path
             d="M4.6 15.6 19.4 15.6"
@@ -47,10 +47,10 @@ function IconShape({ kind }: { kind: Kind }) {
     case 'taco':
       return (
         <>
-          {/* folded shell */}
-          <path d="M3 12a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1c0 5-4.5 9-9 9s-9-4-9-9Z" />
-          {/* filling spilling over the shell's rim, jagged like lettuce */}
-          <path d="M3.5 12 5 8 7 10.5 9 7 11 10.5 13 7 15 10.5 17 7 19 10.5 20.5 8 20.5 12Z" />
+          {/* shell: a flat-topped half circle */}
+          <path d="M3 12A9 9 0 0 0 21 12Z" />
+          {/* filling spilling over the shell's flat rim, jagged like lettuce */}
+          <path d="M3 12 5 8 7 10.5 9 7 11 10.5 13 7 15 10.5 17 7 19 10.5 21 8 21 12Z" />
           {/* tomato + onion bits, punched out as holes */}
           <circle cx="9" cy="15" r="1" fill="var(--color-bg)" />
           <circle cx="15" cy="14.5" r="1" fill="var(--color-bg)" />
