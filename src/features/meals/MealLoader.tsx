@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { PizzaIcon } from './PizzaIcon'
 
 type Kind = 'pizza' | 'burger' | 'taco'
 
@@ -6,36 +7,16 @@ const ICONS: Kind[] = ['pizza', 'burger', 'taco']
 const STEP_MS = 1100
 
 // Accent color each icon fills with once it's "cooking" — the base layer
-// underneath always renders muted/gray via text-text-subtle.
-const ACCENT: Record<Kind, string> = {
-  pizza: '#f97316', // crust/cheese orange
+// underneath always renders muted/gray via text-text-subtle. Pizza is the
+// exception: it's a fully colored illustration (see PizzaIcon) rather than
+// a currentColor shape, so it isn't in this map.
+const ACCENT: Record<Exclude<Kind, 'pizza'>, string> = {
   burger: '#a16207', // bun/patty brown
   taco: '#dc2626', // tomato/salsa red
 }
 
-function IconShape({ kind }: { kind: Kind }) {
+function IconShape({ kind }: { kind: Exclude<Kind, 'pizza'> }) {
   switch (kind) {
-    case 'pizza':
-      return (
-        <>
-          {/* clean triangular slice */}
-          <path d="M12 2 21.5 20H2.5Z" />
-          {/* crust rim */}
-          <path
-            d="M4.6 15.6 19.4 15.6"
-            stroke="var(--color-bg)"
-            strokeWidth="1"
-            strokeLinecap="round"
-            strokeDasharray="0.5 2.6"
-          />
-          {/* pepperoni + a basil leaf, punched out as holes */}
-          <circle cx="11" cy="8.5" r="1" fill="var(--color-bg)" />
-          <circle cx="14.5" cy="11" r="1" fill="var(--color-bg)" />
-          <circle cx="9" cy="12.5" r="1" fill="var(--color-bg)" />
-          <circle cx="13" cy="14.7" r="1" fill="var(--color-bg)" />
-          <ellipse cx="10.2" cy="16.8" rx="1.3" ry="0.7" fill="var(--color-bg)" transform="rotate(-25 10.2 16.8)" />
-        </>
-      )
     case 'burger':
       return (
         <>
@@ -64,6 +45,15 @@ function IconShape({ kind }: { kind: Kind }) {
  * in over it, restarted (via the `key` the parent gives each icon) every
  * time it becomes the active one in the rotation. */
 function FoodIcon({ kind }: { kind: Kind }) {
+  if (kind === 'pizza') {
+    return (
+      <div className="relative h-8 w-8" aria-hidden="true">
+        <PizzaIcon variant="muted" />
+        <PizzaIcon variant="active" animationMs={STEP_MS} />
+      </div>
+    )
+  }
+
   return (
     <div className="relative h-8 w-8" aria-hidden="true">
       <svg viewBox="0 0 24 24" className="absolute inset-0 h-full w-full text-text-subtle opacity-40">
