@@ -142,3 +142,17 @@ body {
   background: var(--gradient-bg);
   background-attachment: fixed;
 }
+
+/* MealLoader: the colored layer of the active icon rises from empty to
+ * fully filled, then holds before the icon swaps (see MealLoader.tsx). */
+@keyframes icon-fill {
+  0% {
+    clip-path: inset(100% 0 0 0);
+  }
+  65% {
+    clip-path: inset(0 0 0 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
