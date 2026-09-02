@@ -143,14 +143,12 @@ body {
   background-attachment: fixed;
 }
 
-/* MealLoader: the colored layer of the active icon fills in from the top
- * down, then holds fully colored before the icon swaps (see
- * MealLoader.tsx). Direction matters here: inset() clips from the bottom
- * up (not the top down) so the revealed area grows downward from the top,
- * reading as color being poured in rather than drained away. */
+/* MealLoader: the colored layer of the active icon fills in from the
+ * bottom up, then holds fully colored before the icon swaps (see
+ * MealLoader.tsx). */
 @keyframes icon-fill {
   0% {
-    clip-path: inset(0 0 100% 0);
+    clip-path: inset(100% 0 0 0);
   }
   65% {
     clip-path: inset(0 0 0 0);
