@@ -29,7 +29,7 @@ export function MealsScreen({ householdId }: { householdId: string }) {
         onClick={() => requestSuggestion(false)}
         disabled={suggest.isPending}
         aria-label={suggest.isPending ? t('thinking') : undefined}
-        className="w-full py-3"
+        className="w-full py-3 min-h-12"
       >
         {suggest.isPending ? <MealLoader /> : t('suggestAMeal')}
       </Button>

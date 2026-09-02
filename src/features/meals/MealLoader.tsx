@@ -14,7 +14,7 @@ const STEP_MS = 1800
 function FoodIcon({ kind }: { kind: Kind }) {
   const Icon = kind === 'pizza' ? PizzaIcon : kind === 'taco' ? TacoIcon : BurgerIcon
   return (
-    <div className="relative h-8 w-8" aria-hidden="true">
+    <div className="relative h-6 w-6" aria-hidden="true">
       <Icon variant="muted" />
       <Icon variant="active" animationMs={STEP_MS} />
     </div>

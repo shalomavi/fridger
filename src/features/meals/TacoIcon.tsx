@@ -7,6 +7,10 @@ type Variant = 'muted' | 'active'
 // shading (a posterized/quantized trace, not clean subject/background
 // layers), so removing the background couldn't be done by dropping colors —
 // it was cut out spatially from a render instead.
+// object-cover (not object-contain): the source photo is wider than tall,
+// and contain would letterbox it, making the taco visibly shorter than the
+// square pizza/burger artwork in the same box. Cover crops the sides
+// instead, keeping its height consistent with the other two icons.
 export function TacoIcon({ variant, animationMs }: { variant: Variant; animationMs?: number }) {
   const style =
     variant === 'muted'
@@ -17,7 +21,7 @@ export function TacoIcon({ variant, animationMs }: { variant: Variant; animation
     <img
       src="/taco.png"
       alt=""
-      className="absolute inset-0 h-full w-full object-contain"
+      className="absolute inset-0 h-full w-full object-cover"
       style={style}
     />
   )
