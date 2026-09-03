@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { PizzaIcon } from './PizzaIcon'
-import { TacoIcon } from './TacoIcon'
+import { SaladIcon } from './SaladIcon'
 import { BurgerIcon } from './BurgerIcon'
 
-type Kind = 'pizza' | 'burger' | 'taco'
+type Kind = 'pizza' | 'burger' | 'salad'
 
-const ICONS: Kind[] = ['pizza', 'burger', 'taco']
+const ICONS: Kind[] = ['pizza', 'burger', 'salad']
 const STEP_MS = 1800
 
 /** One food icon: a muted/grayscale layer with a full-color layer that
@@ -17,7 +17,7 @@ const STEP_MS = 1800
  * The icon itself is drawn bigger (h-9 w-9) inside that box and centered,
  * visually overflowing the reserved space without growing it. */
 function FoodIcon({ kind }: { kind: Kind }) {
-  const Icon = kind === 'pizza' ? PizzaIcon : kind === 'taco' ? TacoIcon : BurgerIcon
+  const Icon = kind === 'pizza' ? PizzaIcon : kind === 'salad' ? SaladIcon : BurgerIcon
   return (
     <div className="flex h-6 w-6 items-center justify-center" aria-hidden="true">
       <div className="relative h-9 w-9">
