@@ -5,8 +5,11 @@ type Variant = 'muted' | 'active'
 // PizzaIcon both variants can safely share one set of fills — grayscale is
 // just a CSS filter on top.
 // viewBox is cropped tight to the bowl's actual bounding box (the source
-// art leaves a lot of empty canvas above and below it) so it fills the
-// icon box at roughly the same scale as the pizza/burger.
+// art leaves a lot of empty canvas above and below it). The bowl itself is
+// a wide, shallow oval (324x215), so fitting that whole viewBox into the
+// square icon box would still letterbox top/bottom — "slice" instead fills
+// the box completely, cropping a bit off the sides, the same object-cover
+// trick used for the old taco photo.
 export function SaladIcon({ variant, animationMs }: { variant: Variant; animationMs?: number }) {
   const style =
     variant === 'muted'
@@ -14,7 +17,12 @@ export function SaladIcon({ variant, animationMs }: { variant: Variant; animatio
       : { animation: `icon-fill ${animationMs}ms linear forwards` }
 
   return (
-    <svg viewBox="28 111 324 215" className="absolute inset-0 h-full w-full" style={style}>
+    <svg
+      viewBox="28 111 324 215"
+      preserveAspectRatio="xMidYMid slice"
+      className="absolute inset-0 h-full w-full"
+      style={style}
+    >
       <ellipse cx="190" cy="300" rx="120" ry="14" fill="#00000014" />
 
       <path d="M40 190 Q40 290 190 300 Q340 290 340 190 Z" fill="#a9744f" />
