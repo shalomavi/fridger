@@ -10,6 +10,10 @@ const GRADIENT_ID: Record<Variant, string> = {
   active: 'pizzaCrustGradActive',
 }
 
+// viewBox is cropped tight to the pizza's actual bounding box (the source
+// art sits inside a much bigger 460x460 canvas after its rotate transform)
+// so it fills the icon box at roughly the same scale as the burger/salad,
+// instead of rendering small with a lot of empty margin around it.
 export function PizzaIcon({ variant, animationMs }: { variant: Variant; animationMs?: number }) {
   const gradientId = GRADIENT_ID[variant]
   const style =
@@ -18,7 +22,7 @@ export function PizzaIcon({ variant, animationMs }: { variant: Variant; animatio
       : { animation: `icon-fill ${animationMs}ms linear forwards` }
 
   return (
-    <svg viewBox="0 0 460 460" className="absolute inset-0 h-full w-full" style={style}>
+    <svg viewBox="10 20 340 340" className="absolute inset-0 h-full w-full" style={style}>
       <defs>
         <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#e8a03c" />
