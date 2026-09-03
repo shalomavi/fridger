@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   addShoppingItem,
+  deleteShoppingItem,
   listShoppingItems,
   markPurchased,
   undoPurchase,
@@ -76,5 +77,19 @@ export function useShoppingList(householdId: string) {
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 
-  return { ...query, addItem, toggleItem, updateAmount }
+  const deleteItem = useMutation({
+    mutationFn: (id: string) => deleteShoppingItem(id),
+    onMutate: async (id) => {
+      await queryClient.cancelQueries({ queryKey: key })
+      const previous = queryClient.getQueryData<ShoppingItem[]>(key)
+      queryClient.setQueryData<ShoppingItem[]>(key, (items) => items?.filter((i) => i.id !== id))
+      return { previous }
+    },
+    onError: (_err, _id, context) => {
+      if (context?.previous) queryClient.setQueryData(key, context.previous)
+    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
+  })
+
+  return { ...query, addItem, toggleItem, updateAmount, deleteItem }
 }

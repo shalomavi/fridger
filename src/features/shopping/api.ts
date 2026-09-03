@@ -48,6 +48,13 @@ export async function updateShoppingItemAmount(id: string, amount: string | null
   if (error) throw error
 }
 
+/** Removes a row outright — unlike markPurchased/undoPurchase this isn't a
+ * status transition kept for history, so it's only for mis-added items. */
+export async function deleteShoppingItem(id: string): Promise<void> {
+  const { error } = await supabase.from('shopping_items').delete().eq('id', id)
+  if (error) throw error
+}
+
 /**
  * The shopping -> pantry transition (§1/§3 of the plan): the shopping row is
  * kept, marked purchased, for history — a new pantry row is created rather

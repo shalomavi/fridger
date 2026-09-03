@@ -40,6 +40,8 @@ const dict = {
     expiryPlaceholder: '+ expiry',
     expiresOn: 'Expires',
     expiringSoon: 'Expiring soon',
+    deleteItem: 'Delete item',
+    confirmDeleteItem: 'Remove this item from the list?',
   },
   he: {
     signOut: 'התנתקות',
@@ -73,6 +75,8 @@ const dict = {
     expiryPlaceholder: '+ תפוגה',
     expiresOn: 'בתוקף עד',
     expiringSoon: 'עומד לפוג בקרוב',
+    deleteItem: 'מחיקת פריט',
+    confirmDeleteItem: 'להסיר את הפריט הזה מהרשימה?',
   },
 } as const satisfies Record<Language, Record<string, string>>
 
