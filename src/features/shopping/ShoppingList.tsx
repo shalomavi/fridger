@@ -13,7 +13,7 @@ function DeleteButton({ onDelete, label, confirmMessage }: { onDelete: () => voi
         if (window.confirm(confirmMessage)) onDelete()
       }}
       aria-label={label}
-      className="flex-none p-1 text-text-subtle"
+      className="flex-none p-1 text-danger"
     >
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
         <path d="M4 7h16" />
