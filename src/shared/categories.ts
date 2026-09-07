@@ -18,3 +18,18 @@ export const CATEGORIES = [
 ] as const
 
 export type Category = (typeof CATEGORIES)[number]
+
+function isCategory(value: string): value is Category {
+  return (CATEGORIES as readonly string[]).includes(value)
+}
+
+/** A household can reorder categories (see settings/CategoryOrderSettings);
+ * `stored` is that saved order, which may be stale — missing a category
+ * this file has added since, or (in theory) carrying a bad value. Resolves
+ * to a full, valid ordering: the stored prefix, then anything missing from
+ * it, in this file's default order. */
+export function resolveCategoryOrder(stored: readonly string[] | null | undefined): Category[] {
+  const valid = (stored ?? []).filter(isCategory)
+  const missing = CATEGORIES.filter((c) => !valid.includes(c))
+  return [...valid, ...missing]
+}

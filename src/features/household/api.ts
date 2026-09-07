@@ -1,7 +1,15 @@
 import { supabase } from '@/shared/supabase'
 
 export type Language = 'en' | 'he'
-export type Household = { id: string; name: string; language: Language; preferences: string | null }
+export type Household = {
+  id: string
+  name: string
+  language: Language
+  preferences: string | null
+  category_order: string[] | null
+}
+
+const HOUSEHOLD_COLUMNS = 'id, name, language, preferences, category_order'
 
 /** The caller's household, or null if they haven't created/joined one yet. */
 export async function getMyHousehold(): Promise<Household | null> {
@@ -15,7 +23,7 @@ export async function getMyHousehold(): Promise<Household | null> {
 
   const { data: household, error } = await supabase
     .from('households')
-    .select('id, name, language, preferences')
+    .select(HOUSEHOLD_COLUMNS)
     .eq('id', membership.household_id)
     .single()
   if (error) throw error
@@ -40,6 +48,18 @@ export async function setHouseholdPreferences(
   if (error) throw error
 }
 
+/** Shared setting — the section order for both the shopping list and pantry. */
+export async function setHouseholdCategoryOrder(
+  householdId: string,
+  categoryOrder: string[],
+): Promise<void> {
+  const { error } = await supabase
+    .from('households')
+    .update({ category_order: categoryOrder })
+    .eq('id', householdId)
+  if (error) throw error
+}
+
 /** Creates a household and makes the current user its first (owner) member. */
 export async function createHousehold(name: string): Promise<Household> {
   const {
@@ -50,7 +70,7 @@ export async function createHousehold(name: string): Promise<Household> {
   const { data: household, error } = await supabase
     .from('households')
     .insert({ name, created_by: user.id })
-    .select('id, name, language, preferences')
+    .select(HOUSEHOLD_COLUMNS)
     .single()
   if (error) throw error
 
@@ -118,7 +138,7 @@ export async function joinHousehold(code: string): Promise<Household> {
 
   const { data: household, error: householdError } = await supabase
     .from('households')
-    .select('id, name, language, preferences')
+    .select(HOUSEHOLD_COLUMNS)
     .eq('id', invite.household_id)
     .single()
   if (householdError) throw householdError

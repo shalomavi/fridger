@@ -10,7 +10,7 @@ import { ThemeToggle } from '@/shared/ui/ThemeToggle'
 import { ShoppingList } from '@/features/shopping/ShoppingList'
 import { PantryList } from '@/features/pantry/PantryList'
 import { MealsScreen } from '@/features/meals/MealsScreen'
-import { HouseholdPreferences } from '@/features/settings/HouseholdPreferences'
+import { SettingsScreen } from '@/features/settings/SettingsScreen'
 
 function tabClass({ isActive }: { isActive: boolean }) {
   return `flex flex-1 items-center justify-center rounded-lg py-2 text-center text-sm font-medium ${
@@ -90,7 +90,7 @@ function HomeScreen({ email }: { email: string | undefined }) {
           <Route path="/" element={<ShoppingList householdId={household.id} />} />
           <Route path="/pantry" element={<PantryList householdId={household.id} />} />
           <Route path="/meals" element={<MealsScreen householdId={household.id} />} />
-          <Route path="/settings" element={<HouseholdPreferences />} />
+          <Route path="/settings" element={<SettingsScreen />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
