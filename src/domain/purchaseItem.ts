@@ -10,12 +10,14 @@ export type PurchasableItem = {
   household_id: string
   name: string
   amount: string | null
+  category: string | null
 }
 
 export type NewPantryItem = {
   household_id: string
   name: string
   amount: string | null
+  category: string | null
   source_item_id: string
   status: 'available'
 }
@@ -25,6 +27,7 @@ export function purchaseItem(item: PurchasableItem): NewPantryItem {
     household_id: item.household_id,
     name: item.name,
     amount: item.amount,
+    category: item.category,
     source_item_id: item.id,
     status: 'available',
   }

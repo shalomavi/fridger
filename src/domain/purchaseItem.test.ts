@@ -8,12 +8,14 @@ describe('purchaseItem', () => {
       household_id: 'house-1',
       name: 'Milk',
       amount: '1L',
+      category: 'dairy',
     })
 
     expect(pantryItem).toEqual({
       household_id: 'house-1',
       name: 'Milk',
       amount: '1L',
+      category: 'dairy',
       source_item_id: 'shop-1',
       status: 'available',
     })
@@ -25,6 +27,7 @@ describe('purchaseItem', () => {
       household_id: 'house-1',
       name: 'Bread',
       amount: null,
+      category: null,
     })
 
     expect(pantryItem.amount).toBeNull()
@@ -36,6 +39,7 @@ describe('purchaseItem', () => {
       household_id: 'house-1',
       name: 'Eggs',
       amount: '1 dozen',
+      category: null,
     })
 
     expect(pantryItem.source_item_id).toBe('shop-3')

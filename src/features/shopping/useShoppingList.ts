@@ -6,11 +6,13 @@ import {
   markPurchased,
   undoPurchase,
   updateShoppingItemAmount,
+  updateShoppingItemCategory,
   type ShoppingItem,
 } from './api'
 import { pantryQueryKey } from '@/features/pantry/usePantry'
 import { isSameIngredient } from '@/domain/normalize'
 import { mergeAmount } from '@/domain/mergeAmount'
+import type { Category } from '@/shared/categories'
 
 const queryKey = (householdId: string) => ['shopping-items', householdId] as const
 
@@ -23,14 +25,23 @@ export function useShoppingList(householdId: string) {
   const addItem = useMutation({
     // Adding something already on the pending list (someone typed "milk"
     // twice, or both of you added it) merges into that row instead of
-    // creating a duplicate — see domain/mergeAmount.ts.
-    mutationFn: ({ name, amount }: { name: string; amount?: string }) => {
+    // creating a duplicate — see domain/mergeAmount.ts. The new category (if
+    // any) is dropped in that case; the existing row's tag wins.
+    mutationFn: ({
+      name,
+      amount,
+      category,
+    }: {
+      name: string
+      amount?: string
+      category?: Category | null
+    }) => {
       const items = queryClient.getQueryData<ShoppingItem[]>(key)
       const existing = items?.find((i) => i.status === 'pending' && isSameIngredient(i.name, name))
       if (existing) {
         return updateShoppingItemAmount(existing.id, mergeAmount(existing.amount, amount ?? null))
       }
-      return addShoppingItem(householdId, name, amount)
+      return addShoppingItem(householdId, name, amount, category)
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: key }),
   })
@@ -77,6 +88,23 @@ export function useShoppingList(householdId: string) {
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 
+  const updateCategory = useMutation({
+    mutationFn: ({ id, category }: { id: string; category: Category | null }) =>
+      updateShoppingItemCategory(id, category),
+    onMutate: async ({ id, category }) => {
+      await queryClient.cancelQueries({ queryKey: key })
+      const previous = queryClient.getQueryData<ShoppingItem[]>(key)
+      queryClient.setQueryData<ShoppingItem[]>(key, (items) =>
+        items?.map((i) => (i.id === id ? { ...i, category } : i)),
+      )
+      return { previous }
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previous) queryClient.setQueryData(key, context.previous)
+    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
+  })
+
   const deleteItem = useMutation({
     mutationFn: (id: string) => deleteShoppingItem(id),
     onMutate: async (id) => {
@@ -91,5 +119,5 @@ export function useShoppingList(householdId: string) {
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 
-  return { ...query, addItem, toggleItem, updateAmount, deleteItem }
+  return { ...query, addItem, toggleItem, updateAmount, updateCategory, deleteItem }
 }

@@ -2,8 +2,10 @@ import { useRef, useState } from 'react'
 import type { PantryItem } from './api'
 import { useLanguage } from '@/features/household/useLanguage'
 import { AmountEditor } from '@/shared/ui/AmountEditor'
+import { CategoryPicker } from '@/shared/ui/CategoryPicker'
 import { ExpiryEditor } from '@/shared/ui/ExpiryEditor'
 import { isExpiringSoon } from '@/domain/expiry'
+import type { Category } from '@/shared/categories'
 
 const SWIPE_THRESHOLD = 72
 
@@ -17,11 +19,13 @@ export function PantryRow({
   item,
   onConsume,
   onUpdateAmount,
+  onUpdateCategory,
   onUpdateExpiry,
 }: {
   item: PantryItem
   onConsume: () => void
   onUpdateAmount: (amount: string | null) => void
+  onUpdateCategory: (category: Category | null) => void
   onUpdateExpiry: (expiresAt: string | null) => void
 }) {
   const { t, lang } = useLanguage()
@@ -77,6 +81,7 @@ export function PantryRow({
           {item.name}
         </span>
         <div className="flex items-center gap-3">
+          <CategoryPicker category={item.category} onSave={onUpdateCategory} />
           <ExpiryEditor
             expiresAt={item.expires_at}
             onSave={onUpdateExpiry}

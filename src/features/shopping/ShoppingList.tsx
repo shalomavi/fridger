@@ -3,7 +3,9 @@ import { AddItemInput } from './AddItemInput'
 import type { ShoppingItem } from './api'
 import { useLanguage } from '@/features/household/useLanguage'
 import { AmountEditor } from '@/shared/ui/AmountEditor'
+import { CategoryPicker } from '@/shared/ui/CategoryPicker'
 import { Surface } from '@/shared/ui/Surface'
+import type { Category } from '@/shared/categories'
 
 function DeleteButton({ onDelete, label, confirmMessage }: { onDelete: () => void; label: string; confirmMessage: string }) {
   return (
@@ -28,6 +30,7 @@ function Row({
   item,
   onToggle,
   onUpdateAmount,
+  onUpdateCategory,
   onDelete,
   amountPlaceholder,
   deleteLabel,
@@ -36,6 +39,7 @@ function Row({
   item: ShoppingItem
   onToggle: () => void
   onUpdateAmount: (amount: string | null) => void
+  onUpdateCategory: (category: Category | null) => void
   onDelete: () => void
   amountPlaceholder: string
   deleteLabel: string
@@ -62,6 +66,7 @@ function Row({
           {item.name}
         </span>
       </button>
+      <CategoryPicker category={item.category} onSave={onUpdateCategory} />
       <AmountEditor amount={item.amount} onSave={onUpdateAmount} placeholder={amountPlaceholder} />
       <DeleteButton onDelete={onDelete} label={deleteLabel} confirmMessage={confirmDeleteMessage} />
     </Surface>
@@ -70,7 +75,7 @@ function Row({
 
 export function ShoppingList({ householdId }: { householdId: string }) {
   const { t } = useLanguage()
-  const { data: items, isLoading, addItem, toggleItem, updateAmount, deleteItem } =
+  const { data: items, isLoading, addItem, toggleItem, updateAmount, updateCategory, deleteItem } =
     useShoppingList(householdId)
 
   const pending = items?.filter((i) => i.status === 'pending') ?? []
@@ -83,6 +88,7 @@ export function ShoppingList({ householdId }: { householdId: string }) {
         item={item}
         onToggle={() => toggleItem.mutate(item)}
         onUpdateAmount={(amount) => updateAmount.mutate({ id: item.id, amount })}
+        onUpdateCategory={(category) => updateCategory.mutate({ id: item.id, category })}
         onDelete={() => deleteItem.mutate(item.id)}
         amountPlaceholder={t('amountPlaceholder')}
         deleteLabel={t('deleteItem')}
@@ -93,7 +99,7 @@ export function ShoppingList({ householdId }: { householdId: string }) {
 
   return (
     <div className="space-y-6">
-      <AddItemInput onAdd={(name, amount) => addItem.mutate({ name, amount })} />
+      <AddItemInput onAdd={(name, amount, category) => addItem.mutate({ name, amount, category })} />
 
       {isLoading && <p className="text-text-subtle">{t('loading')}</p>}
 
