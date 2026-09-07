@@ -1,30 +1,15 @@
 import { useShoppingList } from './useShoppingList'
 import { AddItemInput } from './AddItemInput'
+import { DeleteButton } from './DeleteButton'
 import type { ShoppingItem } from './api'
+import { useHousehold } from '@/features/household/useHousehold'
 import { useLanguage } from '@/features/household/useLanguage'
+import type { TKey } from '@/shared/i18n'
 import { AmountEditor } from '@/shared/ui/AmountEditor'
 import { CategoryPicker } from '@/shared/ui/CategoryPicker'
 import { Surface } from '@/shared/ui/Surface'
-import type { Category } from '@/shared/categories'
-
-function DeleteButton({ onDelete, label, confirmMessage }: { onDelete: () => void; label: string; confirmMessage: string }) {
-  return (
-    <button
-      onClick={(e) => {
-        e.stopPropagation()
-        if (window.confirm(confirmMessage)) onDelete()
-      }}
-      aria-label={label}
-      className="flex-none p-1 text-danger"
-    >
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-        <path d="M4 7h16" />
-        <path d="M6 7V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2" />
-        <path d="M19 7l-1 13a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 7" />
-      </svg>
-    </button>
-  )
-}
+import { resolveCategoryOrder, type Category } from '@/shared/categories'
+import { groupByCategory } from '@/domain/groupByCategory'
 
 function Row({
   item,
@@ -73,11 +58,40 @@ function Row({
   )
 }
 
+/** Splits a status group into its category sections, in the household's
+ * chosen order (settings/CategoryOrderSettings) — empty sections are
+ * dropped, uncategorized items land in one trailing group. */
+function GroupedItems({
+  items,
+  order,
+  row,
+}: {
+  items: ShoppingItem[]
+  order: Category[]
+  row: (item: ShoppingItem) => React.ReactNode
+}) {
+  const { t } = useLanguage()
+  return (
+    <div className="space-y-4">
+      {groupByCategory(items, order).map((group) => (
+        <div key={group.category ?? 'uncategorized'}>
+          <p className="mb-2 text-xs uppercase tracking-wide text-text-subtle">
+            {group.category ? t(`category_${group.category}` as TKey) : t('uncategorized')}
+          </p>
+          <ul className="space-y-2">{group.items.map(row)}</ul>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export function ShoppingList({ householdId }: { householdId: string }) {
   const { t } = useLanguage()
+  const { data: household } = useHousehold()
   const { data: items, isLoading, addItem, toggleItem, updateAmount, updateCategory, deleteItem } =
     useShoppingList(householdId)
 
+  const order = resolveCategoryOrder(household?.category_order)
   const pending = items?.filter((i) => i.status === 'pending') ?? []
   const purchased = items?.filter((i) => i.status === 'purchased') ?? []
 
@@ -107,12 +121,12 @@ export function ShoppingList({ householdId }: { householdId: string }) {
         <p className="text-text-subtle">{t('nothingOnList')}</p>
       )}
 
-      {pending.length > 0 && <ul className="space-y-2">{pending.map(row)}</ul>}
+      {pending.length > 0 && <GroupedItems items={pending} order={order} row={row} />}
 
       {purchased.length > 0 && (
         <div>
           <p className="mb-2 text-xs uppercase tracking-wide text-text-subtle">{t('checkedOff')}</p>
-          <ul className="space-y-2">{purchased.map(row)}</ul>
+          <GroupedItems items={purchased} order={order} row={row} />
         </div>
       )}
     </div>

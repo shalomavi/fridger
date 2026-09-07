@@ -53,6 +53,10 @@ const dict = {
     category_snacks: 'Snacks',
     category_household: 'Household',
     category_other: 'Other',
+    uncategorized: 'Uncategorized',
+    categoryOrderLabel: 'Category order',
+    moveCategoryUp: 'Move up',
+    moveCategoryDown: 'Move down',
   },
   he: {
     signOut: 'התנתקות',
@@ -99,6 +103,10 @@ const dict = {
     category_snacks: 'חטיפים',
     category_household: 'משק בית',
     category_other: 'אחר',
+    uncategorized: 'ללא קטגוריה',
+    categoryOrderLabel: 'סדר קטגוריות',
+    moveCategoryUp: 'הזזה למעלה',
+    moveCategoryDown: 'הזזה למטה',
   },
 } as const satisfies Record<Language, Record<string, string>>
 
