@@ -6,6 +6,42 @@ Shared shopping list → pantry → LLM meal suggestions, for a 2-person househo
 
 See `fridge-app-plan.md` for the architecture rationale and `CLAUDE.md` for the rules enforced during development.
 
+## Stack
+
+React + Vite + TypeScript + Tailwind v4. TanStack Query for server state
+(polling via `refetchInterval`, not Supabase Realtime), persisted to
+localStorage so the last-fetched data renders offline/on cold start — reads
+only, writes still need a live connection. Supabase for Postgres + Auth +
+RLS. **One** Supabase Edge Function (`supabase/functions/suggest-meals`)
+holds the Gemini key and does the LLM call — the only server-side code in
+this project.
+
+## Architecture boundaries
+
+- `src/domain/` imports nothing from React, Supabase, or any framework —
+  plain TypeScript, pure functions, unit-tested with Vitest
+  (`normalizeName`, `purchaseItem`, `mergeAmount`, etc).
+- Every LLM prompt string lives in `supabase/functions/suggest-meals/prompt.ts`,
+  nowhere else — the Gemini adapter is swappable.
+
+## Hard rules
+
+- No secrets under `src/` — the Gemini key lives only in Supabase Function
+  secrets. The Supabase anon key is public by design and is fine in
+  `src/shared/supabase.ts`.
+- Never bypass RLS from the client; the Edge Function is the only place
+  allowed elevated privilege, and it checks household membership itself.
+- `amount` is a single free-text field, no unit/number split, no
+  unit-conversion table, no ingredient taxonomy.
+- Name normalization is `lowercase + trim + collapse whitespace` only — no
+  English stemming/singularization, since input is mixed Hebrew/English.
+- Language is per-household (`households.language`), not per-user or
+  browser-detected. UI copy lives in `src/shared/i18n.ts`.
+- Files ≤150 lines, functions ≤40 lines, one concern per file under
+  `features/*`. No new dependencies without asking first.
+
+Full detail and rationale for all of the above: `CLAUDE.md`.
+
 ## Setup
 
 ```bash
