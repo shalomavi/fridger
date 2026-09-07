@@ -2,12 +2,14 @@ import { supabase } from '@/shared/supabase'
 import { purchaseItem } from '@/domain/purchaseItem'
 import { isSameIngredient } from '@/domain/normalize'
 import { mergeAmount } from '@/domain/mergeAmount'
+import type { Category } from '@/shared/categories'
 
 export type ShoppingItem = {
   id: string
   household_id: string
   name: string
   amount: string | null
+  category: Category | null
   status: 'pending' | 'purchased'
   added_by: string | null
   purchased_at: string | null
@@ -29,6 +31,7 @@ export async function addShoppingItem(
   householdId: string,
   name: string,
   amount?: string,
+  category?: Category | null,
 ): Promise<void> {
   const {
     data: { user },
@@ -38,6 +41,7 @@ export async function addShoppingItem(
     household_id: householdId,
     name: name.trim(),
     amount: amount?.trim() || null,
+    category: category ?? null,
     added_by: user?.id ?? null,
   })
   if (error) throw error
@@ -45,6 +49,14 @@ export async function addShoppingItem(
 
 export async function updateShoppingItemAmount(id: string, amount: string | null): Promise<void> {
   const { error } = await supabase.from('shopping_items').update({ amount }).eq('id', id)
+  if (error) throw error
+}
+
+export async function updateShoppingItemCategory(
+  id: string,
+  category: Category | null,
+): Promise<void> {
+  const { error } = await supabase.from('shopping_items').update({ category }).eq('id', id)
   if (error) throw error
 }
 
