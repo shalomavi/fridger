@@ -48,3 +48,12 @@ export function ChevronDownIcon({ className }: { className?: string }) {
     </svg>
   )
 }
+
+export function SearchIcon({ className }: { className?: string }) {
+  return (
+    <svg {...SHARED_PROPS} className={className}>
+      <circle cx="11" cy="11" r="8" />
+      <path d="m21 21-4.3-4.3" />
+    </svg>
+  )
+}
