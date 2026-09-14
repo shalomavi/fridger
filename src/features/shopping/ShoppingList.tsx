@@ -36,27 +36,29 @@ function Row({
   const { lang } = useLanguage()
   const purchased = item.status === 'purchased'
   return (
-    <Surface as="li" className="flex items-center gap-2 pe-4">
-      <button
-        onClick={onToggle}
-        className="flex flex-1 items-center gap-3 px-4 py-3 text-start"
-      >
-        <span
-          className={`h-5 w-5 flex-none rounded-full border-2 ${
-            purchased ? 'border-primary-ring bg-primary-ring' : 'border-text-subtle'
-          }`}
-        />
-        <span
-          className={`flex-1 ${lang === 'he' ? 'font-list-he' : 'font-list-en'} ${
-            purchased ? 'text-text-subtle line-through' : 'text-text'
-          }`}
-        >
-          {item.name}
-        </span>
-      </button>
-      <CategoryPicker category={item.category} onSave={onUpdateCategory} />
-      <AmountEditor amount={item.amount} onSave={onUpdateAmount} placeholder={amountPlaceholder} />
-      <DeleteButton onDelete={onDelete} label={deleteLabel} confirmMessage={confirmDeleteMessage} />
+    <Surface as="li" className="p-3">
+      <div className="flex items-center gap-3">
+        <button onClick={onToggle} className="flex flex-1 items-center gap-3 text-start">
+          <span
+            className={`h-5 w-5 flex-none rounded-full border-2 ${
+              purchased ? 'border-primary-ring bg-primary-ring' : 'border-text-subtle'
+            }`}
+          />
+          <span
+            className={`flex-1 ${lang === 'he' ? 'font-list-he' : 'font-list-en'} ${
+              purchased ? 'text-text-subtle line-through' : 'text-text'
+            }`}
+          >
+            {item.name}
+          </span>
+        </button>
+        <DeleteButton onDelete={onDelete} label={deleteLabel} confirmMessage={confirmDeleteMessage} />
+      </div>
+      {/* ps-8 lines this row up under the name text (h-5 checkbox + gap-3). */}
+      <div className="mt-1.5 flex items-center gap-3 ps-8">
+        <CategoryPicker category={item.category} onSave={onUpdateCategory} />
+        <AmountEditor amount={item.amount} onSave={onUpdateAmount} placeholder={amountPlaceholder} />
+      </div>
     </Surface>
   )
 }
