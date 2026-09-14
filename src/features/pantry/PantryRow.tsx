@@ -73,22 +73,13 @@ export function PantryRow({
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
         style={{ transform: `translateX(${dragX}px)` }}
-        className={`relative flex touch-pan-y flex-col gap-1.5 px-4 py-3 transition-transform ${
+        className={`relative flex touch-pan-y flex-wrap items-center justify-between gap-x-3 gap-y-1 px-4 py-3 transition-transform ${
           soon ? 'bg-surface ring-1 ring-inset ring-warning-ring/40' : 'bg-surface'
         }`}
       >
-        <div className="flex items-center justify-between gap-3">
-          <span className={`text-text ${lang === 'he' ? 'font-list-he' : 'font-list-en'}`}>
-            {item.name}
-          </span>
-          <button
-            onClick={onConsume}
-            onPointerDown={(e) => e.stopPropagation()}
-            className="flex-none rounded-md bg-surface-muted px-2 py-1 text-xs text-text-soft"
-          >
-            {t('used')}
-          </button>
-        </div>
+        <span className={`text-text ${lang === 'he' ? 'font-list-he' : 'font-list-en'}`}>
+          {item.name}
+        </span>
         <div className="flex items-center gap-3">
           <CategoryPicker category={item.category} onSave={onUpdateCategory} />
           <ExpiryEditor
@@ -101,6 +92,13 @@ export function PantryRow({
             onSave={onUpdateAmount}
             placeholder={t('amountPlaceholder')}
           />
+          <button
+            onClick={onConsume}
+            onPointerDown={(e) => e.stopPropagation()}
+            className="rounded-md bg-surface-muted px-2 py-1 text-xs text-text-soft"
+          >
+            {t('used')}
+          </button>
         </div>
       </div>
     </li>
