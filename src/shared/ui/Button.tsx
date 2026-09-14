@@ -8,7 +8,8 @@ export function Button({
   className = '',
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: ButtonVariant }) {
-  const variantClass = variant === 'primary' ? 'bg-primary text-white' : 'bg-surface text-text'
+  const variantClass =
+    variant === 'primary' ? 'bg-primary text-white' : 'border border-surface-muted bg-surface text-text'
   return (
     <button
       {...props}
