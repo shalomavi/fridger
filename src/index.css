@@ -135,6 +135,17 @@ body {
   overscroll-behavior-y: none;
 }
 
+/* Placeholder color wasn't a token anywhere — inputs fell back to the
+ * browser's own (non-theme-aware) gray. text-subtle is the token already
+ * used for "empty state" text elsewhere (amount/category pickers), so
+ * placeholders now match that instead of drifting per-browser. Firefox
+ * dims placeholder opacity by default; reset it so the token color is
+ * exact. */
+::placeholder {
+  color: var(--color-text-subtle);
+  opacity: 1;
+}
+
 /* Full-viewport app wrappers (Layout, loading states, auth/setup screens)
  * paint over body, so they need the gradient directly rather than relying
  * on the solid --color-bg fallback the bg-bg utility resolves to. */

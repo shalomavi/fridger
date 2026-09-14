@@ -50,7 +50,9 @@ export function AddItemInput({
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value as Category | '')}
-            className="w-full min-w-0 appearance-none truncate rounded-lg bg-surface py-3 ps-8 pe-8 text-text outline-none focus:ring-2 focus:ring-primary-ring"
+            className={`w-full min-w-0 appearance-none truncate rounded-lg bg-surface py-3 ps-8 pe-8 outline-none focus:ring-2 focus:ring-primary-ring ${
+              category ? 'text-text' : 'text-text-subtle'
+            }`}
           >
             <option value="">{t('categoryPlaceholder')}</option>
             {CATEGORIES.map((c) => (
