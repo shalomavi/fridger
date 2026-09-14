@@ -18,13 +18,13 @@ export function CategoryPicker({
   const { t } = useLanguage()
 
   return (
-    <label className="inline-flex items-center gap-0.5">
+    <label className="inline-flex items-center gap-px">
       <select
         value={category ?? ''}
         onClick={(e) => e.stopPropagation()}
         onPointerDown={(e) => e.stopPropagation()}
         onChange={(e) => onSave((e.target.value || null) as Category | null)}
-        className="appearance-none bg-transparent text-sm text-text-subtle underline decoration-dotted underline-offset-2 outline-none"
+        className="appearance-none bg-transparent p-0 text-sm text-text-subtle underline decoration-dotted underline-offset-2 outline-none"
       >
         <option value="">{t('categoryPlaceholder')}</option>
         {CATEGORIES.map((c) => (
