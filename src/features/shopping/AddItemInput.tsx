@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { useLanguage } from '@/features/household/useLanguage'
 import { Button } from '@/shared/ui/Button'
-import { PlusIcon, QuantityIcon, TagIcon } from '@/shared/ui/FormIcons'
+import { PlusIcon, QuantityIcon, TagIcon, ChevronDownIcon } from '@/shared/ui/FormIcons'
 import { CATEGORIES, type Category } from '@/shared/categories'
 
 /** Name is required; amount is one free-text field, optional, no unit
@@ -50,7 +50,7 @@ export function AddItemInput({
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value as Category | '')}
-            className="w-full min-w-0 appearance-none truncate rounded-lg bg-surface py-3 ps-8 pe-3 text-text outline-none focus:ring-2 focus:ring-primary-ring"
+            className="w-full min-w-0 appearance-none truncate rounded-lg bg-surface py-3 ps-8 pe-8 text-text outline-none focus:ring-2 focus:ring-primary-ring"
           >
             <option value="">{t('categoryPlaceholder')}</option>
             {CATEGORIES.map((c) => (
@@ -60,6 +60,7 @@ export function AddItemInput({
             ))}
           </select>
           <TagIcon className="pointer-events-none absolute inset-y-0 start-2.5 my-auto text-text-subtle" />
+          <ChevronDownIcon className="pointer-events-none absolute inset-y-0 end-2.5 my-auto h-3.5 w-3.5 text-text-subtle" />
         </div>
         <Button
           type="submit"

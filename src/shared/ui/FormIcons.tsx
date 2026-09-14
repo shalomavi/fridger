@@ -40,3 +40,11 @@ export function TagIcon({ className }: { className?: string }) {
     </svg>
   )
 }
+
+export function ChevronDownIcon({ className }: { className?: string }) {
+  return (
+    <svg {...SHARED_PROPS} className={className}>
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  )
+}
