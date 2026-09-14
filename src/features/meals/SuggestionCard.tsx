@@ -1,4 +1,5 @@
 import type { Meal } from './api'
+import { shareMealToWhatsApp } from './shareMeal'
 import { useLanguage } from '@/features/household/useLanguage'
 import { Surface } from '@/shared/ui/Surface'
 import { Button } from '@/shared/ui/Button'
@@ -12,7 +13,7 @@ export function SuggestionCard({
   onCookedThis: () => void
   cooking: boolean
 }) {
-  const { t } = useLanguage()
+  const { t, lang } = useLanguage()
 
   return (
     <Surface as="li" className="space-y-3 p-4">
@@ -37,9 +38,18 @@ export function SuggestionCard({
         ))}
       </ol>
 
-      <Button onClick={onCookedThis} disabled={cooking} className="w-full py-2 text-sm">
-        {cooking ? '…' : t('cookedThis')}
-      </Button>
+      <div className="flex gap-2">
+        <Button onClick={onCookedThis} disabled={cooking} className="flex-1 py-2 text-sm">
+          {cooking ? '…' : t('cookedThis')}
+        </Button>
+        <Button
+          variant="secondary"
+          onClick={() => shareMealToWhatsApp(meal, lang)}
+          className="flex-1 py-2 text-sm"
+        >
+          {t('shareMeal')}
+        </Button>
+      </div>
     </Surface>
   )
 }
