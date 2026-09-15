@@ -38,10 +38,9 @@ function ProduceIcon({ className }: { className?: string }) {
 function MeatIcon({ className }: { className?: string }) {
   return (
     <svg {...SHARED_PROPS} className={className}>
-      <path d="M4 10c0-2.6 2.1-5 4.8-5.4 1.9-.3 2.9.8 4.4.8s2.7-1 4.4-.6C20 5.4 21 7.6 21 10c0 4-3.8 8-9 8s-8-3.5-8-8Z" />
-      <path d="m8 8.5 4 4.5" />
-      <path d="m11 7 4.5 5" />
-      <path d="m14 8.5 3 3.5" />
+      <path d="M7 4c-2.5 0-4.5 2-4.5 4.3 0 1.8 1 3 2.8 3.8 3 1.3 4.6 3.4 7 5 2.8 1.9 6.5 1 7.4-2.3.9-3.3-.4-7.4-3.7-9.4C13.3 3.8 9.8 3.7 7 4Z" />
+      <path d="M4.8 8.7c1.3 1 3 2.3 5 3.8 2 1.5 4.3 2.3 6.7 1.6" />
+      <circle cx="15.5" cy="8.3" r="1.6" />
     </svg>
   )
 }
