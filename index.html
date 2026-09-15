@@ -3,14 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- interactive-widget=overlays-content: the on-screen keyboard overlays
-         the page instead of resizing it, so min-h-dvh stays constant while
-         typing. Without this, the keyboard opening/closing shrinks dvh and
-         reflows the layout mid-animation, which is what made position:sticky
-         (the search input) intermittently lose its stuck state while typing. -->
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1, interactive-widget=overlays-content"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1"
     />
     <!-- must match --color-primary in src/index.css (HTML meta is outside CSS) -->
     <meta name="theme-color" content="#0f766e" />
