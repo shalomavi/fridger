@@ -39,7 +39,7 @@ function MeatIcon({ className }: { className?: string }) {
   return (
     <svg {...SHARED_PROPS} className={className}>
       <path d="M7 4c-2.5 0-4.5 2-4.5 4.3 0 1.8 1 3 2.8 3.8 3 1.3 4.6 3.4 7 5 2.8 1.9 6.5 1 7.4-2.3.9-3.3-.4-7.4-3.7-9.4C13.3 3.8 9.8 3.7 7 4Z" />
-      <path d="M4.8 8.7c1.3 1 3 2.3 5 3.8 2 1.5 4.3 2.3 6.7 1.6" />
+      <path d="M2.5 8.3C4 10 6 11.5 8.5 12.5c3.5 1.5 7.5 2.1 11.2 2.3" />
       <circle cx="15.5" cy="8.3" r="1.6" />
     </svg>
   )
