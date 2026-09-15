@@ -27,46 +27,51 @@ function Layout({ household, email }: { household: Household; email: string | un
       dir={lang === 'he' ? 'rtl' : 'ltr'}
       className={`min-h-dvh bg-app p-6 text-text ${lang === 'he' ? 'font-ui-he' : 'font-ui-en'}`}
     >
-      <header className="mb-6 flex flex-col gap-1">
-        {/* Title and toggles share one row so they vertically center against
-         * each other directly — pairing them against mismatched-height
-         * columns (title+email vs. toggles+sign-out) previously left the
-         * large title looking lower than the small toggle icons. */}
-        <div className="flex items-center justify-between gap-4">
-          <h1 className="min-w-0 truncate text-2xl font-semibold text-primary-accent">
-            {household.name}
-          </h1>
-          <div className="flex shrink-0 items-center gap-2">
-            <ThemeToggle />
-            <LanguageToggle />
+      {/* Sticky "glass" app bar: header + invite + tab nav stay pinned while
+       * the list content underneath scrolls past, which is what makes the
+       * translucent/blurred background actually read as glass rather than
+       * a plain tinted box. -mx-6/-mt-6 bleed it to the viewport edges
+       * (cancelling the parent's p-6) and pt-6/px-6 put the inset back. */}
+      <div className="sticky top-0 z-10 -mx-6 -mt-6 mb-6 space-y-4 border-b border-surface-muted/60 bg-surface/70 px-6 pt-6 pb-4 backdrop-blur-md">
+        <header className="flex flex-col gap-1">
+          {/* Title and toggles share one row so they vertically center against
+           * each other directly — pairing them against mismatched-height
+           * columns (title+email vs. toggles+sign-out) previously left the
+           * large title looking lower than the small toggle icons. */}
+          <div className="flex items-center justify-between gap-4">
+            <h1 className="min-w-0 truncate text-2xl font-semibold text-primary-accent">
+              {household.name}
+            </h1>
+            <div className="flex shrink-0 items-center gap-2">
+              <ThemeToggle />
+              <LanguageToggle />
+            </div>
           </div>
-        </div>
-        <div className="flex items-center justify-between gap-4">
-          <p className="min-w-0 truncate text-xs text-text-subtle">{email}</p>
-          <button onClick={() => signOut()} className="shrink-0 text-sm text-text-muted">
-            {t('signOut')}
-          </button>
-        </div>
-      </header>
+          <div className="flex items-center justify-between gap-4">
+            <p className="min-w-0 truncate text-xs text-text-subtle">{email}</p>
+            <button onClick={() => signOut()} className="shrink-0 text-sm text-text-muted">
+              {t('signOut')}
+            </button>
+          </div>
+        </header>
 
-      <div className="mb-6">
         <InviteButton householdId={household.id} />
-      </div>
 
-      <nav className="mb-6 flex gap-2">
-        <NavLink to="/" end className={tabClass} aria-label={t('tabShopping')}>
-          <ShoppingCartIcon />
-        </NavLink>
-        <NavLink to="/pantry" className={tabClass} aria-label={t('tabPantry')}>
-          <PantryIcon />
-        </NavLink>
-        <NavLink to="/meals" className={tabClass} aria-label={t('tabMeals')}>
-          <MealsIcon />
-        </NavLink>
-        <NavLink to="/settings" className={tabClass} aria-label={t('tabSettings')}>
-          <SettingsIcon />
-        </NavLink>
-      </nav>
+        <nav className="flex gap-2">
+          <NavLink to="/" end className={tabClass} aria-label={t('tabShopping')}>
+            <ShoppingCartIcon />
+          </NavLink>
+          <NavLink to="/pantry" className={tabClass} aria-label={t('tabPantry')}>
+            <PantryIcon />
+          </NavLink>
+          <NavLink to="/meals" className={tabClass} aria-label={t('tabMeals')}>
+            <MealsIcon />
+          </NavLink>
+          <NavLink to="/settings" className={tabClass} aria-label={t('tabSettings')}>
+            <SettingsIcon />
+          </NavLink>
+        </nav>
+      </div>
 
       <Outlet />
     </div>
