@@ -4,6 +4,7 @@ import { setHouseholdCategoryOrder } from '@/features/household/api'
 import { useHousehold, useInvalidateHousehold } from '@/features/household/useHousehold'
 import { useLanguage } from '@/features/household/useLanguage'
 import { resolveCategoryOrder, type Category } from '@/shared/categories'
+import { CATEGORY_ICONS } from '@/shared/ui/CategoryIcons'
 
 function moved(order: Category[], index: number, direction: -1 | 1): Category[] | null {
   const target = index + direction
@@ -50,32 +51,38 @@ export function CategoryOrderSettings() {
     <div className="space-y-2">
       <p className="text-sm text-text-muted">{t('categoryOrderLabel')}</p>
       <ul className="space-y-1">
-        {order.map((category, i) => (
-          <li
-            key={category}
-            className="flex items-center justify-between gap-2 rounded-lg bg-surface px-3 py-2"
-          >
-            <span className="text-text">{t(`category_${category}`)}</span>
-            <div className="flex gap-1">
-              <button
-                onClick={() => move(i, -1)}
-                disabled={i === 0}
-                aria-label={t('moveCategoryUp')}
-                className="rounded-md bg-surface-muted px-2 py-1 text-xs text-text-soft disabled:opacity-40"
-              >
-                ↑
-              </button>
-              <button
-                onClick={() => move(i, 1)}
-                disabled={i === order.length - 1}
-                aria-label={t('moveCategoryDown')}
-                className="rounded-md bg-surface-muted px-2 py-1 text-xs text-text-soft disabled:opacity-40"
-              >
-                ↓
-              </button>
-            </div>
-          </li>
-        ))}
+        {order.map((category, i) => {
+          const Icon = CATEGORY_ICONS[category]
+          return (
+            <li
+              key={category}
+              className="flex items-center justify-between gap-2 rounded-lg bg-surface px-3 py-2"
+            >
+              <span className="flex items-center gap-3 text-text">
+                <Icon />
+                <span className="sr-only">{t(`category_${category}`)}</span>
+              </span>
+              <div className="flex gap-1">
+                <button
+                  onClick={() => move(i, -1)}
+                  disabled={i === 0}
+                  aria-label={t('moveCategoryUp')}
+                  className="rounded-md bg-surface-muted px-2 py-1 text-xs text-text-soft disabled:opacity-40"
+                >
+                  ↑
+                </button>
+                <button
+                  onClick={() => move(i, 1)}
+                  disabled={i === order.length - 1}
+                  aria-label={t('moveCategoryDown')}
+                  className="rounded-md bg-surface-muted px-2 py-1 text-xs text-text-soft disabled:opacity-40"
+                >
+                  ↓
+                </button>
+              </div>
+            </li>
+          )
+        })}
       </ul>
     </div>
   )

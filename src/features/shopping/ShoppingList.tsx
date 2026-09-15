@@ -5,10 +5,10 @@ import { DeleteButton } from './DeleteButton'
 import type { ShoppingItem } from './api'
 import { useHousehold } from '@/features/household/useHousehold'
 import { useLanguage } from '@/features/household/useLanguage'
-import type { TKey } from '@/shared/i18n'
 import { AmountEditor } from '@/shared/ui/AmountEditor'
 import { CategoryPicker } from '@/shared/ui/CategoryPicker'
 import { SearchInput } from '@/shared/ui/SearchInput'
+import { CategoryHeading } from '@/shared/ui/CategoryHeading'
 import { Surface } from '@/shared/ui/Surface'
 import { resolveCategoryOrder, type Category } from '@/shared/categories'
 import { groupByCategory } from '@/domain/groupByCategory'
@@ -75,14 +75,11 @@ function GroupedItems({
   order: Category[]
   row: (item: ShoppingItem) => React.ReactNode
 }) {
-  const { t } = useLanguage()
   return (
     <div className="space-y-4">
       {groupByCategory(items, order).map((group) => (
         <div key={group.category ?? 'uncategorized'}>
-          <p className="mb-2 text-xs uppercase tracking-wide text-text-subtle">
-            {group.category ? t(`category_${group.category}` as TKey) : t('uncategorized')}
-          </p>
+          <CategoryHeading category={group.category} />
           <ul className="space-y-2">{group.items.map(row)}</ul>
         </div>
       ))}
