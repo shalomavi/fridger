@@ -13,9 +13,12 @@ import { PantryList } from '@/features/pantry/PantryList'
 import { MealsScreen } from '@/features/meals/MealsScreen'
 import { SettingsScreen } from '@/features/settings/SettingsScreen'
 
+// Strong glass look: low-opacity fill + heavy blur/saturation boost so the
+// gradient behind the nav visibly shows through, plus a light border and
+// shadow for the frosted-edge highlight glass icons usually have.
 function tabClass({ isActive }: { isActive: boolean }) {
-  return `flex flex-1 items-center justify-center rounded-lg py-3 ${
-    isActive ? 'bg-primary text-white' : 'bg-surface text-text-muted'
+  return `flex flex-1 items-center justify-center rounded-lg border py-3 shadow-lg backdrop-blur-xl backdrop-saturate-150 ${
+    isActive ? 'border-white/30 bg-primary/50 text-white' : 'border-white/20 bg-surface/30 text-text-muted'
   }`
 }
 
