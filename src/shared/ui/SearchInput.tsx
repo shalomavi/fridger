@@ -19,7 +19,7 @@ export function SearchInput({
   placeholder: string
 }) {
   return (
-    <div className="sticky top-0 z-10 -mx-6 bg-surface/15 px-6 py-2 backdrop-blur-lg">
+    <div className="sticky top-0 z-10 -mx-6 bg-surface/5 px-6 py-2 backdrop-blur-lg">
       <div className="relative">
         <input
           type="search"
