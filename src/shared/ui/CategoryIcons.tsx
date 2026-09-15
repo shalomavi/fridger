@@ -46,8 +46,10 @@ function MeatIcon({ className }: { className?: string }) {
 function BakeryIcon({ className }: { className?: string }) {
   return (
     <svg {...SHARED_PROPS} className={className}>
-      <path d="M4 13c0-4 3.5-7 8-7s8 3 8 7-3.5 6-8 6-8-2-8-6Z" />
-      <path d="M5 13h14" />
+      <path d="M4 12.5C4 8.36 7.58 5 12 5s8 3.36 8 7.5V17a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" />
+      <path d="m9 9.5-.7 2.5" />
+      <path d="M12 8.7V12" />
+      <path d="m15 9.5.7 2.5" />
     </svg>
   )
 }
@@ -67,8 +69,14 @@ function FrozenIcon({ className }: { className?: string }) {
   return (
     <svg {...SHARED_PROPS} className={className}>
       <path d="M12 2v20" />
-      <path d="M4.5 6.5 19.5 17.5" />
-      <path d="M19.5 6.5 4.5 17.5" />
+      <path d="M4.93 4.93 19.07 19.07" />
+      <path d="M19.07 4.93 4.93 19.07" />
+      <path d="M10.3 3.7h3.4" />
+      <path d="M10.3 20.3h3.4" />
+      <path d="M4.08 5.78 5.78 4.08" />
+      <path d="M18.22 19.92 19.92 18.22" />
+      <path d="M4.08 18.22 5.78 19.92" />
+      <path d="M18.22 4.08 19.92 5.78" />
     </svg>
   )
 }
