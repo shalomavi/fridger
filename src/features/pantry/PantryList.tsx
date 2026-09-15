@@ -3,8 +3,8 @@ import { usePantry } from './usePantry'
 import { PantryRow } from './PantryRow'
 import { useHousehold } from '@/features/household/useHousehold'
 import { useLanguage } from '@/features/household/useLanguage'
-import type { TKey } from '@/shared/i18n'
 import { SearchInput } from '@/shared/ui/SearchInput'
+import { CategoryHeading } from '@/shared/ui/CategoryHeading'
 import { resolveCategoryOrder } from '@/shared/categories'
 import { groupByCategory } from '@/domain/groupByCategory'
 import { filterByName } from '@/domain/filterByName'
@@ -33,9 +33,7 @@ export function PantryList({ householdId }: { householdId: string }) {
 
       {groupByCategory(matched, order).map((group) => (
         <div key={group.category ?? 'uncategorized'}>
-          <p className="mb-2 text-xs uppercase tracking-wide text-text-subtle">
-            {group.category ? t(`category_${group.category}` as TKey) : t('uncategorized')}
-          </p>
+          <CategoryHeading category={group.category} />
           <ul className="space-y-2">
             {group.items.map((item) => (
               <PantryRow
