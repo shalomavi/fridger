@@ -68,17 +68,13 @@ function PantryIcon({ className }: { className?: string }) {
 }
 
 function FrozenIcon({ className }: { className?: string }) {
+  // Traced from a downloaded reference SVG (svgrepo.com) rather than
+  // hand-approximated — user-supplied source, not Lucide.
   return (
     <svg {...SHARED_PROPS} className={className}>
-      <path d="M12 2v20" />
-      <path d="M4.93 4.93 19.07 19.07" />
-      <path d="M19.07 4.93 4.93 19.07" />
-      <path d="M14.3.5 12 2 9.7.5" />
-      <path d="M9.7 23.5 12 22 14.3 23.5" />
-      <path d="M5.5 2.24 4.93 4.93 2.24 5.5" />
-      <path d="M18.5 21.76 19.07 19.07 21.76 18.5" />
-      <path d="M21.76 5.5 19.07 4.93 18.5 2.24" />
-      <path d="M2.24 18.5 4.93 19.07 5.5 21.76" />
+      <path d="M12 2V18M12 22V18M12 18L15 21M12 18L9 21M15 3L12 6L9 3" />
+      <path d="M3.33978 7.00042L6.80389 9.00042M6.80389 9.00042L17.1962 15.0004M6.80389 9.00042L5.70581 4.90234M6.80389 9.00042L2.70581 10.0985M17.1962 15.0004L20.6603 17.0004M17.1962 15.0004L21.2943 13.9023M17.1962 15.0004L18.2943 19.0985" />
+      <path d="M20.66 7.00042L17.1959 9.00042M17.1959 9.00042L6.80364 15.0004M17.1959 9.00042L18.294 4.90234M17.1959 9.00042L21.294 10.0985M6.80364 15.0004L3.33954 17.0004M6.80364 15.0004L2.70557 13.9023M6.80364 15.0004L5.70557 19.0985" />
     </svg>
   )
 }
