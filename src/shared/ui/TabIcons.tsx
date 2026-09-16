@@ -26,10 +26,11 @@ export function ShoppingCartIcon() {
 export function PantryIcon() {
   return (
     <svg {...SHARED_PROPS}>
-      <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73Z" />
-      <path d="M12 22V12" />
-      <polyline points="3.29 7 12 12 20.71 7" />
-      <path d="m7.5 4.27 9 5.15" />
+      <rect x="4" y="2" width="16" height="18" rx="2" />
+      <line x1="12" y1="2" x2="12" y2="20" />
+      <line x1="4" y1="8" x2="20" y2="8" />
+      <line x1="4" y1="14" x2="20" y2="14" />
+      <path d="M8 20v2M16 20v2" />
     </svg>
   )
 }
