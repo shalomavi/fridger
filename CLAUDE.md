@@ -40,6 +40,13 @@ If you only enforce two things in review, enforce these.
   (https://fridger-app.netlify.app). Frontend only; the Edge Function
   deploys separately via `npx supabase functions deploy suggest-meals`, and
   migrations via `npx supabase db push`.
+- `python3 scripts/sync-icon-color.py '#rrggbb'` — after changing
+  `--color-primary` in `src/index.css`, run this with the same hex to
+  recolor `favicon.svg`, the three PWA icon PNGs, and `index.html`'s
+  `theme-color` meta tag to match. These can't reference the CSS variable
+  directly (favicon/PNGs load outside the page's DOM; theme-color is a
+  plain meta attribute), so this script is what keeps them in sync instead
+  of hand-editing five files.
 
 ## Size limits
 
