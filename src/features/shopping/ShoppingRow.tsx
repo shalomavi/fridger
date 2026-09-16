@@ -35,20 +35,20 @@ export function ShoppingRow({
 
   function handleDelete() {
     setRemoving(true)
-    setTimeout(onDelete, 200)
+    setTimeout(onDelete, 500)
   }
 
   return (
     <Surface
       as="li"
-      className={`overflow-hidden transition-all duration-200 ease-in ${
+      className={`overflow-hidden transition-all duration-500 ease-in ${
         removing ? 'max-h-0 p-0 opacity-0' : 'max-h-56 p-3 opacity-100'
       }`}
     >
       <div className="flex items-center gap-3">
         <button onClick={onToggle} className="flex flex-1 items-center gap-3 text-start">
           <span
-            className={`relative flex h-5 w-5 flex-none items-center justify-center rounded-full border-2 transition-colors duration-200 ${
+            className={`relative flex h-5 w-5 flex-none items-center justify-center rounded-full border-2 transition-colors duration-300 ${
               purchased ? 'border-primary-ring bg-primary-ring' : 'border-text-subtle'
             }`}
           >
@@ -62,13 +62,13 @@ export function ShoppingRow({
               strokeLinecap="round"
               strokeLinejoin="round"
               aria-hidden
-              className={`transition-transform duration-200 ${purchased ? 'scale-100' : 'scale-0'}`}
+              className={`transition-transform duration-300 ${purchased ? 'scale-100' : 'scale-0'}`}
             >
               <path d="M20 6 9 17l-5-5" />
             </svg>
           </span>
           <span
-            className={`flex-1 transition-colors duration-200 ${lang === 'he' ? 'font-list-he' : 'font-list-en'} ${
+            className={`flex-1 transition-colors duration-300 ${lang === 'he' ? 'font-list-he' : 'font-list-en'} ${
               purchased ? 'text-text-subtle line-through' : 'text-text'
             }`}
           >

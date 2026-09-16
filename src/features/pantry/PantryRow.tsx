@@ -40,7 +40,7 @@ export function PantryRow({
   function startConsume() {
     setDragX(-500)
     setLeaving(true)
-    setTimeout(onConsume, 220)
+    setTimeout(onConsume, 500)
   }
 
   function onPointerDown(e: React.PointerEvent) {
@@ -66,7 +66,7 @@ export function PantryRow({
 
   return (
     <li
-      className={`relative overflow-hidden rounded-lg transition-all duration-200 ${
+      className={`relative overflow-hidden rounded-lg transition-all duration-500 ${
         leaving ? 'max-h-0 opacity-0' : 'max-h-56 opacity-100'
       }`}
     >
@@ -87,7 +87,7 @@ export function PantryRow({
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
         style={{ transform: `translateX(${dragX}px)` }}
-        className={`relative flex touch-pan-y flex-col gap-1.5 px-4 py-3 transition-transform ${
+        className={`relative flex touch-pan-y flex-col gap-1.5 px-4 py-3 transition-transform duration-300 ${
           soon ? 'bg-surface ring-1 ring-inset ring-warning-ring/40' : 'bg-surface'
         }`}
       >
@@ -98,7 +98,7 @@ export function PantryRow({
           <button
             onClick={startConsume}
             onPointerDown={(e) => e.stopPropagation()}
-            className="flex-none rounded-md bg-surface-muted px-2 py-1 text-xs text-text-soft transition-transform active:scale-95"
+            className="flex-none rounded-md bg-surface-muted px-2 py-1 text-xs text-text-soft transition-transform duration-300 active:scale-95"
           >
             {t('used')}
           </button>
