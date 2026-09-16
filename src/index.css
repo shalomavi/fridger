@@ -189,6 +189,17 @@ body {
   animation: toast-in 300ms ease-out;
 }
 
+/* ToastContainer: the status-colored bar under a toast's text shrinks from
+ * full width to nothing, doubling as a visible countdown to auto-dismiss. */
+@keyframes toast-countdown {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
 /* MealLoader: the colored layer of the active icon fills in from the
  * bottom up, then holds fully colored before the icon swaps (see
  * MealLoader.tsx). */

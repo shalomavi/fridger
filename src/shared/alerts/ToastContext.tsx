@@ -15,7 +15,7 @@ type ToastContextValue = {
 }
 
 const ToastContext = createContext<ToastContextValue | null>(null)
-const AUTO_DISMISS_MS = 4000
+export const TOAST_DURATION_MS = 2000
 
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([])
@@ -24,11 +24,16 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     setToasts((current) => current.filter((toast) => toast.id !== id))
   }, [])
 
+  // Same message already showing (e.g. a mutation error firing twice) is a
+  // no-op, not a second stacked toast.
   const notify = useCallback(
     (message: string, variant: ToastVariant = 'info') => {
-      const id = crypto.randomUUID()
-      setToasts((current) => [...current, { id, variant, message }])
-      setTimeout(() => dismiss(id), AUTO_DISMISS_MS)
+      setToasts((current) => {
+        if (current.some((toast) => toast.message === message)) return current
+        const id = crypto.randomUUID()
+        setTimeout(() => dismiss(id), TOAST_DURATION_MS)
+        return [...current, { id, variant, message }]
+      })
     },
     [dismiss],
   )

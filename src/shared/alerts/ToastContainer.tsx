@@ -1,25 +1,43 @@
-import { useToast, type ToastVariant } from './ToastContext'
+import { useToast, TOAST_DURATION_MS, type ToastVariant } from './ToastContext'
+import { useLanguage } from '@/features/household/useLanguage'
 
-const variantClass: Record<ToastVariant, string> = {
-  success: 'bg-primary text-white',
-  error: 'bg-danger-fill text-white',
-  info: 'bg-surface-muted text-text',
+const variantBarClass: Record<ToastVariant, string> = {
+  success: 'bg-primary',
+  error: 'bg-danger',
+  info: 'bg-primary-accent',
 }
 
 /** Mounted once, near the root (see main.tsx) — every useToast().notify()
- * call anywhere in the app renders here. */
+ * call anywhere in the app renders here. It sits outside Layout, so — like
+ * ConfirmDialog — it sets its own dir/UI font from the household language
+ * instead of inheriting them.
+ *
+ * The bottom bar doubles as the dismiss countdown: it's a status-colored
+ * strip that shrinks from full width to nothing over TOAST_DURATION_MS,
+ * timed to the same setTimeout that actually removes the toast.
+ */
 export function ToastContainer() {
   const { toasts, dismiss } = useToast()
+  const { lang } = useLanguage()
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-4 z-50 flex flex-col items-center gap-2 px-4">
+    <div
+      dir={lang === 'he' ? 'rtl' : 'ltr'}
+      className="pointer-events-none fixed inset-x-0 bottom-4 z-50 flex flex-col items-center gap-2 px-4"
+    >
       {toasts.map((toast) => (
         <button
           key={toast.id}
           onClick={() => dismiss(toast.id)}
-          className={`animate-toast-in pointer-events-auto w-full max-w-sm rounded-lg px-4 py-3 text-start text-sm shadow-lg transition-transform duration-300 active:scale-95 ${variantClass[toast.variant]}`}
+          className={`animate-toast-in pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-surface text-text shadow-lg transition-transform duration-300 active:scale-95 ${
+            lang === 'he' ? 'font-ui-he' : 'font-ui-en'
+          }`}
         >
-          {toast.message}
+          <span className="block px-4 py-3 text-start text-sm">{toast.message}</span>
+          <span
+            className={`block h-1 ${variantBarClass[toast.variant]}`}
+            style={{ animation: `toast-countdown ${TOAST_DURATION_MS}ms linear forwards` }}
+          />
         </button>
       ))}
     </div>
