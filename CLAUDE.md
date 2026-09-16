@@ -66,12 +66,18 @@ splitting). One concern per file under `features/*`.
   fallback is a fixed list of ~3 staples, or an honest "try again" — see the
   plan, §5.
 - Language is per-household (`households.language`, 'en'|'he'), not per-user
-  or browser-detected. UI copy lives in `src/shared/i18n.ts` (one flat
-  dictionary) — read it with `useLanguage()` from the household feature, not
-  a new i18n library. Auth/household-setup screens run before a household
-  exists and stay English-only by design. In the LLM prompt, `uses` must stay
-  the pantry's exact strings regardless of language — translating them would
-  break `matchUsedIngredients()`'s exact-match "cooked this" deduction.
+  or browser-detected. UI copy lives in `src/shared/i18n/` — one file per
+  language (`en.ts`, `he.ts`), combined by `index.ts`, which is also where
+  `t()`/`TKey`/`Language` are exported from; everything outside this folder
+  still imports from `@/shared/i18n` as one module, not the per-language
+  files directly. `he.ts` is typed against `en.ts`'s keys (not its own
+  `as const`), so a key added to one side and forgotten on the other is a
+  type error, not a silent runtime fallback. Read it with `useLanguage()`
+  from the household feature, not a new i18n library. Auth/household-setup
+  screens run before a household exists and stay English-only by design. In
+  the LLM prompt, `uses` must stay the pantry's exact strings regardless of
+  language — translating them would break `matchUsedIngredients()`'s
+  exact-match "cooked this" deduction.
 
 ## Build order
 

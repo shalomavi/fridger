@@ -36,7 +36,8 @@ this project.
 - Name normalization is `lowercase + trim + collapse whitespace` only — no
   English stemming/singularization, since input is mixed Hebrew/English.
 - Language is per-household (`households.language`), not per-user or
-  browser-detected. UI copy lives in `src/shared/i18n.ts`.
+  browser-detected. UI copy lives in `src/shared/i18n/` (one file per
+  language, combined by `index.ts`).
 - Files ≤150 lines, functions ≤40 lines, one concern per file under
   `features/*`. No new dependencies without asking first.
 
