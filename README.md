@@ -71,14 +71,14 @@ Verified: auto-deploy connected via GitHub 2026-08-21.
 ## TODO
 
 - Migrations `0011_shopping_item_delete_policy.sql`,
-  `0012_item_categories.sql`, `0013_category_order.sql`, and
-  `0014_hygiene_category.sql` were applied by pasting their SQL directly
-  into the Supabase dashboard's SQL editor (no CLI access on the device
-  at the time), so the migration history table doesn't know about them.
-  Next time someone has `supabase` CLI access, run
-  `npx supabase migration repair` to mark all four as already applied —
-  otherwise a future `npx supabase db push` will try to reapply them and
-  fail on "already exists".
+  `0012_item_categories.sql`, `0013_category_order.sql`,
+  `0014_hygiene_category.sql`, and `0015_household_meal_types.sql` were
+  applied by pasting their SQL directly into the Supabase dashboard's SQL
+  editor (no CLI access on the device at the time), so the migration
+  history table doesn't know about them. Next time someone has `supabase`
+  CLI access, run `npx supabase migration repair` to mark all five as
+  already applied — otherwise a future `npx supabase db push` will try to
+  reapply them and fail on "already exists".
 - Everything from `npm run build`/`npx vitest run` through to
   `netlify deploy` and `supabase functions/db` commands still needs to be
   run for real (typecheck, tests, lint) — recent work was done from a
