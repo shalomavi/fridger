@@ -8,12 +8,20 @@ import {
   type PantryItem,
 } from './api'
 import type { Category } from '@/shared/categories'
+import { useLanguage } from '@/features/household/useLanguage'
+import { useToast } from '@/shared/alerts/ToastContext'
 
 export const pantryQueryKey = (householdId: string) => ['pantry-items', householdId] as const
 
 export function usePantry(householdId: string) {
   const queryClient = useQueryClient()
   const key = pantryQueryKey(householdId)
+  const { t } = useLanguage()
+  const { notify } = useToast()
+  const onMutationError = (context?: { previous?: PantryItem[] }) => {
+    if (context?.previous) queryClient.setQueryData(key, context.previous)
+    notify(t('actionFailed'), 'error')
+  }
 
   const query = useQuery({ queryKey: key, queryFn: () => listPantryItems(householdId) })
 
@@ -27,9 +35,7 @@ export function usePantry(householdId: string) {
       queryClient.setQueryData<PantryItem[]>(key, (items) => items?.filter((i) => i.id !== id))
       return { previous }
     },
-    onError: (_err, _id, context) => {
-      if (context?.previous) queryClient.setQueryData(key, context.previous)
-    },
+    onError: (_err, _id, context) => onMutationError(context),
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 
@@ -44,9 +50,7 @@ export function usePantry(householdId: string) {
       )
       return { previous }
     },
-    onError: (_err, _vars, context) => {
-      if (context?.previous) queryClient.setQueryData(key, context.previous)
-    },
+    onError: (_err, _vars, context) => onMutationError(context),
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 
@@ -61,9 +65,7 @@ export function usePantry(householdId: string) {
       )
       return { previous }
     },
-    onError: (_err, _vars, context) => {
-      if (context?.previous) queryClient.setQueryData(key, context.previous)
-    },
+    onError: (_err, _vars, context) => onMutationError(context),
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 
@@ -78,9 +80,7 @@ export function usePantry(householdId: string) {
       )
       return { previous }
     },
-    onError: (_err, _vars, context) => {
-      if (context?.previous) queryClient.setQueryData(key, context.previous)
-    },
+    onError: (_err, _vars, context) => onMutationError(context),
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 

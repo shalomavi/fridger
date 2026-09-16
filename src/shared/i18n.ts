@@ -61,6 +61,7 @@ const dict = {
     categoryOrderLabel: 'Category order',
     moveCategoryUp: 'Move up',
     moveCategoryDown: 'Move down',
+    actionFailed: "Something didn't go through. Try again.",
   },
   he: {
     signOut: 'התנתקות',
@@ -115,6 +116,7 @@ const dict = {
     categoryOrderLabel: 'סדר קטגוריות',
     moveCategoryUp: 'הזזה למעלה',
     moveCategoryDown: 'הזזה למטה',
+    actionFailed: 'הפעולה לא הושלמה. נסו שוב.',
   },
 } as const satisfies Record<Language, Record<string, string>>
 

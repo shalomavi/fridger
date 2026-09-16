@@ -4,6 +4,8 @@ import { QueryClient } from '@tanstack/react-query'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
 import { AppRoutes } from '@/app/routes'
+import { ToastProvider } from '@/shared/alerts/ToastContext'
+import { ToastContainer } from '@/shared/alerts/ToastContainer'
 import './index.css'
 
 // Polling stands in for Realtime: two people in one house cannot tell the
@@ -44,7 +46,10 @@ createRoot(document.getElementById('root')!).render(
         buster: 'v1',
       }}
     >
-      <AppRoutes />
+      <ToastProvider>
+        <AppRoutes />
+        <ToastContainer />
+      </ToastProvider>
     </PersistQueryClientProvider>
   </StrictMode>,
 )

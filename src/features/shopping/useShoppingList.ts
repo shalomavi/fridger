@@ -14,6 +14,8 @@ import { pantryQueryKey } from '@/features/pantry/usePantry'
 import { isSameIngredient } from '@/domain/normalize'
 import { mergeAmount } from '@/domain/mergeAmount'
 import type { Category } from '@/shared/categories'
+import { useLanguage } from '@/features/household/useLanguage'
+import { useToast } from '@/shared/alerts/ToastContext'
 
 const queryKey = (householdId: string) => ['shopping-items', householdId] as const
 type AddArgs = { name: string; amount?: string; category?: Category | null }
@@ -21,6 +23,12 @@ type AddArgs = { name: string; amount?: string; category?: Category | null }
 export function useShoppingList(householdId: string) {
   const queryClient = useQueryClient()
   const key = queryKey(householdId)
+  const { t } = useLanguage()
+  const { notify } = useToast()
+  const onMutationError = (context?: { previous?: ShoppingItem[] }) => {
+    if (context?.previous) queryClient.setQueryData(key, context.previous)
+    notify(t('actionFailed'), 'error')
+  }
 
   const query = useQuery({ queryKey: key, queryFn: () => listShoppingItems(householdId) })
 
@@ -67,9 +75,7 @@ export function useShoppingList(householdId: string) {
       })
       return { previous }
     },
-    onError: (_err, _vars, context) => {
-      if (context?.previous) queryClient.setQueryData(key, context.previous)
-    },
+    onError: (_err, _vars, context) => onMutationError(context),
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 
@@ -89,9 +95,7 @@ export function useShoppingList(householdId: string) {
       )
       return { previous }
     },
-    onError: (_err, _item, context) => {
-      if (context?.previous) queryClient.setQueryData(key, context.previous)
-    },
+    onError: (_err, _item, context) => onMutationError(context),
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: key })
       queryClient.invalidateQueries({ queryKey: pantryQueryKey(householdId) })
@@ -109,9 +113,7 @@ export function useShoppingList(householdId: string) {
       )
       return { previous }
     },
-    onError: (_err, _vars, context) => {
-      if (context?.previous) queryClient.setQueryData(key, context.previous)
-    },
+    onError: (_err, _vars, context) => onMutationError(context),
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 
@@ -126,9 +128,7 @@ export function useShoppingList(householdId: string) {
       )
       return { previous }
     },
-    onError: (_err, _vars, context) => {
-      if (context?.previous) queryClient.setQueryData(key, context.previous)
-    },
+    onError: (_err, _vars, context) => onMutationError(context),
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 
@@ -140,9 +140,7 @@ export function useShoppingList(householdId: string) {
       queryClient.setQueryData<ShoppingItem[]>(key, (items) => items?.filter((i) => i.id !== id))
       return { previous }
     },
-    onError: (_err, _id, context) => {
-      if (context?.previous) queryClient.setQueryData(key, context.previous)
-    },
+    onError: (_err, _id, context) => onMutationError(context),
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 

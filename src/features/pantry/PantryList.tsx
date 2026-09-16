@@ -8,6 +8,8 @@ import { CategoryHeading } from '@/shared/ui/CategoryHeading'
 import { resolveCategoryOrder } from '@/shared/categories'
 import { groupByCategory } from '@/domain/groupByCategory'
 import { filterByName } from '@/domain/filterByName'
+import { collectPantryAlerts } from '@/domain/alerts'
+import { AlertBanner } from '@/shared/alerts/AlertBanner'
 
 export function PantryList({ householdId }: { householdId: string }) {
   const { t } = useLanguage()
@@ -24,9 +26,11 @@ export function PantryList({ householdId }: { householdId: string }) {
 
   const order = resolveCategoryOrder(household?.category_order)
   const matched = filterByName(items, query)
+  const alerts = collectPantryAlerts(items)
 
   return (
     <div className="space-y-4">
+      <AlertBanner alerts={alerts} />
       <SearchInput value={query} onChange={setQuery} placeholder={t('searchPlaceholder')} />
 
       {matched.length === 0 && <p className="text-text-subtle">{t('noSearchResults')}</p>}

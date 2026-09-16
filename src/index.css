@@ -173,6 +173,22 @@ body {
   }
 }
 
+/* ToastContainer: a toast rises in from the bottom instead of popping into
+ * place, same opacity-first idea as item-in above. */
+@keyframes toast-in {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  35% {
+    opacity: 1;
+  }
+}
+
+.animate-toast-in {
+  animation: toast-in 300ms ease-out;
+}
+
 /* MealLoader: the colored layer of the active icon fills in from the
  * bottom up, then holds fully colored before the icon swaps (see
  * MealLoader.tsx). */
