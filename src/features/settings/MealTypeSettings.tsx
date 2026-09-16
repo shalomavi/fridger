@@ -22,8 +22,8 @@ export function MealTypeSettings() {
 
   const save = useMutation({
     mutationFn: (next: MealType[]) => setHouseholdMealTypes(household!.id, next),
-    onSuccess: () => {
-      invalidate()
+    onSuccess: async () => {
+      await invalidate()
       setDirty(false)
     },
   })
