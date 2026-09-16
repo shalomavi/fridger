@@ -10,6 +10,7 @@ import {
 import type { Category } from '@/shared/categories'
 import { useLanguage } from '@/features/household/useLanguage'
 import { useToast } from '@/shared/alerts/ToastContext'
+import { itemConsumedToastContent } from '@/shared/alerts/itemConsumedToast'
 
 export const pantryQueryKey = (householdId: string) => ['pantry-items', householdId] as const
 
@@ -33,6 +34,11 @@ export function usePantry(householdId: string) {
       await queryClient.cancelQueries({ queryKey: key })
       const previous = queryClient.getQueryData<PantryItem[]>(key)
       queryClient.setQueryData<PantryItem[]>(key, (items) => items?.filter((i) => i.id !== id))
+      const item = previous?.find((i) => i.id === id)
+      if (item) {
+        const { message, icon } = itemConsumedToastContent(item.name, t)
+        notify(message, 'success', icon)
+      }
       return { previous }
     },
     onError: (_err, _id, context) => onMutationError(context),
