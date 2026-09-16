@@ -20,7 +20,12 @@ export function MealsScreen({ householdId }: { householdId: string }) {
   }
 
   function requestSuggestion(regenerate: boolean) {
-    suggest.mutate({ regenerate, lang, preferences: household?.preferences ?? null })
+    suggest.mutate({
+      regenerate,
+      lang,
+      preferences: household?.preferences ?? null,
+      mealTypes: household?.meal_types ?? [],
+    })
   }
 
   return (

@@ -2,13 +2,27 @@
 // The household's pantry contents are the only user data sent; no names,
 // emails, or user ids ever go into the prompt.
 
-import type { Language } from './schema.ts'
+import type { Language, MealType } from './schema.ts'
 
 const LANGUAGE_NAME: Record<Language, string> = { en: 'English', he: 'Hebrew' }
 
+// One line per meal type, phrased as a soft "favor" rather than a hard
+// rule, so several selected together nudge the result instead of fighting
+// each other outright. Selected types join into one line in buildPrompt.
+const MEAL_TYPE_INSTRUCTIONS: Record<MealType, string> = {
+  healthy: 'lighter, nutrient-dense meals — more vegetables and lean protein, less deep-frying or heavy cream/cheese',
+  fast: 'the quickest options — under 15 minutes hands-on, as few steps and dishes as possible',
+  trending: 'currently popular dishes and flavor combinations, not old-fashioned staples',
+  unique: 'less common, more adventurous combinations rather than the obvious default dish',
+  budget: 'cheap, few-ingredient meals that stretch the pantry rather than requiring extra purchases',
+  comfort: 'hearty, warming, familiar comfort food',
+  dairy: 'dishes built around dairy — cheese, yogurt, cream-based sauces',
+  meaty: 'meat-forward dishes, where meat is the main component rather than a garnish',
+}
+
 export const SYSTEM_INSTRUCTION = `You suggest simple weeknight home-cook meals for a 2-person household, based on
 what's in their shared pantry.
-Reply only with meals realistic to cook in about 30 minutes with basic kitchen equipment, using mostly what's listed.
+Reply only with meals realistic to cook in about 30 minutes or less with basic kitchen equipment, using mostly what's listed.
 It's fine to suggest 1-2 small extra ingredients that aren't listed, but call them out as missing.
 Prefer meals that use more of the listed pantry over ones that use only one or two items and leave the rest as
 missing — reducing pantry waste is the point of this feature.
@@ -23,6 +37,7 @@ export function buildPrompt(
   lang: Language,
   preferences: string | null,
   expiringSoonNames: string[],
+  mealTypes: MealType[],
 ): string {
   const pantryList = pantryNames.length > 0 ? pantryNames.join(', ') : '(nothing logged yet)'
 
@@ -36,12 +51,17 @@ export function buildPrompt(
       ? `\n\nThese are expiring soon — prefer meals that use them: ${expiringSoonNames.join(', ')}.`
       : ''
 
+  const mealTypesLine =
+    mealTypes.length > 0
+      ? `\n\nFavor: ${mealTypes.map((type) => MEAL_TYPE_INSTRUCTIONS[type]).join('; ')}.`
+      : ''
+
   const preferencesLine = preferences?.trim()
     ? `\n\nHousehold preferences and restrictions — follow these strictly (e.g. allergies), even if that means ` +
-      `ignoring an expiring-soon item above: ${preferences.trim()}`
+      `ignoring an expiring-soon item or meal-type preference above: ${preferences.trim()}`
     : ''
 
-  return `Pantry contents: ${pantryList}${expiringLine}${preferencesLine}${avoidLine}
+  return `Pantry contents: ${pantryList}${expiringLine}${mealTypesLine}${preferencesLine}${avoidLine}
 
 Suggest 3 different meals, with portions sized for 2 people. Except for "uses" (see below), write everything —
 name, missing, steps — in ${LANGUAGE_NAME[lang]}.

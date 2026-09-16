@@ -1,5 +1,5 @@
 import { SYSTEM_INSTRUCTION, buildPrompt } from './prompt.ts'
-import type { Language } from './schema.ts'
+import type { Language, MealType } from './schema.ts'
 
 const MODEL = 'gemini-2.5-flash'
 
@@ -36,6 +36,7 @@ export async function callGemini(
   lang: Language,
   preferences: string | null,
   expiringSoonNames: string[],
+  mealTypes: MealType[],
 ): Promise<unknown> {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`
 
@@ -54,6 +55,7 @@ export async function callGemini(
                 lang,
                 preferences,
                 expiringSoonNames,
+                mealTypes,
               ),
             },
           ],

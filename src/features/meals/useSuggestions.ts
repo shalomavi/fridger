@@ -4,6 +4,7 @@ import { listPantryItems, consumeItem } from '@/features/pantry/api'
 import { pantryQueryKey } from '@/features/pantry/usePantry'
 import { matchUsedIngredients } from '@/domain/matchIngredients'
 import type { Language } from '@/shared/i18n'
+import type { MealType } from '@/shared/mealTypes'
 
 const suggestionQueryKey = (householdId: string) => ['meal-suggestion', householdId] as const
 
@@ -27,11 +28,13 @@ export function useSuggestions(householdId: string) {
       regenerate,
       lang,
       preferences,
+      mealTypes,
     }: {
       regenerate: boolean
       lang: Language
       preferences: string | null
-    }) => suggestMeals(householdId, lang, preferences, regenerate),
+      mealTypes: MealType[]
+    }) => suggestMeals(householdId, lang, preferences, mealTypes, regenerate),
     onSuccess: (data) => queryClient.setQueryData(key, data),
   })
 

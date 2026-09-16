@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { createInvite } from './api'
+import { createInvite } from './invites'
 import { useLanguage } from './useLanguage'
 import { Surface } from '@/shared/ui/Surface'
 

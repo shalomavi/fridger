@@ -5,7 +5,8 @@ import '@supabase/functions-js/edge-runtime.d.ts'
 import { createClient } from '@supabase/supabase-js'
 import { callGemini } from './gemini.ts'
 import { FALLBACK_MEALS } from './prompt.ts'
-import { SuggestionsSchema, pantryHash, isExpiringSoon, type Language } from './schema.ts'
+import { SuggestionsSchema, pantryHash, isExpiringSoon } from './schema.ts'
+import { parseRequestBody, type RequestBody } from './request.ts'
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
@@ -35,20 +36,13 @@ Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS_HEADERS })
   if (req.method !== 'POST') return json({ error: 'POST only' }, 405)
 
-  let householdId: string
-  let regenerate = false
-  let lang: Language = 'en'
-  let preferences: string | null = null
+  let body: RequestBody
   try {
-    const body = await req.json()
-    householdId = body.householdId
-    regenerate = Boolean(body.regenerate)
-    if (body.lang === 'he' || body.lang === 'en') lang = body.lang
-    if (typeof body.preferences === 'string') preferences = body.preferences
-    if (!householdId) throw new Error('missing householdId')
+    body = await parseRequestBody(req)
   } catch {
     return json({ error: 'Expected JSON body with householdId' }, 400)
   }
+  const { householdId, regenerate, lang, preferences, mealTypes } = body
 
   // Identify the caller from their own JWT — this is a real auth check,
   // not just trusting whatever householdId the client sends.
@@ -97,7 +91,7 @@ Deno.serve(async (req) => {
   const expiringSoonNames = (pantryRows ?? [])
     .filter((r) => isExpiringSoon(r.expires_at as string | null))
     .map((r) => r.name as string)
-  const hash = await pantryHash(pantryNames, lang, preferences)
+  const hash = await pantryHash(pantryNames, lang, preferences, mealTypes)
 
   if (!regenerate) {
     const { data: cached } = await admin
@@ -132,6 +126,7 @@ Deno.serve(async (req) => {
       lang,
       preferences,
       expiringSoonNames,
+      mealTypes,
     )
     const parsed = SuggestionsSchema.parse(raw)
     payload = { meals: parsed.meals, fallback: false }

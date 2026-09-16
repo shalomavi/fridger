@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { createHousehold, joinHousehold } from './api'
+import { createHousehold } from './api'
+import { joinHousehold } from './invites'
 import { useInvalidateHousehold } from './useHousehold'
 import { Button } from '@/shared/ui/Button'
 import { statusTextClass } from '@/shared/ui/Badge'
