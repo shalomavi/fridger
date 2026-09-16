@@ -3,11 +3,14 @@
  * Shared by TabIcons (nav bar), FormIcons (the moved-to-pantry toast), and
  * CategoryIcons (the pantry category tag) — all three rendered the exact
  * same glyph before, so it lives here once instead of duplicated three
- * times at this size.
+ * times at this size. viewBox is cropped tight to the artwork's actual
+ * bounding box (not the source file's full 0 0 1216 1216 canvas, which has
+ * a lot of unused margin) so it renders at the same visual size as every
+ * other icon here instead of looking small and padded next to them.
  */
 export function PantryIcon({ size = 16, className }: { size?: number; className?: string }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 1216 1216" aria-hidden className={className}>
+    <svg width={size} height={size} viewBox="195 148 825 930" aria-hidden className={className}>
       <g fill="none" stroke="currentColor" strokeWidth={12} strokeLinecap="round" strokeLinejoin="round">
         <rect x="245" y="198" width="725" height="760" rx="55" />
         <rect x="288" y="239" width="639" height="671" rx="35" />
