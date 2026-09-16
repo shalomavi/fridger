@@ -71,4 +71,6 @@ export const he: Record<keyof typeof en, string> = {
   mealType_comfort: 'מפנק',
   mealType_dairy: 'חלבי',
   mealType_meaty: 'בשרי',
+  mealType_vegan: 'טבעוני',
+  mealType_vegetarian: 'צמחוני',
 }

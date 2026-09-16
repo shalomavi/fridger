@@ -67,4 +67,6 @@ export const en = {
   mealType_comfort: 'Comfort',
   mealType_dairy: 'Dairy',
   mealType_meaty: 'Meaty',
+  mealType_vegan: 'Vegan',
+  mealType_vegetarian: 'Vegetarian',
 } as const

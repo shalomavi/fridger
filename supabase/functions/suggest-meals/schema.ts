@@ -13,6 +13,8 @@ export const MEAL_TYPES = [
   'comfort',
   'dairy',
   'meaty',
+  'vegan',
+  'vegetarian',
 ] as const
 export type MealType = (typeof MEAL_TYPES)[number]
 

@@ -6,18 +6,38 @@ import type { Language, MealType } from './schema.ts'
 
 const LANGUAGE_NAME: Record<Language, string> = { en: 'English', he: 'Hebrew' }
 
-// One line per meal type, phrased as a soft "favor" rather than a hard
-// rule, so several selected together nudge the result instead of fighting
-// each other outright. Selected types join into one line in buildPrompt.
-const MEAL_TYPE_INSTRUCTIONS: Record<MealType, string> = {
+// Soft style nudges — one line per type, phrased as "favor" rather than a
+// hard rule, so several selected together nudge the result instead of
+// fighting each other outright. Selected types join into one line below.
+const STYLE_INSTRUCTIONS = {
   healthy: 'lighter, nutrient-dense meals — more vegetables and lean protein, less deep-frying or heavy cream/cheese',
   fast: 'the quickest options — under 15 minutes hands-on, as few steps and dishes as possible',
   trending: 'currently popular dishes and flavor combinations, not old-fashioned staples',
   unique: 'less common, more adventurous combinations rather than the obvious default dish',
   budget: 'cheap, few-ingredient meals that stretch the pantry rather than requiring extra purchases',
   comfort: 'hearty, warming, familiar comfort food',
-  dairy: 'dishes built around dairy — cheese, yogurt, cream-based sauces',
-  meaty: 'meat-forward dishes, where meat is the main component rather than a garnish',
+} as const
+
+// Hard dietary constraints, unlike the style nudges above — every meal must
+// comply, not just lean that way. dairy/meaty specifically exclude each
+// other's ingredient (kosher-style meat/dairy separation), not just favor
+// one over the other.
+const DIET_INSTRUCTIONS = {
+  dairy: 'dairy-based meals only — no meat, poultry, or fish (kosher-style meat/dairy separation)',
+  meaty: 'meat-based meals only — no dairy products (kosher-style meat/dairy separation)',
+  vegan: 'fully vegan — no meat, poultry, fish, dairy, eggs, or any other animal product',
+  vegetarian: 'vegetarian — no meat, poultry, or fish (dairy and eggs are fine)',
+} as const
+
+type StyleType = keyof typeof STYLE_INSTRUCTIONS
+type DietType = keyof typeof DIET_INSTRUCTIONS
+
+function isStyleType(type: MealType): type is StyleType {
+  return type in STYLE_INSTRUCTIONS
+}
+
+function isDietType(type: MealType): type is DietType {
+  return type in DIET_INSTRUCTIONS
 }
 
 export const SYSTEM_INSTRUCTION = `You suggest simple weeknight home-cook meals for a 2-person household, based on
@@ -51,17 +71,26 @@ export function buildPrompt(
       ? `\n\nThese are expiring soon — prefer meals that use them: ${expiringSoonNames.join(', ')}.`
       : ''
 
+  const styleSelected = mealTypes.filter(isStyleType)
   const mealTypesLine =
-    mealTypes.length > 0
-      ? `\n\nFavor: ${mealTypes.map((type) => MEAL_TYPE_INSTRUCTIONS[type]).join('; ')}.`
+    styleSelected.length > 0
+      ? `\n\nFavor: ${styleSelected.map((type) => STYLE_INSTRUCTIONS[type]).join('; ')}.`
+      : ''
+
+  const dietSelected = mealTypes.filter(isDietType)
+  const dietLine =
+    dietSelected.length > 0
+      ? `\n\nDietary requirement — every meal must comply, no exceptions: ${dietSelected
+          .map((type) => DIET_INSTRUCTIONS[type])
+          .join('; ')}.`
       : ''
 
   const preferencesLine = preferences?.trim()
     ? `\n\nHousehold preferences and restrictions — follow these strictly (e.g. allergies), even if that means ` +
-      `ignoring an expiring-soon item or meal-type preference above: ${preferences.trim()}`
+      `ignoring an expiring-soon item, meal-type style, or dietary requirement above: ${preferences.trim()}`
     : ''
 
-  return `Pantry contents: ${pantryList}${expiringLine}${mealTypesLine}${preferencesLine}${avoidLine}
+  return `Pantry contents: ${pantryList}${expiringLine}${mealTypesLine}${dietLine}${preferencesLine}${avoidLine}
 
 Suggest 3 different meals, with portions sized for 2 people. Except for "uses" (see below), write everything —
 name, missing, steps — in ${LANGUAGE_NAME[lang]}.
@@ -72,63 +101,4 @@ For each meal, give:
   language, do not translate or rewrite them, even though the rest of your answer is in ${LANGUAGE_NAME[lang]}
 - missing: any extra ingredients needed that aren't in the pantry (can be empty)
 - steps: 3-5 short steps to make it, including rough quantities sized for 2 people`
-}
-
-/** Shown when the LLM call fails or returns something that doesn't parse — fail closed,
- * not a hand-authored recipe engine. See the plan, §5. */
-export const FALLBACK_MEALS: Record<
-  Language,
-  { name: string; uses: string[]; missing: string[]; steps: string[] }[]
-> = {
-  en: [
-    {
-      name: 'Pasta aglio e olio',
-      uses: [],
-      missing: ['pasta', 'olive oil', 'garlic'],
-      steps: [
-        'Boil pasta until al dente.',
-        'Gently fry sliced garlic in olive oil until golden.',
-        'Toss the pasta through the garlic oil, season, and serve.',
-      ],
-    },
-    {
-      name: 'Simple omelette',
-      uses: [],
-      missing: ['eggs', 'salt', 'oil or butter'],
-      steps: [
-        'Beat eggs with a pinch of salt.',
-        'Cook in a hot pan with oil or butter, folding once set.',
-      ],
-    },
-    {
-      name: 'Grilled cheese sandwich',
-      uses: [],
-      missing: ['bread', 'cheese', 'butter'],
-      steps: [
-        'Butter two slices of bread.',
-        'Add cheese between them.',
-        'Grill both sides until golden and melted.',
-      ],
-    },
-  ],
-  he: [
-    {
-      name: 'פסטה בשמן זית ושום',
-      uses: [],
-      missing: ['פסטה', 'שמן זית', 'שום'],
-      steps: ['מבשלים פסטה עד שהיא אל דנטה.', 'מטגנים קלות שום פרוס בשמן זית עד להזהבה.', 'מערבבים את הפסטה עם השום והשמן, מתבלים ומגישים.'],
-    },
-    {
-      name: 'חביתה פשוטה',
-      uses: [],
-      missing: ['ביצים', 'מלח', 'שמן או חמאה'],
-      steps: ['טורפים ביצים עם קורט מלח.', 'מבשלים במחבת חמה עם שמן או חמאה, מקפלים כשמוצק.'],
-    },
-    {
-      name: 'טוסט גבינה',
-      uses: [],
-      missing: ['לחם', 'גבינה', 'חמאה'],
-      steps: ['מורחים חמאה על שתי פרוסות לחם.', 'מוסיפים גבינה ביניהן.', 'מטגנים משני הצדדים עד להזהבה והמסה.'],
-    },
-  ],
 }

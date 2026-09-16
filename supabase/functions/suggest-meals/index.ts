@@ -4,7 +4,7 @@
 import '@supabase/functions-js/edge-runtime.d.ts'
 import { createClient } from '@supabase/supabase-js'
 import { callGemini } from './gemini.ts'
-import { FALLBACK_MEALS } from './prompt.ts'
+import { FALLBACK_MEALS } from './fallbackMeals.ts'
 import { SuggestionsSchema, pantryHash, isExpiringSoon } from './schema.ts'
 import { parseRequestBody, type RequestBody } from './request.ts'
 
