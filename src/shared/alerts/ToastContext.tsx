@@ -4,13 +4,15 @@ import { createContext, useCallback, useContext, useState, type ReactNode } from
  * Ephemeral feedback toasts — success/error/info today. A new kind of
  * transient feedback is just a new ToastVariant plus a color in
  * ToastContainer's variantClass map; nothing else in this file changes.
+ * `icon` is a free-form slot (see shared/alerts/itemAddedToast.tsx) — the
+ * context/container stay unaware of what any particular toast's icon means.
  */
 export type ToastVariant = 'success' | 'error' | 'info'
-export type Toast = { id: string; variant: ToastVariant; message: string }
+export type Toast = { id: string; variant: ToastVariant; message: string; icon?: ReactNode }
 
 type ToastContextValue = {
   toasts: Toast[]
-  notify: (message: string, variant?: ToastVariant) => void
+  notify: (message: string, variant?: ToastVariant, icon?: ReactNode) => void
   dismiss: (id: string) => void
 }
 
@@ -27,12 +29,12 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   // Same message already showing (e.g. a mutation error firing twice) is a
   // no-op, not a second stacked toast.
   const notify = useCallback(
-    (message: string, variant: ToastVariant = 'info') => {
+    (message: string, variant: ToastVariant = 'info', icon?: ReactNode) => {
       setToasts((current) => {
         if (current.some((toast) => toast.message === message)) return current
         const id = crypto.randomUUID()
         setTimeout(() => dismiss(id), TOAST_DURATION_MS)
-        return [...current, { id, variant, message }]
+        return [...current, { id, variant, message, icon }]
       })
     },
     [dismiss],

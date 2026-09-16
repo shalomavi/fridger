@@ -16,6 +16,7 @@ import { mergeAmount } from '@/domain/mergeAmount'
 import type { Category } from '@/shared/categories'
 import { useLanguage } from '@/features/household/useLanguage'
 import { useToast } from '@/shared/alerts/ToastContext'
+import { itemAddedToastContent } from '@/shared/alerts/itemAddedToast'
 
 const queryKey = (householdId: string) => ['shopping-items', householdId] as const
 type AddArgs = { name: string; amount?: string; category?: Category | null }
@@ -33,9 +34,7 @@ export function useShoppingList(householdId: string) {
   const query = useQuery({ queryKey: key, queryFn: () => listShoppingItems(householdId) })
 
   // mutationFn can't re-derive these from the cache — it already holds
-  // onMutate's optimistic row by then, which would self-match as a
-  // duplicate, or (for the id) mismatch it and remount+reanimate the row
-  // once refetch swaps in the real one. onMutate resolves both once.
+  // onMutate's optimistic row by then and would self-match/mismatch. onMutate resolves both once.
   const pendingExisting = useRef<ShoppingItem | null>(null)
   const pendingId = useRef<string | null>(null)
 
@@ -73,6 +72,8 @@ export function useShoppingList(householdId: string) {
         }
         return [...(items ?? []), optimisticItem]
       })
+      const { message, icon } = itemAddedToastContent(existing?.category ?? category ?? null, t)
+      notify(message, 'success', icon)
       return { previous }
     },
     onError: (_err, _vars, context) => onMutationError(context),

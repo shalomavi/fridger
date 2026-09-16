@@ -33,7 +33,10 @@ export function ToastContainer() {
             lang === 'he' ? 'font-ui-he' : 'font-ui-en'
           }`}
         >
-          <span className="block px-4 py-3 text-start text-sm">{toast.message}</span>
+          <span className="flex items-center gap-2 px-4 py-3 text-start text-sm">
+            {toast.icon}
+            {toast.message}
+          </span>
           <span
             className={`block h-1 ${variantBarClass[toast.variant]}`}
             style={{ animation: `toast-countdown ${TOAST_DURATION_MS}ms linear forwards` }}
