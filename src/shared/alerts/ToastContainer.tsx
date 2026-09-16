@@ -29,7 +29,7 @@ export function ToastContainer() {
         <button
           key={toast.id}
           onClick={() => dismiss(toast.id)}
-          className={`animate-toast-in pointer-events-auto w-full max-w-md overflow-hidden rounded-xl bg-surface/20 text-text shadow-lg ring-1 ring-inset ring-surface-muted/60 backdrop-blur-sm transition-transform duration-300 active:scale-95 ${
+          className={`animate-toast-in pointer-events-auto w-full max-w-md overflow-hidden rounded-xl bg-surface/10 text-text shadow-lg ring-1 ring-inset ring-surface-muted/60 backdrop-blur-sm transition-transform duration-300 active:scale-95 ${
             lang === 'he' ? 'font-ui-he' : 'font-ui-en'
           }`}
         >
