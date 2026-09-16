@@ -42,11 +42,14 @@ If you only enforce two things in review, enforce these.
   migrations via `npx supabase db push`.
 - `python3 scripts/sync-icon-color.py '#rrggbb'` — after changing
   `--color-primary` in `src/index.css`, run this with the same hex to
-  recolor `favicon.svg`, the three PWA icon PNGs, and `index.html`'s
-  `theme-color` meta tag to match. These can't reference the CSS variable
-  directly (favicon/PNGs load outside the page's DOM; theme-color is a
-  plain meta attribute), so this script is what keeps them in sync instead
-  of hand-editing five files.
+  recolor `favicon.svg`, the three PWA icon PNGs, `index.html`'s
+  `theme-color` meta tag, and `vite.config.ts`'s PWA manifest `theme_color`
+  to match. These can't reference the CSS variable directly (favicon/PNGs
+  load outside the page's DOM; theme-color is a plain meta attribute; the
+  manifest is generated at build time — and for an *installed* PWA it's the
+  manifest's `theme_color`, not the HTML meta tag, that Android actually
+  uses for the status bar), so this script is what keeps them in sync
+  instead of hand-editing six files.
 
 ## Size limits
 

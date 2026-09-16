@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 """
-Resyncs the app icon/favicon background color (and index.html's theme-color
-meta tag) to match src/index.css's --color-primary, after you change it.
+Resyncs the app icon/favicon background color (index.html's theme-color meta
+tag, and vite.config.ts's PWA manifest theme_color) to match src/index.css's
+--color-primary, after you change it.
 
 These assets can't reference the CSS variable directly — favicon.svg is
-loaded outside the page's DOM, the PNGs are rasters, and theme-color is a
-plain meta attribute — so this script is the single place that keeps them
-in sync instead of hand-editing 5 files. See CLAUDE.md.
+loaded outside the page's DOM, the PNGs are rasters, theme-color is a plain
+meta attribute, and the PWA manifest is generated at build time — so this
+script is the single place that keeps them in sync instead of hand-editing
+6 files. See CLAUDE.md. Note: for an *installed* PWA, Android reads the
+generated manifest's theme_color (not the HTML meta tag) for the status
+bar, so both must be updated.
 
 Usage: python3 scripts/sync-icon-color.py '#15803d'
 """
@@ -19,6 +23,7 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parent.parent
 FAVICON = ROOT / "public" / "favicon.svg"
 INDEX_HTML = ROOT / "index.html"
+VITE_CONFIG = ROOT / "vite.config.ts"
 PNGS = ["icon-192.png", "icon-512.png", "icon-maskable-512.png"]
 BODY_COLOR = (226, 232, 240)  # #e2e8f0, fixed — not part of the primary-color swap
 
@@ -84,6 +89,20 @@ def sync_theme_color(new_hex: str) -> None:
         print(f"index.html: theme-color -> {new_hex}")
 
 
+def sync_vite_manifest(new_hex: str) -> None:
+    ts = VITE_CONFIG.read_text()
+    updated = re.sub(
+        r"(theme_color: ')#[0-9a-fA-F]{6}(')",
+        rf"\g<1>{new_hex}\g<2>",
+        ts,
+    )
+    if updated == ts:
+        print("vite.config.ts: theme_color not found / already up to date")
+    else:
+        VITE_CONFIG.write_text(updated)
+        print(f"vite.config.ts: theme_color -> {new_hex}")
+
+
 def main() -> None:
     if len(sys.argv) != 2 or not re.fullmatch(r"#[0-9a-fA-F]{6}", sys.argv[1]):
         print("Usage: python3 scripts/sync-icon-color.py '#rrggbb'")
@@ -92,6 +111,7 @@ def main() -> None:
     sync_svg(new_hex)
     sync_pngs(new_hex)
     sync_theme_color(new_hex)
+    sync_vite_manifest(new_hex)
 
 
 if __name__ == "__main__":
