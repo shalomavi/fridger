@@ -23,13 +23,13 @@ export function ToastContainer() {
   return (
     <div
       dir={lang === 'he' ? 'rtl' : 'ltr'}
-      className="pointer-events-none fixed inset-x-0 top-16 z-50 flex flex-col items-center gap-2 px-4"
+      className="pointer-events-none fixed inset-x-0 top-4 z-50 flex flex-col items-center gap-2 px-4"
     >
       {toasts.map((toast) => (
         <button
           key={toast.id}
           onClick={() => dismiss(toast.id)}
-          className={`animate-toast-in pointer-events-auto w-full max-w-md overflow-hidden rounded-xl bg-surface/70 text-text shadow-lg ring-1 ring-inset ring-surface-muted/60 backdrop-blur-lg transition-transform duration-300 active:scale-95 ${
+          className={`animate-toast-in pointer-events-auto w-full max-w-md overflow-hidden rounded-xl bg-surface/80 text-text shadow-lg ring-1 ring-inset ring-surface-muted/60 backdrop-blur-md transition-transform duration-300 active:scale-95 ${
             lang === 'he' ? 'font-ui-he' : 'font-ui-en'
           }`}
         >
