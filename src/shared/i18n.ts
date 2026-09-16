@@ -64,6 +64,8 @@ const dict = {
     actionFailed: "Something didn't go through. Try again.",
     cancel: 'Cancel',
     addedTo: 'Added to',
+    movedToPantry: 'Moved to pantry',
+    movedToShoppingList: 'Moved to shopping list',
   },
   he: {
     signOut: 'התנתקות',
@@ -121,6 +123,8 @@ const dict = {
     actionFailed: 'הפעולה לא הושלמה. נסו שוב.',
     cancel: 'ביטול',
     addedTo: 'נוסף ל',
+    movedToPantry: 'עבר למזווה',
+    movedToShoppingList: 'עבר לרשימת הקניות',
   },
 } as const satisfies Record<Language, Record<string, string>>
 

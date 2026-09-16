@@ -66,3 +66,27 @@ export function CheckCircleIcon({ className }: { className?: string }) {
     </svg>
   )
 }
+
+// Same glyphs as TabIcons' ShoppingCartIcon/PantryIcon, but at this file's
+// smaller size and with a className prop — TabIcons' are fixed-size (20px,
+// no className) for the nav bar specifically.
+export function ShoppingCartIcon({ className }: { className?: string }) {
+  return (
+    <svg {...SHARED_PROPS} className={className}>
+      <circle cx="8" cy="21" r="1" />
+      <circle cx="19" cy="21" r="1" />
+      <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+    </svg>
+  )
+}
+
+export function PantryIcon({ className }: { className?: string }) {
+  return (
+    <svg {...SHARED_PROPS} className={className}>
+      <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73Z" />
+      <path d="M12 22V12" />
+      <polyline points="3.29 7 12 12 20.71 7" />
+      <path d="m7.5 4.27 9 5.15" />
+    </svg>
+  )
+}

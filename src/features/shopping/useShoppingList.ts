@@ -17,6 +17,7 @@ import type { Category } from '@/shared/categories'
 import { useLanguage } from '@/features/household/useLanguage'
 import { useToast } from '@/shared/alerts/ToastContext'
 import { itemAddedToastContent } from '@/shared/alerts/itemAddedToast'
+import { itemMovedToastContent } from '@/shared/alerts/itemMovedToast'
 
 const queryKey = (householdId: string) => ['shopping-items', householdId] as const
 type AddArgs = { name: string; amount?: string; category?: Category | null }
@@ -33,8 +34,13 @@ export function useShoppingList(householdId: string) {
 
   const query = useQuery({ queryKey: key, queryFn: () => listShoppingItems(householdId) })
 
-  // mutationFn can't re-derive these from the cache — it already holds
-  // onMutate's optimistic row by then and would self-match/mismatch. onMutate resolves both once.
+  // Shared by every mutation's onMutate: stop in-flight refetches, then snapshot for rollback.
+  async function snapshot() {
+    await queryClient.cancelQueries({ queryKey: key })
+    return queryClient.getQueryData<ShoppingItem[]>(key)
+  }
+
+  // mutationFn can't re-derive these from the cache (it already holds onMutate's optimistic row).
   const pendingExisting = useRef<ShoppingItem | null>(null)
   const pendingId = useRef<string | null>(null)
 
@@ -48,8 +54,7 @@ export function useShoppingList(householdId: string) {
       return addShoppingItem(householdId, pendingId.current!, name, amount, category)
     },
     onMutate: async ({ name, amount, category }: AddArgs) => {
-      await queryClient.cancelQueries({ queryKey: key })
-      const previous = queryClient.getQueryData<ShoppingItem[]>(key)
+      const previous = await snapshot()
       const existing = previous?.find((i) => i.status === 'pending' && isSameIngredient(i.name, name))
       pendingExisting.current = existing ?? null
       queryClient.setQueryData<ShoppingItem[]>(key, (items) => {
@@ -81,19 +86,18 @@ export function useShoppingList(householdId: string) {
   })
 
   const toggleItem = useMutation({
-    // Checking a pending item off writes it to the pantry (§1/§3 of the
-    // plan: a transition, not a move); unchecking a mis-tap undoes that.
+    // Checking off writes to the pantry (§1/§3 of the plan: a transition, not a move); unchecking undoes that.
     mutationFn: (item: ShoppingItem) =>
       item.status === 'pending' ? markPurchased(item) : undoPurchase(item),
-    // Optimistic: checking an item off should feel instant, not wait on a round trip.
     onMutate: async (item) => {
-      await queryClient.cancelQueries({ queryKey: key })
-      const previous = queryClient.getQueryData<ShoppingItem[]>(key)
+      const previous = await snapshot()
       queryClient.setQueryData<ShoppingItem[]>(key, (items) =>
         items?.map((i) =>
           i.id === item.id ? { ...i, status: i.status === 'pending' ? 'purchased' : 'pending' } : i,
         ),
       )
+      const { message, icon } = itemMovedToastContent(item.status === 'pending' ? 'pantry' : 'shopping-list', t)
+      notify(message, 'success', icon)
       return { previous }
     },
     onError: (_err, _item, context) => onMutationError(context),
@@ -107,8 +111,7 @@ export function useShoppingList(householdId: string) {
     mutationFn: ({ id, amount }: { id: string; amount: string | null }) =>
       updateShoppingItemAmount(id, amount),
     onMutate: async ({ id, amount }) => {
-      await queryClient.cancelQueries({ queryKey: key })
-      const previous = queryClient.getQueryData<ShoppingItem[]>(key)
+      const previous = await snapshot()
       queryClient.setQueryData<ShoppingItem[]>(key, (items) =>
         items?.map((i) => (i.id === id ? { ...i, amount } : i)),
       )
@@ -122,8 +125,7 @@ export function useShoppingList(householdId: string) {
     mutationFn: ({ id, category }: { id: string; category: Category | null }) =>
       updateShoppingItemCategory(id, category),
     onMutate: async ({ id, category }) => {
-      await queryClient.cancelQueries({ queryKey: key })
-      const previous = queryClient.getQueryData<ShoppingItem[]>(key)
+      const previous = await snapshot()
       queryClient.setQueryData<ShoppingItem[]>(key, (items) =>
         items?.map((i) => (i.id === id ? { ...i, category } : i)),
       )
@@ -136,8 +138,7 @@ export function useShoppingList(householdId: string) {
   const deleteItem = useMutation({
     mutationFn: (id: string) => deleteShoppingItem(id),
     onMutate: async (id) => {
-      await queryClient.cancelQueries({ queryKey: key })
-      const previous = queryClient.getQueryData<ShoppingItem[]>(key)
+      const previous = await snapshot()
       queryClient.setQueryData<ShoppingItem[]>(key, (items) => items?.filter((i) => i.id !== id))
       return { previous }
     },
