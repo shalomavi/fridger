@@ -26,9 +26,18 @@ export async function listShoppingItems(householdId: string): Promise<ShoppingIt
   return data
 }
 
-/** `amount` is free text and optional — no unit picker, no number parsing. See CLAUDE.md. */
+/**
+ * `amount` is free text and optional — no unit picker, no number parsing.
+ * See CLAUDE.md. `id` is supplied by the caller (rather than left to the
+ * column's default) so the optimistic row in useShoppingList's cache can
+ * use that same id — otherwise the optimistic-to-real swap changes the
+ * row's id, which changes its list `key` and forces an unmount/remount
+ * (visible as a blink, replaying the entrance animation) instead of a
+ * seamless update in place.
+ */
 export async function addShoppingItem(
   householdId: string,
+  id: string,
   name: string,
   amount?: string,
   category?: Category | null,
@@ -38,6 +47,7 @@ export async function addShoppingItem(
   } = await supabase.auth.getUser()
 
   const { error } = await supabase.from('shopping_items').insert({
+    id,
     household_id: householdId,
     name: name.trim(),
     amount: amount?.trim() || null,

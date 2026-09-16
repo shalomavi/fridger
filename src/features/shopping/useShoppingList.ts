@@ -24,23 +24,22 @@ export function useShoppingList(householdId: string) {
 
   const query = useQuery({ queryKey: key, queryFn: () => listShoppingItems(householdId) })
 
-  // mutationFn and onMutate must agree on the same pre-mutation duplicate
-  // match; mutationFn can't re-derive it from the cache itself, since by
-  // then it already holds onMutate's own optimistic row (which would match
-  // against itself — merging into a fake id, so nothing actually inserts).
+  // mutationFn can't re-derive these from the cache — it already holds
+  // onMutate's optimistic row by then, which would self-match as a
+  // duplicate, or (for the id) mismatch it and remount+reanimate the row
+  // once refetch swaps in the real one. onMutate resolves both once.
   const pendingExisting = useRef<ShoppingItem | null>(null)
+  const pendingId = useRef<string | null>(null)
 
   const addItem = useMutation({
-    // Adding something already pending (typed twice, or both of you added
-    // it) merges into that row instead of duplicating — domain/mergeAmount.ts.
+    // Duplicate of a pending item merges into that row — domain/mergeAmount.ts.
     mutationFn: ({ name, amount, category }: AddArgs) => {
       const existing = pendingExisting.current
       if (existing) {
         return updateShoppingItemAmount(existing.id, mergeAmount(existing.amount, amount ?? null))
       }
-      return addShoppingItem(householdId, name, amount, category)
+      return addShoppingItem(householdId, pendingId.current!, name, amount, category)
     },
-    // Optimistic — without this a new item only showed up after two round trips.
     onMutate: async ({ name, amount, category }: AddArgs) => {
       await queryClient.cancelQueries({ queryKey: key })
       const previous = queryClient.getQueryData<ShoppingItem[]>(key)
@@ -52,8 +51,9 @@ export function useShoppingList(householdId: string) {
             i.id === existing.id ? { ...i, amount: mergeAmount(i.amount, amount ?? null) } : i,
           )
         }
+        pendingId.current = crypto.randomUUID()
         const optimisticItem: ShoppingItem = {
-          id: crypto.randomUUID(),
+          id: pendingId.current,
           household_id: householdId,
           name: name.trim(),
           amount: amount?.trim() || null,
