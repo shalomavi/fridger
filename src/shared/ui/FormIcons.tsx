@@ -90,3 +90,14 @@ export function PantryIcon({ className }: { className?: string }) {
     </svg>
   )
 }
+
+// Deliberately not CheckCircleIcon: a minus reads as "used up/taken away"
+// rather than "success", so a consumed-item toast doesn't look like an add.
+export function CircleMinusIcon({ className }: { className?: string }) {
+  return (
+    <svg {...SHARED_PROPS} className={className}>
+      <circle cx="12" cy="12" r="10" />
+      <path d="M8 12h8" />
+    </svg>
+  )
+}
