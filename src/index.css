@@ -193,10 +193,10 @@ body {
  * full width to nothing, doubling as a visible countdown to auto-dismiss. */
 @keyframes toast-countdown {
   from {
-    width: 100%;
+    width: 0%;
   }
   to {
-    width: 0%;
+    width: 100%;
   }
 }
 
