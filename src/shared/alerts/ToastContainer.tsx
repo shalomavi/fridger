@@ -29,11 +29,11 @@ export function ToastContainer() {
         <button
           key={toast.id}
           onClick={() => dismiss(toast.id)}
-          className={`animate-toast-in pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg bg-surface text-text shadow-lg transition-transform duration-300 active:scale-95 ${
+          className={`animate-toast-in pointer-events-auto w-full max-w-md overflow-hidden rounded-xl bg-surface/70 text-text shadow-lg ring-1 ring-inset ring-surface-muted/60 backdrop-blur-lg transition-transform duration-300 active:scale-95 ${
             lang === 'he' ? 'font-ui-he' : 'font-ui-en'
           }`}
         >
-          <span className="flex items-center gap-2 px-4 py-3 text-start text-sm">
+          <span className="flex items-center gap-3 px-5 py-4 text-start text-base">
             {toast.icon}
             {toast.message}
           </span>
