@@ -1,3 +1,5 @@
+import { PantryIcon as PantryCabinetIcon } from './PantryIcon'
+
 // Icons: Lucide (ISC license, lucide.dev), inlined the same way as
 // ThemeToggle's Sun/Moon icons — no icon library dependency. currentColor
 // lets each icon inherit the tab's active/inactive text color.
@@ -24,14 +26,7 @@ export function ShoppingCartIcon() {
 }
 
 export function PantryIcon() {
-  return (
-    <svg {...SHARED_PROPS}>
-      <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73Z" />
-      <path d="M12 22V12" />
-      <polyline points="3.29 7 12 12 20.71 7" />
-      <path d="m7.5 4.27 9 5.15" />
-    </svg>
-  )
+  return <PantryCabinetIcon size={20} />
 }
 
 export function MealsIcon() {

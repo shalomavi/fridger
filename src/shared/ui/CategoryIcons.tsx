@@ -1,4 +1,5 @@
 import type { Category } from '@/shared/categories'
+import { PantryIcon } from './PantryIcon'
 
 // Icons: Lucide (ISC license, lucide.dev), inlined the same way as
 // ThemeToggle's Sun/Moon icons — no icon library dependency. A couple
@@ -89,17 +90,6 @@ function BakeryIcon({ className }: { className?: string }) {
       <path d="m9 9.5-.7 2.5" />
       <path d="M12 8.7V12" />
       <path d="m15 9.5.7 2.5" />
-    </svg>
-  )
-}
-
-function PantryIcon({ className }: { className?: string }) {
-  return (
-    <svg {...SHARED_PROPS} className={className}>
-      <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73Z" />
-      <path d="M12 22V12" />
-      <polyline points="3.29 7 12 12 20.71 7" />
-      <path d="m7.5 4.27 9 5.15" />
     </svg>
   )
 }
