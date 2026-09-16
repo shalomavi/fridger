@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   addShoppingItem,
@@ -23,23 +24,28 @@ export function useShoppingList(householdId: string) {
 
   const query = useQuery({ queryKey: key, queryFn: () => listShoppingItems(householdId) })
 
+  // mutationFn and onMutate must agree on the same pre-mutation duplicate
+  // match; mutationFn can't re-derive it from the cache itself, since by
+  // then it already holds onMutate's own optimistic row (which would match
+  // against itself — merging into a fake id, so nothing actually inserts).
+  const pendingExisting = useRef<ShoppingItem | null>(null)
+
   const addItem = useMutation({
     // Adding something already pending (typed twice, or both of you added
     // it) merges into that row instead of duplicating — domain/mergeAmount.ts.
     mutationFn: ({ name, amount, category }: AddArgs) => {
-      const items = queryClient.getQueryData<ShoppingItem[]>(key)
-      const existing = items?.find((i) => i.status === 'pending' && isSameIngredient(i.name, name))
+      const existing = pendingExisting.current
       if (existing) {
         return updateShoppingItemAmount(existing.id, mergeAmount(existing.amount, amount ?? null))
       }
       return addShoppingItem(householdId, name, amount, category)
     },
-    // Optimistic — without this, a new item only showed up after two round
-    // trips (insert, then refetch), which read as a delayed/stuck add.
+    // Optimistic — without this a new item only showed up after two round trips.
     onMutate: async ({ name, amount, category }: AddArgs) => {
       await queryClient.cancelQueries({ queryKey: key })
       const previous = queryClient.getQueryData<ShoppingItem[]>(key)
       const existing = previous?.find((i) => i.status === 'pending' && isSameIngredient(i.name, name))
+      pendingExisting.current = existing ?? null
       queryClient.setQueryData<ShoppingItem[]>(key, (items) => {
         if (existing) {
           return items?.map((i) =>
