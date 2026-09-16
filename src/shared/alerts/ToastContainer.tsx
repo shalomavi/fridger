@@ -14,7 +14,11 @@ const variantBarClass: Record<ToastVariant, string> = {
  *
  * The bottom bar doubles as the dismiss countdown: it's a status-colored
  * strip that shrinks from full width to nothing over TOAST_DURATION_MS,
- * timed to the same setTimeout that actually removes the toast.
+ * timed to the same setTimeout that actually removes the toast. `ms-auto`
+ * (margin-inline-start) pins it to the inline-end edge as it shrinks, so it
+ * drains toward the start — the same direction text on the line above it
+ * reads, in both LTR and RTL, since it's a logical property that flips
+ * with `dir` automatically rather than a hardcoded left/right.
  */
 export function ToastContainer() {
   const { toasts, dismiss } = useToast()
@@ -38,7 +42,7 @@ export function ToastContainer() {
             {toast.message}
           </span>
           <span
-            className={`block h-1 ${variantBarClass[toast.variant]}`}
+            className={`ms-auto block h-1 ${variantBarClass[toast.variant]}`}
             style={{ animation: `toast-countdown ${TOAST_DURATION_MS}ms linear forwards` }}
           />
         </button>
