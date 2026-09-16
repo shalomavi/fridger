@@ -16,6 +16,7 @@
   --color-primary: var(--color-green-700);
   --color-primary-accent: var(--color-green-400);
   --color-primary-ring: var(--color-green-500);
+  --color-primary-bright: color-mix(in oklch, var(--color-primary), white 18%);
   --color-warning: var(--color-amber-400);
   --color-warning-ring: var(--color-amber-500);
   --color-danger: var(--color-rose-400);
@@ -46,6 +47,7 @@
   --color-primary: var(--color-green-700);
   --color-primary-accent: var(--color-green-700);
   --color-primary-ring: var(--color-green-500);
+  --color-primary-bright: color-mix(in oklch, var(--color-primary), white 18%);
 
   --color-warning: var(--color-amber-600);
   --color-warning-ring: var(--color-amber-500);
@@ -76,6 +78,7 @@
     --color-primary: var(--color-green-700);
     --color-primary-accent: var(--color-green-400);
     --color-primary-ring: var(--color-green-500);
+    --color-primary-bright: color-mix(in oklch, var(--color-primary), white 18%);
 
     --color-warning: var(--color-amber-400);
     --color-warning-ring: var(--color-amber-500);
@@ -106,6 +109,7 @@
   --color-primary: var(--color-green-700);
   --color-primary-accent: var(--color-green-400);
   --color-primary-ring: var(--color-green-500);
+  --color-primary-bright: color-mix(in oklch, var(--color-primary), white 18%);
 
   --color-warning: var(--color-amber-400);
   --color-warning-ring: var(--color-amber-500);
