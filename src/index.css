@@ -158,12 +158,18 @@ body {
  * into existence. Existing rows are unaffected — React reuses their DOM
  * node across re-renders (stable `key={item.id}`), and a CSS `animation`
  * (unlike a `transition`) only plays on actual mount, so this only fires
- * for the row that's truly new. No explicit `to` keyframe: it just
- * interpolates into the element's real computed styles. */
+ * for the row that's truly new. Opacity reaches full well before the
+ * slide/scale settles (35% vs. 100% of the duration) so the item reads as
+ * "shown" early on, rather than staying translucent for the whole
+ * animation. No explicit end transform: it interpolates into the
+ * element's real computed styles. */
 @keyframes item-in {
-  from {
+  0% {
     opacity: 0;
     transform: translateY(-6px) scale(0.98);
+  }
+  35% {
+    opacity: 1;
   }
 }
 
