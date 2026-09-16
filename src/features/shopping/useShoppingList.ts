@@ -15,6 +15,7 @@ import { mergeAmount } from '@/domain/mergeAmount'
 import type { Category } from '@/shared/categories'
 
 const queryKey = (householdId: string) => ['shopping-items', householdId] as const
+type AddArgs = { name: string; amount?: string; category?: Category | null }
 
 export function useShoppingList(householdId: string) {
   const queryClient = useQueryClient()
@@ -23,19 +24,9 @@ export function useShoppingList(householdId: string) {
   const query = useQuery({ queryKey: key, queryFn: () => listShoppingItems(householdId) })
 
   const addItem = useMutation({
-    // Adding something already on the pending list (someone typed "milk"
-    // twice, or both of you added it) merges into that row instead of
-    // creating a duplicate — see domain/mergeAmount.ts. The new category (if
-    // any) is dropped in that case; the existing row's tag wins.
-    mutationFn: ({
-      name,
-      amount,
-      category,
-    }: {
-      name: string
-      amount?: string
-      category?: Category | null
-    }) => {
+    // Adding something already pending (typed twice, or both of you added
+    // it) merges into that row instead of duplicating — domain/mergeAmount.ts.
+    mutationFn: ({ name, amount, category }: AddArgs) => {
       const items = queryClient.getQueryData<ShoppingItem[]>(key)
       const existing = items?.find((i) => i.status === 'pending' && isSameIngredient(i.name, name))
       if (existing) {
@@ -43,7 +34,37 @@ export function useShoppingList(householdId: string) {
       }
       return addShoppingItem(householdId, name, amount, category)
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: key }),
+    // Optimistic — without this, a new item only showed up after two round
+    // trips (insert, then refetch), which read as a delayed/stuck add.
+    onMutate: async ({ name, amount, category }: AddArgs) => {
+      await queryClient.cancelQueries({ queryKey: key })
+      const previous = queryClient.getQueryData<ShoppingItem[]>(key)
+      const existing = previous?.find((i) => i.status === 'pending' && isSameIngredient(i.name, name))
+      queryClient.setQueryData<ShoppingItem[]>(key, (items) => {
+        if (existing) {
+          return items?.map((i) =>
+            i.id === existing.id ? { ...i, amount: mergeAmount(i.amount, amount ?? null) } : i,
+          )
+        }
+        const optimisticItem: ShoppingItem = {
+          id: crypto.randomUUID(),
+          household_id: householdId,
+          name: name.trim(),
+          amount: amount?.trim() || null,
+          category: category ?? null,
+          status: 'pending',
+          added_by: null,
+          purchased_at: null,
+          created_at: new Date().toISOString(),
+        }
+        return [...(items ?? []), optimisticItem]
+      })
+      return { previous }
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previous) queryClient.setQueryData(key, context.previous)
+    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 
   const toggleItem = useMutation({

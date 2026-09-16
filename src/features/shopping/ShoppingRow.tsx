@@ -41,7 +41,7 @@ export function ShoppingRow({
   return (
     <Surface
       as="li"
-      style={{ animation: 'item-in 1s ease-out' }}
+      style={{ animation: 'item-in 300ms ease-out' }}
       className={`overflow-hidden transition-all duration-500 ease-in ${
         removing ? 'max-h-0 p-0 opacity-0' : 'max-h-56 p-3 opacity-100'
       }`}
