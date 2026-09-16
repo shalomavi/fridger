@@ -17,7 +17,7 @@ export function SuggestionCard({
 
   return (
     <Surface as="li" className="space-y-3 p-4">
-      <h3 className="text-lg font-medium text-primary">{meal.name}</h3>
+      <h3 className="text-lg font-medium text-primary-accent">{meal.name}</h3>
 
       {meal.uses.length > 0 && (
         <p className="text-sm text-text-muted">
