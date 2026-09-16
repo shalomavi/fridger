@@ -154,6 +154,19 @@ body {
   background-attachment: fixed;
 }
 
+/* ShoppingRow: a newly added item settles into place instead of popping
+ * into existence. Existing rows are unaffected — React reuses their DOM
+ * node across re-renders (stable `key={item.id}`), and a CSS `animation`
+ * (unlike a `transition`) only plays on actual mount, so this only fires
+ * for the row that's truly new. No explicit `to` keyframe: it just
+ * interpolates into the element's real computed styles. */
+@keyframes item-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+}
+
 /* MealLoader: the colored layer of the active icon fills in from the
  * bottom up, then holds fully colored before the icon swaps (see
  * MealLoader.tsx). */
