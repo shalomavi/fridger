@@ -13,7 +13,7 @@
   --color-text-soft: var(--color-slate-300);
   --color-text-muted: var(--color-slate-400);
   --color-text-subtle: var(--color-slate-500);
-  --color-primary: var(--color-green-600);
+  --color-primary: var(--color-green-700);
   --color-primary-accent: var(--color-green-400);
   --color-primary-ring: var(--color-green-500);
   --color-warning: var(--color-amber-400);
@@ -43,7 +43,7 @@
   --color-text-muted: var(--color-slate-500);
   --color-text-subtle: var(--color-slate-400);
 
-  --color-primary: var(--color-green-600);
+  --color-primary: var(--color-green-700);
   --color-primary-accent: var(--color-green-700);
   --color-primary-ring: var(--color-green-500);
 
@@ -73,7 +73,7 @@
     --color-text-muted: var(--color-slate-400);
     --color-text-subtle: var(--color-slate-500);
 
-    --color-primary: var(--color-green-600);
+    --color-primary: var(--color-green-700);
     --color-primary-accent: var(--color-green-400);
     --color-primary-ring: var(--color-green-500);
 
@@ -103,7 +103,7 @@
   --color-text-muted: var(--color-slate-400);
   --color-text-subtle: var(--color-slate-500);
 
-  --color-primary: var(--color-green-600);
+  --color-primary: var(--color-green-700);
   --color-primary-accent: var(--color-green-400);
   --color-primary-ring: var(--color-green-500);
 
