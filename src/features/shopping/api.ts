@@ -1,14 +1,14 @@
 import { supabase } from '@/shared/supabase'
 import { purchaseItem } from '@/domain/purchaseItem'
 import { isSameIngredient } from '@/domain/normalize'
-import { mergeAmount } from '@/domain/mergeAmount'
+import { mergeDetails } from '@/domain/mergeDetails'
 import type { Category } from '@/shared/categories'
 
 export type ShoppingItem = {
   id: string
   household_id: string
   name: string
-  amount: string | null
+  details: string | null
   category: Category | null
   status: 'pending' | 'purchased'
   added_by: string | null
@@ -27,7 +27,7 @@ export async function listShoppingItems(householdId: string): Promise<ShoppingIt
 }
 
 /**
- * `amount` is free text and optional — no unit picker, no number parsing.
+ * `details` is free text and optional — no unit picker, no number parsing.
  * See CLAUDE.md. `id` is supplied by the caller (rather than left to the
  * column's default) so the optimistic row in useShoppingList's cache can
  * use that same id — otherwise the optimistic-to-real swap changes the
@@ -39,7 +39,7 @@ export async function addShoppingItem(
   householdId: string,
   id: string,
   name: string,
-  amount?: string,
+  details?: string,
   category?: Category | null,
 ): Promise<void> {
   const {
@@ -50,15 +50,15 @@ export async function addShoppingItem(
     id,
     household_id: householdId,
     name: name.trim(),
-    amount: amount?.trim() || null,
+    details: details?.trim() || null,
     category: category ?? null,
     added_by: user?.id ?? null,
   })
   if (error) throw error
 }
 
-export async function updateShoppingItemAmount(id: string, amount: string | null): Promise<void> {
-  const { error } = await supabase.from('shopping_items').update({ amount }).eq('id', id)
+export async function updateShoppingItemDetails(id: string, details: string | null): Promise<void> {
+  const { error } = await supabase.from('shopping_items').update({ details }).eq('id', id)
   if (error) throw error
 }
 
@@ -82,19 +82,19 @@ export async function deleteShoppingItem(id: string): Promise<void> {
  * kept, marked purchased, for history — a new pantry row is created rather
  * than the old one being moved. If an available pantry row for the same
  * ingredient already exists (you still had some milk and bought more), the
- * amounts merge into that row instead of creating a second "Milk" entry —
- * see domain/mergeAmount.ts.
+ * details merge into that row instead of creating a second "Milk" entry —
+ * see domain/mergeDetails.ts.
  *
  * Known limitation: undoPurchase can only find a pantry row it created
  * itself (matched by source_item_id). A mis-tap undo after a merge leaves
- * the merged amount in the pantry rather than un-merging it — reversing a
+ * the merged details in the pantry rather than un-merging it — reversing a
  * text join isn't well-defined, and this is a rare enough case (undo right
  * after a merge-on-purchase) that it's not worth solving.
  */
 export async function markPurchased(item: ShoppingItem): Promise<void> {
   const { data: available } = await supabase
     .from('pantry_items')
-    .select('id, name, amount')
+    .select('id, name, details')
     .eq('household_id', item.household_id)
     .eq('status', 'available')
   const match = (available ?? []).find((p) => isSameIngredient(p.name, item.name))
@@ -102,7 +102,7 @@ export async function markPurchased(item: ShoppingItem): Promise<void> {
   if (match) {
     const { error } = await supabase
       .from('pantry_items')
-      .update({ amount: mergeAmount(match.amount, item.amount) })
+      .update({ details: mergeDetails(match.details, item.details) })
       .eq('id', match.id)
     if (error) throw error
   } else {

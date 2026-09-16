@@ -20,7 +20,7 @@ this project.
 
 - `src/domain/` imports nothing from React, Supabase, or any framework —
   plain TypeScript, pure functions, unit-tested with Vitest
-  (`normalizeName`, `purchaseItem`, `mergeAmount`, etc).
+  (`normalizeName`, `purchaseItem`, `mergeDetails`, etc).
 - Every LLM prompt string lives in `supabase/functions/suggest-meals/prompt.ts`,
   nowhere else — the Gemini adapter is swappable.
 
@@ -31,7 +31,7 @@ this project.
   `src/shared/supabase.ts`.
 - Never bypass RLS from the client; the Edge Function is the only place
   allowed elevated privilege, and it checks household membership itself.
-- `amount` is a single free-text field, no unit/number split, no
+- `details` is a single free-text field, no unit/number split, no
   unit-conversion table, no ingredient taxonomy.
 - Name normalization is `lowercase + trim + collapse whitespace` only — no
   English stemming/singularization, since input is mixed Hebrew/English.
@@ -63,7 +63,7 @@ npm run dev
 
 All six planned slices are done: shared list, purchase→pantry, consume, LLM
 suggestions, household preferences/expiry, and polish (merging, offline
-reads). Plus a Hebrew/English language toggle and inline amount/expiry
+reads). Plus a Hebrew/English language toggle and inline details/expiry
 editing beyond the original plan. See `CLAUDE.md` for details.
 
 Verified: auto-deploy connected via GitHub 2026-08-21.
@@ -83,3 +83,10 @@ Verified: auto-deploy connected via GitHub 2026-08-21.
   `netlify deploy` and `supabase functions/db` commands still needs to be
   run for real (typecheck, tests, lint) — recent work was done from a
   phone with no npm, so none of it has been verified to actually build.
+- `0017_rename_amount_to_details.sql` (renames `shopping_items.amount` /
+  `pantry_items.amount` to `details`) has NOT been applied to the live
+  database yet — the app code now reads/writes `details`, so the frontend
+  will break against the live DB until this migration is run (`npx supabase
+  db push`, or paste its SQL into the dashboard's SQL editor like
+  0011-0015 above, in which case fold it into the `migration repair` list
+  too).

@@ -3,7 +3,7 @@ import { useLanguage } from '@/features/household/useLanguage'
 import { ChevronDownIcon, TagIcon } from '@/shared/ui/FormIcons'
 import { CATEGORY_ICONS } from '@/shared/ui/CategoryIcons'
 
-/** Tap-to-pick category tag, same interaction pattern as AmountEditor/
+/** Tap-to-pick category tag, same interaction pattern as DetailsEditor/
  * ExpiryEditor: shown as an icon (name kept for screen readers) with a
  * chevron. The <select> itself is an invisible full-size overlay (tap it
  * anywhere to get the native picker) rather than the visible control — a

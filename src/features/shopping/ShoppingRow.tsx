@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { DeleteButton } from './DeleteButton'
 import type { ShoppingItem } from './api'
 import { useLanguage } from '@/features/household/useLanguage'
-import { AmountEditor } from '@/shared/ui/AmountEditor'
+import { DetailsEditor } from '@/shared/ui/DetailsEditor'
 import { CategoryPicker } from '@/shared/ui/CategoryPicker'
 import { Surface } from '@/shared/ui/Surface'
 import type { Category } from '@/shared/categories'
@@ -10,19 +10,19 @@ import type { Category } from '@/shared/categories'
 export function ShoppingRow({
   item,
   onToggle,
-  onUpdateAmount,
+  onUpdateDetails,
   onUpdateCategory,
   onDelete,
-  amountPlaceholder,
+  detailsPlaceholder,
   deleteLabel,
   confirmDeleteMessage,
 }: {
   item: ShoppingItem
   onToggle: () => void
-  onUpdateAmount: (amount: string | null) => void
+  onUpdateDetails: (details: string | null) => void
   onUpdateCategory: (category: Category | null) => void
   onDelete: () => void
-  amountPlaceholder: string
+  detailsPlaceholder: string
   deleteLabel: string
   confirmDeleteMessage: string
 }) {
@@ -81,7 +81,7 @@ export function ShoppingRow({
       {/* ps-8 lines this row up under the name text (h-5 checkbox + gap-3). */}
       <div className="mt-1.5 flex items-center gap-3 ps-8">
         <CategoryPicker category={item.category} onSave={onUpdateCategory} />
-        <AmountEditor amount={item.amount} onSave={onUpdateAmount} placeholder={amountPlaceholder} />
+        <DetailsEditor details={item.details} onSave={onUpdateDetails} placeholder={detailsPlaceholder} />
       </div>
     </Surface>
   )

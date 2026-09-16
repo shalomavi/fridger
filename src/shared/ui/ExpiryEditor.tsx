@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { isExpiringSoon, toDateInputValue, formatDateDisplay } from '@/domain/expiry'
 import { statusTextClass } from '@/shared/ui/Badge'
 
-/** Same tap-to-edit pattern as AmountEditor, with a native date picker and
+/** Same tap-to-edit pattern as DetailsEditor, with a native date picker and
  * an amber highlight once the date is within the "expiring soon" window. */
 export function ExpiryEditor({
   expiresAt,

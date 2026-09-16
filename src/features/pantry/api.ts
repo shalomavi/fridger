@@ -5,7 +5,7 @@ export type PantryItem = {
   id: string
   household_id: string
   name: string
-  amount: string | null
+  details: string | null
   category: Category | null
   status: 'available' | 'consumed'
   added_at: string
@@ -25,8 +25,8 @@ export async function listPantryItems(householdId: string): Promise<PantryItem[]
   return data
 }
 
-export async function updatePantryItemAmount(id: string, amount: string | null): Promise<void> {
-  const { error } = await supabase.from('pantry_items').update({ amount }).eq('id', id)
+export async function updatePantryItemDetails(id: string, details: string | null): Promise<void> {
+  const { error } = await supabase.from('pantry_items').update({ details }).eq('id', id)
   if (error) throw error
 }
 

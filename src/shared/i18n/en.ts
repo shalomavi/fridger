@@ -9,7 +9,7 @@ export const en = {
   addItemPlaceholder: 'Add an item…',
   searchPlaceholder: 'Search…',
   noSearchResults: 'No matches.',
-  amountPlaceholder: 'Amount',
+  detailsPlaceholder: 'Details',
   add: 'Add',
   loading: 'Loading…',
   nothingOnList: 'Nothing on the list yet.',

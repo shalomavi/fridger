@@ -21,7 +21,7 @@ export function PlusIcon({ className }: { className?: string }) {
   )
 }
 
-export function QuantityIcon({ className }: { className?: string }) {
+export function DetailsIcon({ className }: { className?: string }) {
   return (
     <svg {...SHARED_PROPS} className={className}>
       <line x1="4" x2="20" y1="9" y2="9" />

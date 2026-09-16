@@ -23,34 +23,34 @@ if (!url || !serviceKey) {
 
 const supabase = createClient(url, serviceKey)
 
-const items: { name: string; amount: string | null }[] = [
-  { name: 'Chicken breast', amount: '500g' },
-  { name: 'עגבניות', amount: '6' },
-  { name: 'Milk', amount: '1L' },
-  { name: 'ביצים', amount: '12' },
-  { name: 'Rice', amount: '1kg' },
-  { name: 'מלפפון', amount: '4' },
-  { name: 'Onion', amount: '3' },
-  { name: 'שמן זית', amount: null },
-  { name: 'Garlic', amount: '1 head' },
-  { name: 'גבינה צהובה', amount: '200g' },
-  { name: 'Pasta', amount: '500g' },
-  { name: 'לחם', amount: '1 loaf' },
-  { name: 'Butter', amount: '200g' },
-  { name: 'תפוחי אדמה', amount: '5' },
-  { name: 'Bell pepper', amount: '2' },
-  { name: 'יוגורט', amount: '4' },
-  { name: 'Canned tomatoes', amount: '2 cans' },
-  { name: 'קמח', amount: '1kg' },
-  { name: 'Lemon', amount: '3' },
-  { name: 'תבלינים מעורבים', amount: null },
+const items: { name: string; details: string | null }[] = [
+  { name: 'Chicken breast', details: '500g' },
+  { name: 'עגבניות', details: '6' },
+  { name: 'Milk', details: '1L' },
+  { name: 'ביצים', details: '12' },
+  { name: 'Rice', details: '1kg' },
+  { name: 'מלפפון', details: '4' },
+  { name: 'Onion', details: '3' },
+  { name: 'שמן זית', details: null },
+  { name: 'Garlic', details: '1 head' },
+  { name: 'גבינה צהובה', details: '200g' },
+  { name: 'Pasta', details: '500g' },
+  { name: 'לחם', details: '1 loaf' },
+  { name: 'Butter', details: '200g' },
+  { name: 'תפוחי אדמה', details: '5' },
+  { name: 'Bell pepper', details: '2' },
+  { name: 'יוגורט', details: '4' },
+  { name: 'Canned tomatoes', details: '2 cans' },
+  { name: 'קמח', details: '1kg' },
+  { name: 'Lemon', details: '3' },
+  { name: 'תבלינים מעורבים', details: null },
 ]
 
 async function main() {
   const rows = items.map((item) => ({
     household_id: householdId,
     name: item.name,
-    amount: item.amount,
+    details: item.details,
     status: 'available' as const,
   }))
 

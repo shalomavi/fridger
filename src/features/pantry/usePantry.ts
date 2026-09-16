@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   consumeItem,
   listPantryItems,
-  updatePantryItemAmount,
+  updatePantryItemDetails,
   updatePantryItemCategory,
   updatePantryItemExpiry,
   type PantryItem,
@@ -45,14 +45,14 @@ export function usePantry(householdId: string) {
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 
-  const updateAmount = useMutation({
-    mutationFn: ({ id, amount }: { id: string; amount: string | null }) =>
-      updatePantryItemAmount(id, amount),
-    onMutate: async ({ id, amount }) => {
+  const updateDetails = useMutation({
+    mutationFn: ({ id, details }: { id: string; details: string | null }) =>
+      updatePantryItemDetails(id, details),
+    onMutate: async ({ id, details }) => {
       await queryClient.cancelQueries({ queryKey: key })
       const previous = queryClient.getQueryData<PantryItem[]>(key)
       queryClient.setQueryData<PantryItem[]>(key, (items) =>
-        items?.map((i) => (i.id === id ? { ...i, amount } : i)),
+        items?.map((i) => (i.id === id ? { ...i, details } : i)),
       )
       return { previous }
     },
@@ -90,7 +90,7 @@ export function usePantry(householdId: string) {
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 
-  return { ...query, consume, updateAmount, updateCategory, updateExpiry }
+  return { ...query, consume, updateDetails, updateCategory, updateExpiry }
 }
 
 export function useInvalidatePantry(householdId: string) {

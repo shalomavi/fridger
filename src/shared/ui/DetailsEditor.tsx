@@ -1,33 +1,33 @@
 import { useState } from 'react'
 
 /**
- * Tap the amount to edit it inline — free text, same as adding one (no
+ * Tap the details to edit them inline — free text, same as adding one (no
  * number+unit split). Used on both the shopping list and pantry rows, which
  * both live inside a tappable/swipeable row, so every handler here stops
  * propagation to avoid triggering the row's own tap/drag behavior.
  */
-export function AmountEditor({
-  amount,
+export function DetailsEditor({
+  details,
   onSave,
   placeholder,
 }: {
-  amount: string | null
-  onSave: (amount: string | null) => void
+  details: string | null
+  onSave: (details: string | null) => void
   placeholder: string
 }) {
   const [editing, setEditing] = useState(false)
-  const [value, setValue] = useState(amount ?? '')
+  const [value, setValue] = useState(details ?? '')
 
   function startEditing(e: React.SyntheticEvent) {
     e.stopPropagation()
-    setValue(amount ?? '')
+    setValue(details ?? '')
     setEditing(true)
   }
 
   function save() {
     setEditing(false)
     const trimmed = value.trim()
-    if (trimmed !== (amount ?? '')) onSave(trimmed || null)
+    if (trimmed !== (details ?? '')) onSave(trimmed || null)
   }
 
   if (!editing) {
@@ -37,7 +37,7 @@ export function AmountEditor({
         onPointerDown={(e) => e.stopPropagation()}
         className="text-sm text-text-subtle underline decoration-dotted underline-offset-2"
       >
-        {amount || placeholder}
+        {details || placeholder}
       </button>
     )
   }

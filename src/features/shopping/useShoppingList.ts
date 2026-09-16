@@ -6,13 +6,13 @@ import {
   listShoppingItems,
   markPurchased,
   undoPurchase,
-  updateShoppingItemAmount,
+  updateShoppingItemDetails,
   updateShoppingItemCategory,
   type ShoppingItem,
 } from './api'
 import { pantryQueryKey } from '@/features/pantry/usePantry'
 import { isSameIngredient } from '@/domain/normalize'
-import { mergeAmount } from '@/domain/mergeAmount'
+import { mergeDetails } from '@/domain/mergeDetails'
 import type { Category } from '@/shared/categories'
 import { useLanguage } from '@/features/household/useLanguage'
 import { useToast } from '@/shared/alerts/ToastContext'
@@ -21,7 +21,7 @@ import { itemMovedToastContent } from '@/shared/alerts/itemMovedToast'
 import { itemDeletedToastContent } from '@/shared/alerts/itemDeletedToast'
 
 const queryKey = (householdId: string) => ['shopping-items', householdId] as const
-type AddArgs = { name: string; amount?: string; category?: Category | null }
+type AddArgs = { name: string; details?: string; category?: Category | null }
 
 export function useShoppingList(householdId: string) {
   const queryClient = useQueryClient()
@@ -45,22 +45,22 @@ export function useShoppingList(householdId: string) {
   const pendingId = useRef<string | null>(null)
 
   const addItem = useMutation({
-    // Duplicate of a pending item merges into that row — domain/mergeAmount.ts.
-    mutationFn: ({ name, amount, category }: AddArgs) => {
+    // Duplicate of a pending item merges into that row — domain/mergeDetails.ts.
+    mutationFn: ({ name, details, category }: AddArgs) => {
       const existing = pendingExisting.current
       if (existing) {
-        return updateShoppingItemAmount(existing.id, mergeAmount(existing.amount, amount ?? null))
+        return updateShoppingItemDetails(existing.id, mergeDetails(existing.details, details ?? null))
       }
-      return addShoppingItem(householdId, pendingId.current!, name, amount, category)
+      return addShoppingItem(householdId, pendingId.current!, name, details, category)
     },
-    onMutate: async ({ name, amount, category }: AddArgs) => {
+    onMutate: async ({ name, details, category }: AddArgs) => {
       const previous = await snapshot()
       const existing = previous?.find((i) => i.status === 'pending' && isSameIngredient(i.name, name))
       pendingExisting.current = existing ?? null
       queryClient.setQueryData<ShoppingItem[]>(key, (items) => {
         if (existing) {
           return items?.map((i) =>
-            i.id === existing.id ? { ...i, amount: mergeAmount(i.amount, amount ?? null) } : i,
+            i.id === existing.id ? { ...i, details: mergeDetails(i.details, details ?? null) } : i,
           )
         }
         pendingId.current = crypto.randomUUID()
@@ -68,7 +68,7 @@ export function useShoppingList(householdId: string) {
           id: pendingId.current,
           household_id: householdId,
           name: name.trim(),
-          amount: amount?.trim() || null,
+          details: details?.trim() || null,
           category: category ?? null,
           status: 'pending',
           added_by: null,
@@ -105,13 +105,13 @@ export function useShoppingList(householdId: string) {
     },
   })
 
-  const updateAmount = useMutation({
-    mutationFn: ({ id, amount }: { id: string; amount: string | null }) =>
-      updateShoppingItemAmount(id, amount),
-    onMutate: async ({ id, amount }) => {
+  const updateDetails = useMutation({
+    mutationFn: ({ id, details }: { id: string; details: string | null }) =>
+      updateShoppingItemDetails(id, details),
+    onMutate: async ({ id, details }) => {
       const previous = await snapshot()
       queryClient.setQueryData<ShoppingItem[]>(key, (items) =>
-        items?.map((i) => (i.id === id ? { ...i, amount } : i)),
+        items?.map((i) => (i.id === id ? { ...i, details } : i)),
       )
       return { previous }
     },
@@ -146,5 +146,5 @@ export function useShoppingList(householdId: string) {
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 
-  return { ...query, addItem, toggleItem, updateAmount, updateCategory, deleteItem }
+  return { ...query, addItem, toggleItem, updateDetails, updateCategory, deleteItem }
 }

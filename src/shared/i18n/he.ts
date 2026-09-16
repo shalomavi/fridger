@@ -13,7 +13,7 @@ export const he: Record<keyof typeof en, string> = {
   addItemPlaceholder: 'הוספת פריט…',
   searchPlaceholder: 'חיפוש…',
   noSearchResults: 'לא נמצאו תוצאות.',
-  amountPlaceholder: 'כמות',
+  detailsPlaceholder: 'פרטים',
   add: 'הוספה',
   loading: 'טוען…',
   nothingOnList: 'הרשימה עדיין ריקה.',

@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import type { PantryItem } from './api'
 import { useLanguage } from '@/features/household/useLanguage'
-import { AmountEditor } from '@/shared/ui/AmountEditor'
+import { DetailsEditor } from '@/shared/ui/DetailsEditor'
 import { CategoryPicker } from '@/shared/ui/CategoryPicker'
 import { ExpiryEditor } from '@/shared/ui/ExpiryEditor'
 import { isExpiringSoon } from '@/domain/expiry'
@@ -18,13 +18,13 @@ const SWIPE_THRESHOLD = 72
 export function PantryRow({
   item,
   onConsume,
-  onUpdateAmount,
+  onUpdateDetails,
   onUpdateCategory,
   onUpdateExpiry,
 }: {
   item: PantryItem
   onConsume: () => void
-  onUpdateAmount: (amount: string | null) => void
+  onUpdateDetails: (details: string | null) => void
   onUpdateCategory: (category: Category | null) => void
   onUpdateExpiry: (expiresAt: string | null) => void
 }) {
@@ -110,10 +110,10 @@ export function PantryRow({
             onSave={onUpdateExpiry}
             placeholder={t('expiryPlaceholder')}
           />
-          <AmountEditor
-            amount={item.amount}
-            onSave={onUpdateAmount}
-            placeholder={t('amountPlaceholder')}
+          <DetailsEditor
+            details={item.details}
+            onSave={onUpdateDetails}
+            placeholder={t('detailsPlaceholder')}
           />
         </div>
       </div>

@@ -14,7 +14,7 @@ import { AlertBanner } from '@/shared/alerts/AlertBanner'
 export function PantryList({ householdId }: { householdId: string }) {
   const { t } = useLanguage()
   const { data: household } = useHousehold()
-  const { data: items, isLoading, consume, updateAmount, updateCategory, updateExpiry } =
+  const { data: items, isLoading, consume, updateDetails, updateCategory, updateExpiry } =
     usePantry(householdId)
   const [query, setQuery] = useState('')
 
@@ -44,7 +44,7 @@ export function PantryList({ householdId }: { householdId: string }) {
                 key={item.id}
                 item={item}
                 onConsume={() => consume.mutate(item.id)}
-                onUpdateAmount={(amount) => updateAmount.mutate({ id: item.id, amount })}
+                onUpdateDetails={(details) => updateDetails.mutate({ id: item.id, details })}
                 onUpdateCategory={(category) => updateCategory.mutate({ id: item.id, category })}
                 onUpdateExpiry={(expiresAt) => updateExpiry.mutate({ id: item.id, expiresAt })}
               />
