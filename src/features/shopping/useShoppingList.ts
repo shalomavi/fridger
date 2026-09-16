@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, type ReactNode } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   addShoppingItem,
@@ -18,6 +18,7 @@ import { useLanguage } from '@/features/household/useLanguage'
 import { useToast } from '@/shared/alerts/ToastContext'
 import { itemAddedToastContent } from '@/shared/alerts/itemAddedToast'
 import { itemMovedToastContent } from '@/shared/alerts/itemMovedToast'
+import { itemDeletedToastContent } from '@/shared/alerts/itemDeletedToast'
 
 const queryKey = (householdId: string) => ['shopping-items', householdId] as const
 type AddArgs = { name: string; amount?: string; category?: Category | null }
@@ -31,15 +32,14 @@ export function useShoppingList(householdId: string) {
     if (context?.previous) queryClient.setQueryData(key, context.previous)
     notify(t('actionFailed'), 'error')
   }
+  const fireToast = (c: { message: string; icon: ReactNode }) => notify(c.message, 'success', c.icon)
 
   const query = useQuery({ queryKey: key, queryFn: () => listShoppingItems(householdId) })
-
-  // Shared by every mutation's onMutate: stop in-flight refetches, then snapshot for rollback.
+  // Stop in-flight refetches, then snapshot for rollback — shared by every mutation's onMutate.
   async function snapshot() {
     await queryClient.cancelQueries({ queryKey: key })
     return queryClient.getQueryData<ShoppingItem[]>(key)
   }
-
   // mutationFn can't re-derive these from the cache (it already holds onMutate's optimistic row).
   const pendingExisting = useRef<ShoppingItem | null>(null)
   const pendingId = useRef<string | null>(null)
@@ -77,8 +77,7 @@ export function useShoppingList(householdId: string) {
         }
         return [...(items ?? []), optimisticItem]
       })
-      const { message, icon } = itemAddedToastContent(existing?.category ?? category ?? null, t)
-      notify(message, 'success', icon)
+      fireToast(itemAddedToastContent(existing?.category ?? category ?? null, t))
       return { previous }
     },
     onError: (_err, _vars, context) => onMutationError(context),
@@ -96,8 +95,7 @@ export function useShoppingList(householdId: string) {
           i.id === item.id ? { ...i, status: i.status === 'pending' ? 'purchased' : 'pending' } : i,
         ),
       )
-      const { message, icon } = itemMovedToastContent(item.status === 'pending' ? 'pantry' : 'shopping-list', t)
-      notify(message, 'success', icon)
+      fireToast(itemMovedToastContent(item.status === 'pending' ? 'pantry' : 'shopping-list', t))
       return { previous }
     },
     onError: (_err, _item, context) => onMutationError(context),
@@ -140,6 +138,8 @@ export function useShoppingList(householdId: string) {
     onMutate: async (id) => {
       const previous = await snapshot()
       queryClient.setQueryData<ShoppingItem[]>(key, (items) => items?.filter((i) => i.id !== id))
+      const deletedName = previous?.find((i) => i.id === id)?.name
+      if (deletedName) fireToast(itemDeletedToastContent(deletedName, t))
       return { previous }
     },
     onError: (_err, _id, context) => onMutationError(context),

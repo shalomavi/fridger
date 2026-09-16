@@ -66,6 +66,7 @@ const dict = {
     addedTo: 'Added to',
     movedToPantry: 'Moved to pantry',
     movedToShoppingList: 'Moved to shopping list',
+    deleted: 'Deleted',
   },
   he: {
     signOut: 'התנתקות',
@@ -125,6 +126,7 @@ const dict = {
     addedTo: 'נוסף ל',
     movedToPantry: 'עבר למזווה',
     movedToShoppingList: 'עבר לרשימת הקניות',
+    deleted: 'נמחק',
   },
 } as const satisfies Record<Language, Record<string, string>>
 
