@@ -6,6 +6,8 @@ import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persi
 import { AppRoutes } from '@/app/routes'
 import { ToastProvider } from '@/shared/alerts/ToastContext'
 import { ToastContainer } from '@/shared/alerts/ToastContainer'
+import { ConfirmProvider } from '@/shared/alerts/ConfirmContext'
+import { ConfirmDialog } from '@/shared/alerts/ConfirmDialog'
 import './index.css'
 
 // Polling stands in for Realtime: two people in one house cannot tell the
@@ -47,8 +49,11 @@ createRoot(document.getElementById('root')!).render(
       }}
     >
       <ToastProvider>
-        <AppRoutes />
-        <ToastContainer />
+        <ConfirmProvider>
+          <AppRoutes />
+          <ToastContainer />
+          <ConfirmDialog />
+        </ConfirmProvider>
       </ToastProvider>
     </PersistQueryClientProvider>
   </StrictMode>,
