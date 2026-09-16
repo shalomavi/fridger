@@ -16,7 +16,7 @@ export function DeleteButton({
         if (window.confirm(confirmMessage)) onDelete()
       }}
       aria-label={label}
-      className="flex-none p-1 text-danger"
+      className="flex-none p-1 text-danger transition-transform active:scale-95"
     >
       <svg
         width="16"

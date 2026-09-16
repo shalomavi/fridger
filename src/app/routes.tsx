@@ -14,7 +14,7 @@ import { MealsScreen } from '@/features/meals/MealsScreen'
 import { SettingsScreen } from '@/features/settings/SettingsScreen'
 
 function tabClass({ isActive }: { isActive: boolean }) {
-  return `flex flex-1 items-center justify-center rounded-lg py-3 ${
+  return `flex flex-1 items-center justify-center rounded-lg py-3 transition-transform active:scale-95 ${
     isActive ? 'bg-primary text-white' : 'bg-surface text-text-muted'
   }`
 }

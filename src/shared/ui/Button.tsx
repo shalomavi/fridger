@@ -13,7 +13,7 @@ export function Button({
   return (
     <button
       {...props}
-      className={`rounded-lg font-medium disabled:opacity-50 ${variantClass} ${className}`}
+      className={`rounded-lg font-medium transition-transform active:scale-95 disabled:opacity-50 ${variantClass} ${className}`}
     />
   )
 }

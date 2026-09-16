@@ -30,8 +30,18 @@ export function PantryRow({
 }) {
   const { t, lang } = useLanguage()
   const [dragX, setDragX] = useState(0)
+  const [leaving, setLeaving] = useState(false)
   const dragging = useRef<{ startX: number } | null>(null)
   const soon = isExpiringSoon(item.expires_at)
+
+  // Finishes the swipe (or the tap-to-consume button) by sliding the row
+  // the rest of the way off instead of cutting the gesture short — it
+  // vanishing mid-drag the instant the mutation resolves looked broken.
+  function startConsume() {
+    setDragX(-500)
+    setLeaving(true)
+    setTimeout(onConsume, 220)
+  }
 
   function onPointerDown(e: React.PointerEvent) {
     dragging.current = { startX: e.clientX }
@@ -48,14 +58,18 @@ export function PantryRow({
     if (!dragging.current) return
     dragging.current = null
     if (dragX < -SWIPE_THRESHOLD) {
-      onConsume()
+      startConsume()
     } else {
       setDragX(0)
     }
   }
 
   return (
-    <li className="relative overflow-hidden rounded-lg">
+    <li
+      className={`relative overflow-hidden rounded-lg transition-all duration-200 ${
+        leaving ? 'max-h-0 opacity-0' : 'max-h-56 opacity-100'
+      }`}
+    >
       {/* The reveal is a fixed physical left-drag in both languages (see
        * the gesture note above), so it always uncovers on the physical
        * right. `justify-end` is flow-relative and would flip to the left
@@ -82,9 +96,9 @@ export function PantryRow({
             {item.name}
           </span>
           <button
-            onClick={onConsume}
+            onClick={startConsume}
             onPointerDown={(e) => e.stopPropagation()}
-            className="flex-none rounded-md bg-surface-muted px-2 py-1 text-xs text-text-soft"
+            className="flex-none rounded-md bg-surface-muted px-2 py-1 text-xs text-text-soft transition-transform active:scale-95"
           >
             {t('used')}
           </button>
