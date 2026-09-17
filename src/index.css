@@ -54,7 +54,7 @@
     160deg,
     var(--color-teal-100) 0%,
     var(--color-slate-50) 50%,
-    var(--color-teal-200) 100%
+    var(--color-emerald-200) 100%
   );
 
   color-scheme: light;
