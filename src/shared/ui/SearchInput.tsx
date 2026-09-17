@@ -27,7 +27,7 @@ export function SearchInput({
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           autoComplete="off"
-          className="w-full rounded-lg bg-surface py-3 ps-10 pe-4 text-text outline-none focus:ring-2 focus:ring-primary-ring"
+          className="w-full rounded-lg bg-surface py-3 ps-10 pe-4 text-text outline-none focus:ring-2 focus:ring-primary"
         />
         <SearchIcon className="pointer-events-none absolute inset-y-0 start-3 my-auto text-text-subtle" />
       </div>

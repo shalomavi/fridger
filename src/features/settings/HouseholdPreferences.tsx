@@ -39,7 +39,7 @@ export function HouseholdPreferences() {
         }}
         placeholder={t('preferencesPlaceholder')}
         rows={4}
-        className="w-full resize-none rounded-lg bg-surface px-4 py-3 text-text outline-none focus:ring-2 focus:ring-primary-ring"
+        className="w-full resize-none rounded-lg bg-surface px-4 py-3 text-text outline-none focus:ring-2 focus:ring-primary"
       />
       <Button onClick={() => save.mutate(value)} disabled={!dirty || save.isPending} className="px-5 py-2 text-sm">
         {save.isPending ? '…' : t('save')}

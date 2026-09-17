@@ -38,7 +38,7 @@ export function LoginForm() {
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full rounded-lg bg-surface px-4 py-3 text-text outline-none focus:ring-2 focus:ring-primary-ring"
+          className="w-full rounded-lg bg-surface px-4 py-3 text-text outline-none focus:ring-2 focus:ring-primary"
         />
         <input
           type="password"
@@ -48,7 +48,7 @@ export function LoginForm() {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full rounded-lg bg-surface px-4 py-3 text-text outline-none focus:ring-2 focus:ring-primary-ring"
+          className="w-full rounded-lg bg-surface px-4 py-3 text-text outline-none focus:ring-2 focus:ring-primary"
         />
 
         {error && <p className={`text-sm ${statusTextClass('danger')}`}>{error}</p>}

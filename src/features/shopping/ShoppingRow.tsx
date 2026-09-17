@@ -50,7 +50,7 @@ export function ShoppingRow({
         <button onClick={onToggle} className="flex flex-1 items-center gap-3 text-start">
           <span
             className={`relative flex h-5 w-5 flex-none items-center justify-center rounded-full border-2 transition-colors duration-300 ${
-              purchased ? 'border-primary-ring bg-primary-ring' : 'border-text-subtle'
+              purchased ? 'border-primary bg-primary' : 'border-text-subtle'
             }`}
           >
             <svg

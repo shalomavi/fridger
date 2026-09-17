@@ -33,7 +33,7 @@ export function AddItemInput({
         onChange={(e) => setName(e.target.value)}
         placeholder={t('addItemPlaceholder')}
         autoComplete="off"
-        className="w-full rounded-lg bg-surface px-4 py-3 text-text outline-none focus:ring-2 focus:ring-primary-ring"
+        className="w-full rounded-lg bg-surface px-4 py-3 text-text outline-none focus:ring-2 focus:ring-primary"
       />
       <div className="flex gap-2">
         <div className="relative w-24 min-w-0 flex-none">
@@ -42,7 +42,7 @@ export function AddItemInput({
             onChange={(e) => setDetails(e.target.value)}
             placeholder={t('detailsPlaceholder')}
             autoComplete="off"
-            className="w-full min-w-0 rounded-lg bg-surface py-3 ps-8 pe-3 text-text outline-none focus:ring-2 focus:ring-primary-ring"
+            className="w-full min-w-0 rounded-lg bg-surface py-3 ps-8 pe-3 text-text outline-none focus:ring-2 focus:ring-primary"
           />
           <DetailsIcon className="pointer-events-none absolute inset-y-0 start-2.5 my-auto text-text-subtle" />
         </div>
@@ -50,7 +50,7 @@ export function AddItemInput({
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value as Category | '')}
-            className={`w-full min-w-0 appearance-none truncate rounded-lg bg-surface py-3 ps-8 pe-8 outline-none focus:ring-2 focus:ring-primary-ring ${
+            className={`w-full min-w-0 appearance-none truncate rounded-lg bg-surface py-3 ps-8 pe-8 outline-none focus:ring-2 focus:ring-primary ${
               category ? 'text-text' : 'text-text-subtle'
             }`}
           >
