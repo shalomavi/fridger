@@ -12,7 +12,7 @@ export function ConfirmDialog() {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-bg/15 p-6 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-bg/5 p-6 backdrop-blur-sm"
       onClick={() => respond(false)}
     >
       <div
