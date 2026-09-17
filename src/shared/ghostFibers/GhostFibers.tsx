@@ -6,6 +6,7 @@ import type { GhostFibersProps } from './types'
 const defaultProps: Required<Omit<GhostFibersProps, 'className'>> = {
   lineColor: '#140E35',
   glowColor: '#3437A0',
+  backdropColor: '#120F17',
   speed: 0.2,
   scale: 2,
   rotation: 0,
@@ -33,8 +34,16 @@ const defaultProps: Required<Omit<GhostFibersProps, 'className'>> = {
   paused: false
 }
 
+// backdropColor has no single sensible default: it must be light for
+// lightMode and dark otherwise, so an explicit prop wins but an unset one
+// falls back per-mode instead of always defaulting to the dark value.
+const lightBackdropDefault = '#FFFFFF'
+
 const GhostFibers: FC<GhostFibersProps> = (props) => {
   const merged = { ...defaultProps, ...props }
+  if (props.backdropColor === undefined) {
+    merged.backdropColor = merged.lightMode ? lightBackdropDefault : defaultProps.backdropColor
+  }
   const containerRef = useRef<HTMLDivElement | null>(null)
   const sceneRef = useRef<GhostFibersScene | null>(null)
 
@@ -66,6 +75,7 @@ const GhostFibers: FC<GhostFibersProps> = (props) => {
   }, [
     merged.lineColor,
     merged.glowColor,
+    merged.backdropColor,
     merged.speed,
     merged.scale,
     merged.rotation,

@@ -131,6 +131,32 @@ body {
   overscroll-behavior-y: none;
 }
 
+/* Chrome paints its own #e8f0fe autofill background over bg-surface, which
+ * only a box-shadow (not background-color) can override. Light theme uses
+ * emerald-50 (already one of --gradient-bg's stops); dark theme falls back
+ * to --color-surface so it doesn't autofill a bright patch onto slate. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  box-shadow: 0 0 0 1000px var(--color-emerald-50) inset;
+  -webkit-text-fill-color: var(--color-text);
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+:root[data-theme='dark'] input:-webkit-autofill,
+:root[data-theme='dark'] input:-webkit-autofill:hover,
+:root[data-theme='dark'] input:-webkit-autofill:focus {
+  box-shadow: 0 0 0 1000px var(--color-surface) inset;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) input:-webkit-autofill,
+  :root:not([data-theme='light']) input:-webkit-autofill:hover,
+  :root:not([data-theme='light']) input:-webkit-autofill:focus {
+    box-shadow: 0 0 0 1000px var(--color-surface) inset;
+  }
+}
+
 /* Placeholder color wasn't a token anywhere — inputs fell back to the
  * browser's own (non-theme-aware) gray. text-subtle is the token already
  * used for "empty state" text elsewhere (amount/category pickers), so

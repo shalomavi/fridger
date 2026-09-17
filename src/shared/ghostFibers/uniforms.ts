@@ -31,7 +31,8 @@ export function createUniforms() {
     uGrain: { value: 0.05 },
     uLightMode: { value: 0 },
     uLineColor: { value: new Float32Array(hexToRgb('#140E35')) },
-    uGlowColor: { value: new Float32Array(hexToRgb('#3437A0')) }
+    uGlowColor: { value: new Float32Array(hexToRgb('#3437A0')) },
+    uBackdropColor: { value: new Float32Array(hexToRgb('#120F17')) }
   }
 }
 
@@ -40,6 +41,7 @@ export type GhostFibersUniforms = ReturnType<typeof createUniforms>
 export function applyProps(uniforms: GhostFibersUniforms, props: Required<Omit<GhostFibersProps, 'className'>>) {
   setColor(uniforms.uLineColor, props.lineColor)
   setColor(uniforms.uGlowColor, props.glowColor)
+  setColor(uniforms.uBackdropColor, props.backdropColor)
   uniforms.uSpeed.value = props.speed
   uniforms.uScale.value = props.scale
   uniforms.uRotation.value = props.rotation

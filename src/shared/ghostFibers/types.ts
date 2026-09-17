@@ -1,6 +1,7 @@
 export interface GhostFibersProps {
   lineColor?: string
   glowColor?: string
+  backdropColor?: string
   speed?: number
   scale?: number
   rotation?: number

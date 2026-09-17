@@ -19,11 +19,12 @@ const fiberColors = {
   light: {
     lineColor: 'var(--color-primary)',
     glowColor: 'var(--color-primary-accent)',
+    backdropColor: 'var(--color-emerald-50)',
     brightness: 3,
     glowIntensity: 1,
     glowFalloff: 4,
-    layers: 8,
-    lineSharpness: 7,
+    layers: 10,
+    lineSharpness: 5,
     scale: 1.1
   },
   dark: {

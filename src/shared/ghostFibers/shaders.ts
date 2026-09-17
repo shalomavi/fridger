@@ -38,6 +38,7 @@ uniform float uRotationSpeed;
 uniform float uLightMode;
 uniform vec3 uLineColor;
 uniform vec3 uGlowColor;
+uniform vec3 uBackdropColor;
 
 out vec4 fragColor;
 
@@ -71,7 +72,7 @@ void main() {
   vec2 resolution = max(uResolution, vec2(1.0));
   vec2 uv = (2.0 * gl_FragCoord.xy - resolution) / resolution.y;
   float time = uTime * uSpeed;
-  vec3 backdrop = mix(vec3(0.070588, 0.058824, 0.090196), vec3(1.0), step(0.5, uLightMode));
+  vec3 backdrop = uBackdropColor;
   vec3 centerTone = max(uLineColor * 0.85567 - uGlowColor * 0.06186, vec3(0.0));
   vec3 cloudTone = uLineColor * 0.19588 + uGlowColor * 0.2268;
   vec2 p = uv;
@@ -121,12 +122,18 @@ void main() {
     float airStrength = clamp(uGlowIntensity / 1.6, 0.0, 2.0);
     float edgeFade = mix(1.0 - uVignette, 1.0, vignette);
     float fibers = pow(smoothstep(0.12, 1.05, fiberField) * edgeFade, 1.5);
-    float atmosphere = (center * 0.025 + cloud * 0.015) * edgeFade;
+    // The per-fiber glow term accumulated into color above already carries
+    // uGlowFalloff's soft falloff (that's what gives the dark branch its
+    // bright-line-to-background gradient via additive blending) — reusing
+    // its luminance here gives the light branch the same graduated halo
+    // around each line instead of the hard ink edge alone produces.
+    float glowField = dot(color, vec3(0.3333)) * edgeFade;
+    float atmosphere = clamp((center * 0.07 + cloud * 0.04) * edgeFade + glowField * airStrength, 0.0, 1.0);
     vec3 fiberInk = mix(backdrop, uLineColor, 0.52 * inkStrength);
-    vec3 airColor = mix(backdrop, uGlowColor, 0.16 * airStrength);
+    vec3 airColor = mix(backdrop, uGlowColor, 0.28 * airStrength);
 
     outputColor = mix(backdrop, airColor, atmosphere);
-    outputColor = mix(outputColor, fiberInk, fibers * 0.3 * inkStrength);
+    outputColor = mix(outputColor, fiberInk, fibers * 0.42 * inkStrength);
   } else {
     outputColor = backdrop + color;
   }
