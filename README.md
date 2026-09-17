@@ -68,25 +68,7 @@ editing beyond the original plan. See `CLAUDE.md` for details.
 
 Verified: auto-deploy connected via GitHub 2026-08-21.
 
-## TODO
-
-- Migrations `0011_shopping_item_delete_policy.sql`,
-  `0012_item_categories.sql`, `0013_category_order.sql`,
-  `0014_hygiene_category.sql`, and `0015_household_meal_types.sql` were
-  applied by pasting their SQL directly into the Supabase dashboard's SQL
-  editor (no CLI access on the device at the time), so the migration
-  history table doesn't know about them. Next time someone has `supabase`
-  CLI access, run `npx supabase migration repair` to mark all five as
-  already applied — otherwise a future `npx supabase db push` will try to
-  reapply them and fail on "already exists".
-- Everything from `npm run build`/`npx vitest run` through to
-  `netlify deploy` and `supabase functions/db` commands still needs to be
-  run for real (typecheck, tests, lint) — recent work was done from a
-  phone with no npm, so none of it has been verified to actually build.
-- `0017_rename_amount_to_details.sql` (renames `shopping_items.amount` /
-  `pantry_items.amount` to `details`) has NOT been applied to the live
-  database yet — the app code now reads/writes `details`, so the frontend
-  will break against the live DB until this migration is run (`npx supabase
-  db push`, or paste its SQL into the dashboard's SQL editor like
-  0011-0015 above, in which case fold it into the `migration repair` list
-  too).
+Migration history table is in sync with the live database as of
+2026-09-17 — all of `0001`-`0017` show as applied via `npx supabase
+migration list`. `npm run build`, `npx vitest run`, and `npm run lint` all
+pass.
