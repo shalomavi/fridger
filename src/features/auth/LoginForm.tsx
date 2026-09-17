@@ -71,7 +71,7 @@ export function LoginForm() {
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full rounded-lg bg-surface px-4 py-3 text-text outline-none focus:ring-2 focus:ring-primary"
+          className="w-full rounded-lg bg-surface/15 px-4 py-3 text-text outline-none ring-1 ring-inset ring-surface-muted/60 backdrop-blur-lg focus:ring-2 focus:ring-primary"
         />
         <input
           type="password"
@@ -81,7 +81,7 @@ export function LoginForm() {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full rounded-lg bg-surface px-4 py-3 text-text outline-none focus:ring-2 focus:ring-primary"
+          className="w-full rounded-lg bg-surface/15 px-4 py-3 text-text outline-none ring-1 ring-inset ring-surface-muted/60 backdrop-blur-lg focus:ring-2 focus:ring-primary"
         />
 
         {error && <p className={`text-sm ${statusTextClass('danger')}`}>{error}</p>}

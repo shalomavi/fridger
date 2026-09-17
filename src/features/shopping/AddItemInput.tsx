@@ -1,7 +1,8 @@
 import { useState, type FormEvent } from 'react'
 import { useLanguage } from '@/features/household/useLanguage'
 import { Button } from '@/shared/ui/Button'
-import { PlusIcon, DetailsIcon, TagIcon, ChevronDownIcon } from '@/shared/ui/FormIcons'
+import { Select } from '@/shared/ui/Select'
+import { PlusIcon, DetailsIcon, TagIcon } from '@/shared/ui/FormIcons'
 import { CATEGORIES, type Category } from '@/shared/categories'
 
 /** Name is required; details is one free-text field, optional, no unit
@@ -33,7 +34,7 @@ export function AddItemInput({
         onChange={(e) => setName(e.target.value)}
         placeholder={t('addItemPlaceholder')}
         autoComplete="off"
-        className="w-full rounded-lg bg-surface px-4 py-3 text-text outline-none focus:ring-2 focus:ring-primary"
+        className="w-full rounded-lg bg-surface/15 px-4 py-3 text-text outline-none ring-1 ring-inset ring-surface-muted/60 backdrop-blur-lg focus:ring-2 focus:ring-primary"
       />
       <div className="flex gap-2">
         <div className="relative w-24 min-w-0 flex-none">
@@ -42,28 +43,19 @@ export function AddItemInput({
             onChange={(e) => setDetails(e.target.value)}
             placeholder={t('detailsPlaceholder')}
             autoComplete="off"
-            className="w-full min-w-0 rounded-lg bg-surface py-3 ps-8 pe-3 text-text outline-none focus:ring-2 focus:ring-primary"
+            className="w-full min-w-0 rounded-lg bg-surface/15 py-3 ps-8 pe-3 text-text outline-none ring-1 ring-inset ring-surface-muted/60 backdrop-blur-lg focus:ring-2 focus:ring-primary"
           />
           <DetailsIcon className="pointer-events-none absolute inset-y-0 start-2.5 my-auto text-text-subtle" />
         </div>
-        <div className="relative min-w-0 flex-1">
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value as Category | '')}
-            className={`w-full min-w-0 appearance-none truncate rounded-lg bg-surface py-3 ps-8 pe-8 outline-none focus:ring-2 focus:ring-primary ${
-              category ? 'text-text' : 'text-text-subtle'
-            }`}
-          >
-            <option value="">{t('categoryPlaceholder')}</option>
-            {CATEGORIES.map((c) => (
-              <option key={c} value={c}>
-                {t(`category_${c}`)}
-              </option>
-            ))}
-          </select>
-          <TagIcon className="pointer-events-none absolute inset-y-0 start-2.5 my-auto text-text-subtle" />
-          <ChevronDownIcon className="pointer-events-none absolute inset-y-0 end-2.5 my-auto h-3.5 w-3.5 text-text-subtle" />
-        </div>
+        <Select
+          value={category}
+          onChange={(v) => setCategory(v as Category | '')}
+          options={CATEGORIES.map((c) => ({ value: c, label: t(`category_${c}`) }))}
+          placeholder={t('categoryPlaceholder')}
+          ariaLabel={t('categoryPlaceholder')}
+          leadingIcon={TagIcon}
+          className="flex-1"
+        />
         <Button
           type="submit"
           disabled={!name.trim()}

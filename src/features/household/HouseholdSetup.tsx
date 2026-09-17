@@ -77,7 +77,7 @@ export function HouseholdSetup() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Household name"
-              className="w-full rounded-lg bg-surface px-4 py-3 outline-none focus:ring-2 focus:ring-primary"
+              className="w-full rounded-lg bg-surface/15 px-4 py-3 outline-none ring-1 ring-inset ring-surface-muted/60 backdrop-blur-lg focus:ring-2 focus:ring-primary"
             />
             <Button onClick={submitCreate} disabled={busy} className="w-full py-3">
               {busy ? '…' : 'Create'}
@@ -92,7 +92,7 @@ export function HouseholdSetup() {
               onChange={(e) => setCode(e.target.value)}
               placeholder="Invite code"
               autoCapitalize="characters"
-              className="w-full rounded-lg bg-surface px-4 py-3 uppercase outline-none focus:ring-2 focus:ring-primary"
+              className="w-full rounded-lg bg-surface/15 px-4 py-3 uppercase outline-none ring-1 ring-inset ring-surface-muted/60 backdrop-blur-lg focus:ring-2 focus:ring-primary"
             />
             <Button onClick={submitJoin} disabled={busy || !code.trim()} className="w-full py-3">
               {busy ? '…' : 'Join'}
