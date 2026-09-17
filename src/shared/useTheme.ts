@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useState } from 'react'
 
 export type Theme = 'light' | 'dark'
 
@@ -32,7 +32,12 @@ export function useTheme() {
     return () => mql.removeEventListener('change', onChange)
   }, [])
 
-  useEffect(() => {
+  // useLayoutEffect, not useEffect: all layout effects tree-wide finish
+  // before any passive effect runs, so this write is guaranteed visible to
+  // GhostFibers' color-resolving useEffect on the same commit — a plain
+  // useEffect here could run after GhostFibers' (child effects fire before
+  // a parent's own), leaving it reading the previous theme's colors.
+  useLayoutEffect(() => {
     document.documentElement.dataset.theme = theme
   }, [theme])
 
