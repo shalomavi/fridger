@@ -43,7 +43,7 @@
   --color-text-subtle: var(--color-slate-500);
 
   --color-primary: var(--color-green-700);
-  --color-primary-accent: color-mix(in oklch, var(--color-primary), black 20%);
+  --color-primary-accent: var(--color-green-800);
 
   --color-warning: var(--color-amber-600);
   --color-warning-ring: var(--color-amber-500);
