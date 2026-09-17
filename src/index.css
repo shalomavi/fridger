@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 
-/* Semantic color tokens, aliased to Tailwind's built-in slate/emerald/amber/rose
+/* Semantic color tokens, aliased to Tailwind's built-in slate/teal/amber/rose
  * scales so there's one source of truth. Values are declared once here as
  * token *names* to generate utilities (bg-bg, text-text, bg-primary,
  * text-warning, etc.); the actual light/dark values are assigned below,
@@ -13,8 +13,8 @@
   --color-text-soft: var(--color-slate-200);
   --color-text-muted: var(--color-slate-300);
   --color-text-subtle: var(--color-slate-400);
-  --color-primary: var(--color-emerald-700);
-  --color-primary-accent: var(--color-emerald-600);
+  --color-primary: var(--color-teal-700);
+  --color-primary-accent: var(--color-teal-600);
   --color-warning: var(--color-amber-400);
   --color-warning-ring: var(--color-amber-500);
   --color-danger: var(--color-rose-400);
@@ -42,8 +42,8 @@
   --color-text-muted: var(--color-slate-600);
   --color-text-subtle: var(--color-slate-500);
 
-  --color-primary: var(--color-emerald-700);
-  --color-primary-accent: var(--color-emerald-800);
+  --color-primary: var(--color-teal-700);
+  --color-primary-accent: var(--color-teal-800);
 
   --color-warning: var(--color-amber-600);
   --color-warning-ring: var(--color-amber-500);
@@ -52,9 +52,9 @@
 
   --gradient-bg: linear-gradient(
     160deg,
-    var(--color-emerald-100) 0%,
+    var(--color-teal-100) 0%,
     var(--color-slate-50) 50%,
-    var(--color-emerald-200) 100%
+    var(--color-teal-200) 100%
   );
 
   color-scheme: light;
@@ -71,8 +71,8 @@
     --color-text-muted: var(--color-slate-300);
     --color-text-subtle: var(--color-slate-400);
 
-    --color-primary: var(--color-emerald-700);
-    --color-primary-accent: var(--color-emerald-600);
+    --color-primary: var(--color-teal-700);
+    --color-primary-accent: var(--color-teal-600);
 
     --color-warning: var(--color-amber-400);
     --color-warning-ring: var(--color-amber-500);
@@ -82,7 +82,7 @@
     --gradient-bg: linear-gradient(
       160deg,
       var(--color-slate-800) 0%,
-      var(--color-emerald-800) 50%,
+      var(--color-teal-800) 50%,
       var(--color-slate-950) 100%
     );
 
@@ -100,8 +100,8 @@
   --color-text-muted: var(--color-slate-300);
   --color-text-subtle: var(--color-slate-400);
 
-  --color-primary: var(--color-emerald-700);
-  --color-primary-accent: var(--color-emerald-600);
+  --color-primary: var(--color-teal-700);
+  --color-primary-accent: var(--color-teal-600);
 
   --color-warning: var(--color-amber-400);
   --color-warning-ring: var(--color-amber-500);
@@ -111,7 +111,7 @@
   --gradient-bg: linear-gradient(
     160deg,
     var(--color-slate-800) 0%,
-    var(--color-emerald-800) 50%,
+    var(--color-teal-800) 50%,
     var(--color-slate-950) 100%
   );
 
