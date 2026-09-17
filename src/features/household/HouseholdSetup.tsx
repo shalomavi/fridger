@@ -5,6 +5,7 @@ import { useInvalidateHousehold } from './useHousehold'
 import { Button } from '@/shared/ui/Button'
 import { Input } from '@/shared/ui/Input'
 import { statusTextClass } from '@/shared/ui/Badge'
+import { AuthBackdrop } from '@/shared/ghostFibers/AuthBackdrop'
 
 // PostgrestError isn't `instanceof Error`, so pull its message out explicitly
 // rather than falling back to a generic string that hides the real cause.
@@ -55,8 +56,8 @@ export function HouseholdSetup() {
   }
 
   return (
-    <div className="flex min-h-dvh items-center justify-center bg-app p-6 font-ui-en">
-      <div className="w-full max-w-sm space-y-4 text-text">
+    <AuthBackdrop>
+      <div className="relative w-full max-w-sm space-y-4 text-text">
         <h1 className="text-center text-2xl font-semibold text-primary-accent">
           Set up your household
         </h1>
@@ -109,6 +110,6 @@ export function HouseholdSetup() {
 
         {error && <p className={`text-sm ${statusTextClass('danger')}`}>{error}</p>}
       </div>
-    </div>
+    </AuthBackdrop>
   )
 }
