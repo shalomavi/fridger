@@ -14,8 +14,7 @@
   --color-text-muted: var(--color-slate-300);
   --color-text-subtle: var(--color-slate-400);
   --color-primary: var(--color-green-700);
-  --color-primary-accent: var(--color-green-400);
-  --color-primary-bright: color-mix(in oklch, var(--color-primary), white 55%);
+  --color-primary-accent: color-mix(in oklch, var(--color-primary), white 55%);
   --color-warning: var(--color-amber-400);
   --color-warning-ring: var(--color-amber-500);
   --color-danger: var(--color-rose-400);
@@ -44,8 +43,7 @@
   --color-text-subtle: var(--color-slate-500);
 
   --color-primary: var(--color-green-700);
-  --color-primary-accent: var(--color-green-700);
-  --color-primary-bright: color-mix(in oklch, var(--color-primary), black 20%);
+  --color-primary-accent: color-mix(in oklch, var(--color-primary), black 20%);
 
   --color-warning: var(--color-amber-600);
   --color-warning-ring: var(--color-amber-500);
@@ -74,8 +72,7 @@
     --color-text-subtle: var(--color-slate-400);
 
     --color-primary: var(--color-green-700);
-    --color-primary-accent: var(--color-green-400);
-    --color-primary-bright: color-mix(in oklch, var(--color-primary), white 55%);
+    --color-primary-accent: color-mix(in oklch, var(--color-primary), white 55%);
 
     --color-warning: var(--color-amber-400);
     --color-warning-ring: var(--color-amber-500);
@@ -104,8 +101,7 @@
   --color-text-subtle: var(--color-slate-400);
 
   --color-primary: var(--color-green-700);
-  --color-primary-accent: var(--color-green-400);
-  --color-primary-bright: color-mix(in oklch, var(--color-primary), white 55%);
+  --color-primary-accent: color-mix(in oklch, var(--color-primary), white 55%);
 
   --color-warning: var(--color-amber-400);
   --color-warning-ring: var(--color-amber-500);

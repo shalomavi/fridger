@@ -32,7 +32,7 @@ function Layout({ household, email }: { household: Household; email: string | un
          * columns (title+email vs. toggles+sign-out) previously left the
          * large title looking lower than the small toggle icons. */}
         <div className="flex items-center justify-between gap-4">
-          <h1 className="min-w-0 truncate text-2xl font-semibold text-primary-bright">
+          <h1 className="min-w-0 truncate text-2xl font-semibold text-primary-accent">
             {household.name}
           </h1>
           <div className="flex shrink-0 items-center gap-2">
