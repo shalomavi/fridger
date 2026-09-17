@@ -54,9 +54,9 @@
 
   --gradient-bg: linear-gradient(
     160deg,
-    var(--color-green-200) 0%,
+    var(--color-lime-200) 0%,
     var(--color-slate-50) 50%,
-    var(--color-green-100) 100%
+    var(--color-lime-100) 100%
   );
 
   color-scheme: light;
