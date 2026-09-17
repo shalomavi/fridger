@@ -22,7 +22,7 @@ export function ConfirmDialog() {
           lang === 'he' ? 'font-ui-he' : 'font-ui-en'
         }`}
       >
-        <p className="text-sm text-text">{pending.message}</p>
+        <p className="text-base text-text">{pending.message}</p>
         <div className="mt-10 flex justify-end gap-2">
           <button
             onClick={() => respond(false)}
