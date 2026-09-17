@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { createHousehold } from './api'
-import { joinHousehold } from './invites'
+import { createInvite, joinHousehold } from './invites'
 import { useInvalidateHousehold } from './useHousehold'
 import { Button } from '@/shared/ui/Button'
 import { Input } from '@/shared/ui/Input'
+import { Surface } from '@/shared/ui/Surface'
 import { statusTextClass } from '@/shared/ui/Badge'
 import { AuthBackdrop } from '@/shared/ghostFibers/AuthBackdrop'
 
@@ -22,19 +23,24 @@ function describeError(e: unknown): string {
 /** Shown once, to whichever of the two users signs up first (create) and
  * second (join with the code the first user shares). */
 export function HouseholdSetup() {
-  const [mode, setMode] = useState<'choose' | 'create' | 'join'>('choose')
+  const [mode, setMode] = useState<'choose' | 'create' | 'join' | 'invite'>('choose')
   const [name, setName] = useState('Our household')
   const [code, setCode] = useState('')
+  const [inviteCode, setInviteCode] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const invalidate = useInvalidateHousehold()
 
+  // The creator is the only one guaranteed to see this screen — show the
+  // invite code here rather than relying on them to find it later in
+  // Settings, or the second household member may never get invited.
   async function submitCreate() {
     setBusy(true)
     setError(null)
     try {
-      await createHousehold(name.trim() || 'Our household')
-      invalidate()
+      const household = await createHousehold(name.trim() || 'Our household')
+      setInviteCode(await createInvite(household.id))
+      setMode('invite')
     } catch (e) {
       setError(describeError(e))
     } finally {
@@ -87,6 +93,18 @@ export function HouseholdSetup() {
           </div>
         )}
 
+        {mode === 'invite' && inviteCode && (
+          <div className="space-y-3">
+            <Surface className="px-4 py-3 text-center">
+              <p className="text-xs text-text-muted">Share this code with your partner</p>
+              <p className="text-2xl font-mono tracking-widest text-primary-accent">{inviteCode}</p>
+            </Surface>
+            <Button onClick={invalidate} className="w-full py-3">
+              Continue
+            </Button>
+          </div>
+        )}
+
         {mode === 'join' && (
           <div className="space-y-3">
             <Input
@@ -102,7 +120,7 @@ export function HouseholdSetup() {
           </div>
         )}
 
-        {mode !== 'choose' && (
+        {mode !== 'choose' && mode !== 'invite' && (
           <button onClick={() => setMode('choose')} className="w-full text-sm text-text-muted">
             Back
           </button>
