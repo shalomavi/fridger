@@ -23,7 +23,7 @@ export function ConfirmDialog() {
         }`}
       >
         <p className="text-sm text-text">{pending.message}</p>
-        <div className="mt-4 flex justify-end gap-2">
+        <div className="mt-6 flex justify-end gap-2">
           <button
             onClick={() => respond(false)}
             className="rounded-md bg-surface-muted px-3 py-1.5 text-sm text-text-soft transition-transform duration-300 active:scale-95"
