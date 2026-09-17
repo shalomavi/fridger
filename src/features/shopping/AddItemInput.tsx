@@ -68,7 +68,7 @@ export function AddItemInput({
           type="submit"
           disabled={!name.trim()}
           aria-label={t('add')}
-          className="flex flex-none items-center justify-center p-3"
+          className="flex aspect-square items-center justify-center p-3"
         >
           <PlusIcon />
         </Button>
