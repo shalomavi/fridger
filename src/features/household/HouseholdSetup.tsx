@@ -3,6 +3,7 @@ import { createHousehold } from './api'
 import { joinHousehold } from './invites'
 import { useInvalidateHousehold } from './useHousehold'
 import { Button } from '@/shared/ui/Button'
+import { Input } from '@/shared/ui/Input'
 import { statusTextClass } from '@/shared/ui/Badge'
 
 // PostgrestError isn't `instanceof Error`, so pull its message out explicitly
@@ -73,11 +74,11 @@ export function HouseholdSetup() {
 
         {mode === 'create' && (
           <div className="space-y-3">
-            <input
+            <Input
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Household name"
-              className="w-full rounded-lg bg-surface/15 px-4 py-3 outline-none ring-1 ring-inset ring-surface-muted/60 backdrop-blur-lg focus:ring-2 focus:ring-primary"
+              className="w-full px-4 py-3"
             />
             <Button onClick={submitCreate} disabled={busy} className="w-full py-3">
               {busy ? '…' : 'Create'}
@@ -87,12 +88,12 @@ export function HouseholdSetup() {
 
         {mode === 'join' && (
           <div className="space-y-3">
-            <input
+            <Input
               value={code}
               onChange={(e) => setCode(e.target.value)}
               placeholder="Invite code"
               autoCapitalize="characters"
-              className="w-full rounded-lg bg-surface/15 px-4 py-3 uppercase outline-none ring-1 ring-inset ring-surface-muted/60 backdrop-blur-lg focus:ring-2 focus:ring-primary"
+              className="w-full px-4 py-3 uppercase"
             />
             <Button onClick={submitJoin} disabled={busy || !code.trim()} className="w-full py-3">
               {busy ? '…' : 'Join'}

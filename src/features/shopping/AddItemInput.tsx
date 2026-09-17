@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { useLanguage } from '@/features/household/useLanguage'
 import { Button } from '@/shared/ui/Button'
+import { Input } from '@/shared/ui/Input'
 import { Select } from '@/shared/ui/Select'
 import { PlusIcon, DetailsIcon, TagIcon } from '@/shared/ui/FormIcons'
 import { CATEGORIES, type Category } from '@/shared/categories'
@@ -29,21 +30,21 @@ export function AddItemInput({
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-2">
-      <input
+      <Input
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder={t('addItemPlaceholder')}
         autoComplete="off"
-        className="w-full rounded-lg bg-surface/15 px-4 py-3 text-text outline-none ring-1 ring-inset ring-surface-muted/60 backdrop-blur-lg focus:ring-2 focus:ring-primary"
+        className="w-full px-4 py-3"
       />
       <div className="flex gap-2">
         <div className="relative w-24 min-w-0 flex-none">
-          <input
+          <Input
             value={details}
             onChange={(e) => setDetails(e.target.value)}
             placeholder={t('detailsPlaceholder')}
             autoComplete="off"
-            className="w-full min-w-0 rounded-lg bg-surface/15 py-3 ps-8 pe-3 text-text outline-none ring-1 ring-inset ring-surface-muted/60 backdrop-blur-lg focus:ring-2 focus:ring-primary"
+            className="w-full min-w-0 py-3 ps-8 pe-3"
           />
           <DetailsIcon className="pointer-events-none absolute inset-y-0 start-2.5 my-auto text-text-subtle" />
         </div>

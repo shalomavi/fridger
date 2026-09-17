@@ -1,4 +1,5 @@
 import { SearchIcon } from '@/shared/ui/FormIcons'
+import { Input } from '@/shared/ui/Input'
 
 /** Plain text search box, styled to match AddItemInput's fields, with a
  * leading magnifying-glass icon in place of relying on the placeholder text
@@ -21,13 +22,13 @@ export function SearchInput({
   return (
     <div className="sticky top-0 z-10 -mx-6 bg-surface/5 px-6 py-2 backdrop-blur-lg">
       <div className="relative">
-        <input
+        <Input
           type="search"
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           autoComplete="off"
-          className="w-full rounded-lg bg-surface/15 py-3 ps-10 pe-4 text-text outline-none ring-1 ring-inset ring-surface-muted/60 backdrop-blur-lg focus:ring-2 focus:ring-primary"
+          className="w-full py-3 ps-10 pe-4"
         />
         <SearchIcon className="pointer-events-none absolute inset-y-0 start-3 my-auto text-text-subtle" />
       </div>

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ComponentType } from 'react'
 import { ChevronDownIcon } from '@/shared/ui/FormIcons'
+import { fieldClass } from '@/shared/ui/Input'
 
 export interface SelectOption {
   value: string
@@ -81,8 +82,8 @@ export function Select({
         aria-label={ariaLabel}
         onClick={() => (open ? setOpen(false) : openAt(selectedIndex))}
         onKeyDown={onButtonKeyDown}
-        className={`w-full min-w-0 truncate rounded-lg bg-surface/15 py-3 ps-8 pe-8 text-start outline-none ring-1 ring-inset ring-surface-muted/60 backdrop-blur-lg focus:ring-2 focus:ring-primary ${
-          selectedIndex >= 0 ? 'text-text' : 'text-text-subtle'
+        className={`${fieldClass} w-full min-w-0 truncate py-3 ps-8 pe-8 text-start ${
+          selectedIndex >= 0 ? '' : 'text-text-subtle'
         }`}
       >
         {selectedLabel}

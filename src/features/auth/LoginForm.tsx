@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { supabase } from '@/shared/supabase'
 import { Button } from '@/shared/ui/Button'
+import { Input } from '@/shared/ui/Input'
 import { statusTextClass } from '@/shared/ui/Badge'
 import { useTheme } from '@/shared/useTheme'
 import GhostFibers from '@/shared/ghostFibers/GhostFibers'
@@ -64,16 +65,16 @@ export function LoginForm() {
       <form onSubmit={onSubmit} className="relative w-full max-w-sm space-y-4">
         <h1 className="text-center text-3xl font-semibold text-primary-accent">Fridger</h1>
 
-        <input
+        <Input
           type="email"
           required
           autoComplete="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full rounded-lg bg-surface/15 px-4 py-3 text-text outline-none ring-1 ring-inset ring-surface-muted/60 backdrop-blur-lg focus:ring-2 focus:ring-primary"
+          className="w-full px-4 py-3"
         />
-        <input
+        <Input
           type="password"
           required
           minLength={6}
@@ -81,7 +82,7 @@ export function LoginForm() {
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full rounded-lg bg-surface/15 px-4 py-3 text-text outline-none ring-1 ring-inset ring-surface-muted/60 backdrop-blur-lg focus:ring-2 focus:ring-primary"
+          className="w-full px-4 py-3"
         />
 
         {error && <p className={`text-sm ${statusTextClass('danger')}`}>{error}</p>}
