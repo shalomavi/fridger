@@ -4,7 +4,6 @@ import { LoginForm } from '@/features/auth/LoginForm'
 import { useHousehold, type Household } from '@/features/household/useHousehold'
 import { useLanguage } from '@/features/household/useLanguage'
 import { HouseholdSetup } from '@/features/household/HouseholdSetup'
-import { InviteButton } from '@/features/household/InviteButton'
 import { LanguageToggle } from '@/features/household/LanguageToggle'
 import { ThemeToggle } from '@/shared/ui/ThemeToggle'
 import { ShoppingCartIcon, PantryIcon, MealsIcon, SettingsIcon } from '@/shared/ui/TabIcons'
@@ -48,10 +47,6 @@ function Layout({ household, email }: { household: Household; email: string | un
           </button>
         </div>
       </header>
-
-      <div className="mb-6">
-        <InviteButton householdId={household.id} />
-      </div>
 
       <nav className="mb-6 flex gap-2">
         <NavLink to="/" end className={tabClass} aria-label={t('tabShopping')}>
