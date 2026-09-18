@@ -5,6 +5,7 @@ import { DetailsEditor } from '@/shared/ui/DetailsEditor'
 import { CategoryPicker } from '@/shared/ui/CategoryPicker'
 import { ExpiryEditor } from '@/shared/ui/ExpiryEditor'
 import { isExpiringSoon } from '@/domain/expiry'
+import { glowShadow } from '@/shared/ui/elevation'
 import type { Category } from '@/shared/categories'
 
 const SWIPE_THRESHOLD = 72
@@ -83,7 +84,7 @@ export function PantryRow({
     <li
       style={{ animation: leaving ? 'item-out 300ms ease-in forwards' : 'item-in 300ms ease-out' }}
       onAnimationEnd={handleAnimationEnd}
-      className="relative overflow-hidden rounded-lg"
+      className={`relative overflow-hidden rounded-lg ${glowShadow}`}
     >
       {/* The reveal is a fixed physical left-drag in both languages (see
        * the gesture note above), so it always uncovers on the physical

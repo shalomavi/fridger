@@ -5,6 +5,7 @@ import { useLanguage } from '@/features/household/useLanguage'
 import { DetailsEditor } from '@/shared/ui/DetailsEditor'
 import { CategoryPicker } from '@/shared/ui/CategoryPicker'
 import { Surface } from '@/shared/ui/Surface'
+import { glowShadow } from '@/shared/ui/elevation'
 import type { Category } from '@/shared/categories'
 
 export function ShoppingRow({
@@ -72,7 +73,7 @@ export function ShoppingRow({
       as="li"
       style={{ animation: leaving ? 'item-out 300ms ease-in forwards' : 'item-in 300ms ease-out' }}
       onAnimationEnd={handleAnimationEnd}
-      className="overflow-hidden p-3"
+      className={`overflow-hidden p-3 ${glowShadow}`}
     >
       <div className="flex items-center gap-3">
         <button onClick={handleToggle} className="flex flex-1 items-center gap-3 text-start">
