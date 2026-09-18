@@ -43,7 +43,7 @@ function Layout({ household, email }: { household: Household; email: string | un
         </div>
         <div className="flex items-center justify-between gap-4">
           <p className="min-w-0 truncate text-xs text-text-subtle">{email}</p>
-          <button onClick={() => signOut()} className="shrink-0 text-sm text-text-muted">
+          <button onClick={() => signOut()} className="shrink-0 text-sm text-text-muted underline">
             {t('signOut')}
           </button>
         </div>
