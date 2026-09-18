@@ -16,8 +16,16 @@ import { MealsScreen } from '@/features/meals/MealsScreen'
 import { SettingsScreen } from '@/features/settings/SettingsScreen'
 
 function tabClass({ isActive }: { isActive: boolean }) {
+  // Inactive tabs get a literal top/bottom border instead of relying on
+  // elevationShadow's inset shadows for definition — bg-surface is plain
+  // white in light theme, so a white top sheen has nothing to contrast
+  // against. Dark (not white) on both edges shows up against that white
+  // fill either way; top a bit lighter than bottom keeps the same
+  // light-catches-the-top-edge read the shadow was going for.
   return `flex flex-1 items-center justify-center rounded-lg py-3 transition-transform duration-300 active:scale-95 ${elevationShadow} ${
-    isActive ? 'bg-primary text-white' : 'bg-surface text-text-muted'
+    isActive
+      ? 'bg-primary text-white'
+      : 'border-t border-b border-t-black/10 border-b-black/25 bg-surface text-text-muted'
   }`
 }
 
