@@ -13,7 +13,7 @@
  * page. backdrop-saturate makes whatever's blurred behind it read as richer
  * glass. focus:ring is the one ring that's kept, as an interaction cue. */
 export const fieldClass =
-  'rounded-lg bg-surface/5 text-text outline-none shadow-[inset_0_-2px_0_rgba(0,0,0,0.35),0_2px_4px_rgba(0,0,0,0.3),0_12px_32px_rgba(0,0,0,0.4)] backdrop-blur-md backdrop-saturate-150 focus:ring-2 focus:ring-primary'
+  'rounded-lg bg-surface/5 text-text outline-none shadow-[inset_0_-2px_0_rgba(0,0,0,0.35),0_2px_4px_rgba(0,0,0,0.3),0_12px_32px_rgba(0,0,0,0.4)] backdrop-blur-sm backdrop-saturate-150 focus:ring-2 focus:ring-primary'
 
 /** Thin styled wrapper around <input>, same pattern as Button: the glass
  * look is baked in here, width/padding/icon-offset stay in the caller's
