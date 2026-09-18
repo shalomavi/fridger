@@ -13,10 +13,16 @@
  * page. A slight backdrop-blur (just the "sm" step) plus backdrop-saturate
  * so it still reads as glass rather than plain see-through — kept small on
  * purpose, and specific to fields; SearchInput's sticky strip stays
- * unblurred. focus:ring is the one ring that's kept, as an interaction
- * cue. */
+ * unblurred.
+ *
+ * Focus is an arbitrary shadow too, not ring-2/ring-primary: an arbitrary
+ * shadow-[...] sets box-shadow directly rather than through the --tw-shadow
+ * variable ring-* utilities compose with, so a plain focus:ring would
+ * replace this whole shadow with just a flat ring instead of adding to it —
+ * the "weird" jump on focus. Repeating the resting shadow plus a solid
+ * 2px outline (0_0_0_2px) keeps the same depth while focused. */
 export const fieldClass =
-  'rounded-lg bg-surface/5 text-text outline-none shadow-[inset_0_-2px_0_rgba(0,0,0,0.35),0_2px_4px_rgba(0,0,0,0.3),0_12px_32px_rgba(0,0,0,0.4)] backdrop-blur-sm backdrop-saturate-150 focus:ring-2 focus:ring-primary'
+  'rounded-lg bg-surface/5 text-text outline-none shadow-[inset_0_-2px_0_rgba(0,0,0,0.35),0_2px_4px_rgba(0,0,0,0.3),0_12px_32px_rgba(0,0,0,0.4)] backdrop-blur-sm backdrop-saturate-150 focus:shadow-[inset_0_-2px_0_rgba(0,0,0,0.35),0_2px_4px_rgba(0,0,0,0.3),0_12px_32px_rgba(0,0,0,0.4),0_0_0_2px_var(--color-primary)]'
 
 /** Thin styled wrapper around <input>, same pattern as Button: the glass
  * look is baked in here, width/padding/icon-offset stay in the caller's
