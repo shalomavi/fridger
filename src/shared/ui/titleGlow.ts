@@ -1,15 +1,10 @@
 import type { Theme } from '@/shared/useTheme'
 
 /** Shared "glowing teal title" look — Fridger's login title, the household
- * setup heading, and the household name in the app header all use this.
- *
- * Dark mode gets a dedicated brighter text shade (text-primary-accent's
- * teal-600 still reads fine, but the glow needs something brighter under it
- * to not look mismatched); light mode keeps the original token — a bright
- * teal looked out of place against light theme's light background. */
+ * setup heading, and the household name in the app header all use this. */
 export const titleTextClass: Record<Theme, string> = {
-  light: 'text-primary-accent',
-  dark: 'text-teal-500',
+  light: 'text-primary',
+  dark: 'text-teal-600',
 }
 
 /** Same glow shape (tight + wide drop-shadow) in both themes, but dark mode
