@@ -8,14 +8,19 @@ import { useTheme } from '@/shared/useTheme'
 
 type Mode = 'signin' | 'signup'
 
+// text-primary-accent is a fairly dark teal (esp. in light theme) — too
+// dark to read as "glowing", so the title uses its own brighter shade per
+// theme instead of that token.
+const titleTextClass = { light: 'text-teal-600', dark: 'text-teal-400' } as const
+
 // Same glow shape (tight + wide drop-shadow) in both themes, but dark mode
-// needs it much weaker: the same bright cyan reads as subtle against
+// needs it weaker: the same bright cyan reads as subtle against
 // light-theme's light background, but overpowers the text against
 // dark-theme's dark one — the glow's contrast against the page, not just
 // against the text, is what changes between themes.
 const titleGlow = {
-  light: '[filter:drop-shadow(0_0_4px_rgba(94,234,212,0.3))_drop-shadow(0_0_16px_rgba(94,234,212,0.15))]',
-  dark: '[filter:drop-shadow(0_0_2px_rgba(94,234,212,0.15))_drop-shadow(0_0_8px_rgba(94,234,212,0.08))]',
+  light: '[filter:drop-shadow(0_0_4px_rgba(94,234,212,0.5))_drop-shadow(0_0_16px_rgba(94,234,212,0.3))]',
+  dark: '[filter:drop-shadow(0_0_2px_rgba(94,234,212,0.35))_drop-shadow(0_0_8px_rgba(94,234,212,0.2))]',
 } as const
 
 export function LoginForm() {
@@ -43,7 +48,7 @@ export function LoginForm() {
   return (
     <AuthBackdrop>
       <form onSubmit={onSubmit} className="relative w-full max-w-sm space-y-4">
-        <h1 className={`text-center text-3xl font-semibold text-primary-accent ${titleGlow[theme]}`}>
+        <h1 className={`text-center text-3xl font-semibold ${titleTextClass[theme]} ${titleGlow[theme]}`}>
           Fridger
         </h1>
 
