@@ -4,7 +4,7 @@ import { setHouseholdMealTypes } from '@/features/household/api'
 import { useHousehold, useInvalidateHousehold } from '@/features/household/useHousehold'
 import { useLanguage } from '@/features/household/useLanguage'
 import { MEAL_TYPES, type MealType } from '@/shared/mealTypes'
-import { buttonShadow } from '@/shared/ui/elevation'
+import { elevationShadow } from '@/shared/ui/elevation'
 
 /** Multi-select style nudge for meal suggestions (healthy, fast, etc.) — see
  * shared/mealTypes.ts. Chips toggle and save immediately, same as
@@ -46,7 +46,7 @@ export function MealTypeSettings() {
           <button
             key={type}
             onClick={() => toggle(type)}
-            className={`rounded-full px-3 py-1.5 text-sm transition-transform duration-300 active:scale-95 ${buttonShadow} ${
+            className={`rounded-full px-3 py-1.5 text-sm transition-transform duration-300 active:scale-95 ${elevationShadow} ${
               selected.includes(type) ? 'bg-primary text-white' : 'bg-surface text-text-soft'
             }`}
           >
