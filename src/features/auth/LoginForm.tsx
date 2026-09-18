@@ -31,7 +31,7 @@ export function LoginForm() {
   return (
     <AuthBackdrop>
       <form onSubmit={onSubmit} className="relative w-full max-w-sm space-y-4">
-        <h1 className="text-center text-3xl font-semibold text-primary-accent [filter:drop-shadow(0_0_8px_rgba(94,234,212,0.9))_drop-shadow(0_0_28px_rgba(94,234,212,0.7))]">
+        <h1 className="text-center text-3xl font-semibold text-primary-accent [filter:drop-shadow(0_0_4px_rgba(94,234,212,0.6))_drop-shadow(0_0_14px_rgba(94,234,212,0.35))]">
           Fridger
         </h1>
 
