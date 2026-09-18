@@ -16,17 +16,17 @@ export const elevationShadow =
 export const buttonShadow =
   'shadow-[inset_0_-2px_0_rgba(0,0,0,0.25),0_2px_4px_rgba(0,0,0,0.3),0_8px_20px_rgba(0,0,0,0.35)]'
 
-/** elevationShadow, but for *inactive* nav tabs/chips in light theme
- * specifically. Paired with inactiveSurfaceClass's bg-surface-muted fill
- * (a light gray, not plain white) below — with that fill in place, a
- * bright top sheen has something to contrast against again, so this goes
- * back to white (brighter than the muted fill) over the dark bottom bevel,
- * rather than the dark-on-white workaround from before that fill existed.
- * Dark theme keeps plain elevationShadow unchanged — its bg-surface was
- * never the problem. */
+/** elevationShadow, but for *inactive* bg-surface elements (inactive nav
+ * tabs, unselected MealTypeSettings chips) in light theme specifically: the
+ * white top sheen has nothing to contrast against on bg-surface's plain
+ * white fill there, so it's swapped for a soft dark inset instead — a
+ * shadow, not a border, to match the rest of the app's shadow-based depth
+ * rather than a hard line. Dark theme keeps plain elevationShadow
+ * unchanged, since bg-surface is a dark slate there and the white sheen
+ * already shows fine. */
 export const inactiveElevationShadow: Record<Theme, string> = {
   light:
-    'shadow-[inset_0_2px_0_rgba(255,255,255,0.7),inset_0_-2px_0_rgba(0,0,0,0.4),0_2px_4px_rgba(0,0,0,0.3),0_8px_20px_rgba(0,0,0,0.35)]',
+    'shadow-[inset_0_2px_0_rgba(0,0,0,0.3),inset_0_-2px_0_rgba(0,0,0,0.4),0_2px_4px_rgba(0,0,0,0.3),0_8px_20px_rgba(0,0,0,0.35)]',
   dark: elevationShadow,
 }
 
