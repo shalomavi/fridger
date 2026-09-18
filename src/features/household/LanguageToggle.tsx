@@ -1,6 +1,6 @@
 import { useLanguage } from './useLanguage'
 import type { Language } from './api'
-import { elevationShadow } from '@/shared/ui/elevation'
+import { elevationShadow, pressedShadow } from '@/shared/ui/elevation'
 
 const OPTIONS: { value: Language; label: string }[] = [
   { value: 'en', label: 'EN' },
@@ -17,7 +17,9 @@ export function LanguageToggle() {
           key={opt.value}
           onClick={() => setLanguage.mutate(opt.value)}
           disabled={setLanguage.isPending}
-          className={`px-2 py-1 ${lang === opt.value ? 'bg-primary text-white' : 'bg-surface text-text-muted'}`}
+          className={`px-2 py-1 ${
+            lang === opt.value ? `bg-primary text-white ${pressedShadow}` : 'bg-surface text-text-muted'
+          }`}
         >
           {opt.label}
         </button>

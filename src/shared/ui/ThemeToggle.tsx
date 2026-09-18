@@ -1,5 +1,5 @@
 import { useTheme, type Theme } from '@/shared/useTheme'
-import { elevationShadow } from './elevation'
+import { elevationShadow, pressedShadow } from './elevation'
 
 // Icons: Lucide (ISC license, lucide.dev). currentColor lets them inherit
 // each button's text color, so no separate light/dark icon variant needed.
@@ -62,7 +62,9 @@ export function ThemeToggle() {
           key={value}
           onClick={() => setTheme(value)}
           aria-label={value}
-          className={`flex items-center justify-center px-2 py-1 ${theme === value ? 'bg-primary text-white' : 'bg-surface text-text-muted'}`}
+          className={`flex items-center justify-center px-2 py-1 ${
+            theme === value ? `bg-primary text-white ${pressedShadow}` : 'bg-surface text-text-muted'
+          }`}
         >
           <Icon />
         </button>
