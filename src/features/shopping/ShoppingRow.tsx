@@ -33,18 +33,30 @@ export function ShoppingRow({
   const [removing, setRemoving] = useState(false)
   const deleted = useRef(false)
 
+  function fireDelete() {
+    if (deleted.current) return
+    deleted.current = true
+    onDelete()
+  }
+
   function handleDelete() {
     setRemoving(true)
+    // Safety net if transitionend never fires (e.g. the tab is backgrounded
+    // mid-animation) — comfortably past the 500ms transition, so it never
+    // wins the race under normal conditions.
+    setTimeout(fireDelete, 800)
   }
 
   // A fixed setTimeout raced the actual transition (React's commit delay
   // plus real paint time on a phone can easily push it past 500ms), cutting
-  // the animation off mid-collapse. Firing on the real transitionend instead
-  // keeps the two in sync regardless of how long it actually takes.
+  // the animation off mid-collapse. Firing on transitionend instead keeps
+  // the two in sync — gated to the opacity leg specifically, since browser
+  // support for animating grid-template-rows itself is patchier and can
+  // fire its own transitionend near-instantly instead of after 500ms.
   function handleTransitionEnd(e: React.TransitionEvent<HTMLLIElement>) {
-    if (!removing || deleted.current || e.target !== e.currentTarget) return
-    deleted.current = true
-    onDelete()
+    if (!removing) return
+    if (e.target !== e.currentTarget || e.propertyName !== 'opacity') return
+    fireDelete()
   }
 
   return (
