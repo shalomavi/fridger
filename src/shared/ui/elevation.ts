@@ -19,7 +19,7 @@ export const pressedShadow = 'shadow-[inset_0_3px_6px_rgba(0,0,0,0.45),inset_0_1
 /** A soft ambient halo, for list rows (ShoppingRow/PantryRow) rather than
  * controls — no offset and a wide blur, so it reads as a glow surrounding
  * the item rather than a shadow cast in one direction like elevationShadow.
- * Fixed teal (primary's actual color in both light and dark — see
- * index.css) rather than the `primary` token, since arbitrary shadow values
- * can't reference Tailwind's color-mix-based opacity utilities directly. */
-export const glowShadow = 'shadow-[0_0_14px_rgba(15,118,110,0.35)]'
+ * color-mix against --color-primary (index.css) directly, rather than a
+ * hardcoded teal rgba, so the glow follows the token if it's ever
+ * retheme'd instead of silently going stale. */
+export const glowShadow = 'shadow-[0_0_14px_color-mix(in_srgb,var(--color-primary)_35%,transparent)]'
