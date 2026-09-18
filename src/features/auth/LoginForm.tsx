@@ -8,10 +8,11 @@ import { useTheme } from '@/shared/useTheme'
 
 type Mode = 'signin' | 'signup'
 
-// text-primary-accent is a fairly dark teal (esp. in light theme) — too
-// dark to read as "glowing", so the title uses its own brighter shade per
-// theme instead of that token.
-const titleTextClass = { light: 'text-teal-600', dark: 'text-teal-400' } as const
+// Dark mode gets a dedicated brighter shade (text-primary-accent's teal-600
+// still reads fine, but the glow needs something brighter under it to not
+// look mismatched); light mode keeps the original token — a bright teal
+// looked out of place against light theme's light background.
+const titleTextClass = { light: 'text-primary-accent', dark: 'text-teal-400' } as const
 
 // Same glow shape (tight + wide drop-shadow) in both themes, but dark mode
 // needs it weaker: the same bright cyan reads as subtle against
