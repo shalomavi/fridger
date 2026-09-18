@@ -3,8 +3,8 @@ import type { Theme } from '@/shared/useTheme'
 /** Shared "glowing teal title" look — Fridger's login title, the household
  * setup heading, and the household name in the app header all use this. */
 export const titleTextClass: Record<Theme, string> = {
-  light: 'text-primary',
-  dark: 'text-teal-600',
+  light: 'text-primary-accent',
+  dark: 'text-teal-500',
 }
 
 /** Same glow shape (tight + wide drop-shadow) in both themes, but dark mode
