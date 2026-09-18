@@ -195,6 +195,25 @@ input:-webkit-autofill:focus {
   }
 }
 
+/* ShoppingRow: the mirror image of item-in above, for deleting an item —
+ * same slide/scale, played backwards, so arrive and leave feel like the same
+ * motion in reverse rather than two unrelated animations. Opacity reaches 0
+ * by 65% (mirroring item-in reaching full opacity by 35%) while the
+ * slide/scale keeps settling outward for the full duration. */
+@keyframes item-out {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  65% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+}
+
 /* ToastContainer: a toast rises in from the bottom instead of popping into
  * place, same opacity-first idea as item-in above. */
 @keyframes toast-in {
