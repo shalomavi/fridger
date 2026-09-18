@@ -1,11 +1,12 @@
 import { useRef } from 'react'
 import { useMutation, useQueryClient, type QueryKey } from '@tanstack/react-query'
-import { addShoppingItem, updateShoppingItemDetails, type ShoppingItem } from './api'
+import { addShoppingItem, deleteShoppingItem, updateShoppingItemDetails, type ShoppingItem } from './api'
 import { isSameIngredient } from '@/domain/normalize'
 import { mergeDetails } from '@/domain/mergeDetails'
 import type { Category } from '@/shared/categories'
 import { useLanguage } from '@/features/household/useLanguage'
 import { useToast } from '@/shared/alerts/ToastContext'
+import { undoAction } from '@/shared/query/undoAction'
 import { itemAddedToastContent } from '@/shared/alerts/itemAddedToast'
 
 type AddArgs = { name: string; details?: string; category?: Category | null }
@@ -61,7 +62,19 @@ export function useAddShoppingItem(
         return [...(items ?? []), optimisticItem]
       })
       const { message, icon } = itemAddedToastContent(existing?.category ?? category ?? null, t)
-      notify(message, 'success', icon)
+      // Undo: a genuinely new row gets deleted; a merge-into-a-duplicate
+      // instead restores that row's pre-merge details rather than deleting
+      // it outright, since it existed before this add.
+      const newId = existing ? null : pendingId.current
+      const onUndo = () =>
+        undoAction(
+          queryClient,
+          key,
+          previous,
+          () => (existing ? updateShoppingItemDetails(existing.id, existing.details) : deleteShoppingItem(newId!)),
+          () => notify(t('actionFailed'), 'error'),
+        )
+      notify(message, 'success', icon, onUndo)
       return { previous }
     },
     onError: (_err, _vars, context) => {
