@@ -14,8 +14,8 @@ type Mode = 'signin' | 'signup'
 // dark-theme's dark one — the glow's contrast against the page, not just
 // against the text, is what changes between themes.
 const titleGlow = {
-  light: '[filter:drop-shadow(0_0_2px_rgba(94,234,212,0.3))_drop-shadow(0_0_6px_rgba(94,234,212,0.15))]',
-  dark: '[filter:drop-shadow(0_0_1px_rgba(94,234,212,0.15))_drop-shadow(0_0_3px_rgba(94,234,212,0.08))]',
+  light: '[filter:drop-shadow(0_0_4px_rgba(94,234,212,0.3))_drop-shadow(0_0_16px_rgba(94,234,212,0.15))]',
+  dark: '[filter:drop-shadow(0_0_2px_rgba(94,234,212,0.15))_drop-shadow(0_0_8px_rgba(94,234,212,0.08))]',
 } as const
 
 export function LoginForm() {
