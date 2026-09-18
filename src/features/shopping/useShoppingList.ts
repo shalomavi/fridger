@@ -45,7 +45,8 @@ export function useShoppingList(householdId: string) {
   const pendingToggles = useRef(0)
   const toggleItem = useMutation({
     // Checking off writes to the pantry (§1/§3 of the plan: a transition, not a move); unchecking undoes that.
-    mutationFn: (item: ShoppingItem) =>
+    // `silent` marks the re-toggle Undo fires, so that doesn't show its own toast.
+    mutationFn: (item: ShoppingItem & { silent?: boolean }) =>
       item.status === 'pending' ? markPurchased(item) : undoPurchase(item),
     onMutate: async (item) => {
       pendingToggles.current += 1
@@ -54,10 +55,12 @@ export function useShoppingList(householdId: string) {
       queryClient.setQueryData<ShoppingItem[]>(key, (items) =>
         items?.map((i) => (i.id === item.id ? { ...i, status: nextStatus } : i)),
       )
-      // Undo re-toggles: passing the post-toggle status flips it straight back the other way.
-      fireToast(itemMovedToastContent(item.status === 'pending' ? 'pantry' : 'shopping-list', t), () =>
-        toggleItem.mutate({ ...item, status: nextStatus }),
-      )
+      if (!item.silent) {
+        // Undo re-toggles: passing the post-toggle status flips it straight back the other way.
+        fireToast(itemMovedToastContent(item.status === 'pending' ? 'pantry' : 'shopping-list', t), () =>
+          toggleItem.mutate({ ...item, status: nextStatus, silent: true }),
+        )
+      }
       return { previous }
     },
     onError: (_err, _item, context) => onMutationError(context),
