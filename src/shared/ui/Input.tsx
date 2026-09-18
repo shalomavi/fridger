@@ -1,5 +1,5 @@
 /** The "glass" look shared by every text field and the Select trigger:
- * translucent surface, blur, primary focus ring. Exported so non-<input>
+ * mostly-transparent surface, primary focus ring. Exported so non-<input>
  * elements that should look like a field (Select's button) can reuse the
  * exact same classes instead of copying them.
  *
@@ -10,10 +10,12 @@
  * (shadow pooling at the glass' bottom edge), plus a tight "contact" shadow
  * right under the field and a larger, softer one further out (the same
  * near+far pairing real elevation shadows use) so it visibly lifts off the
- * page. backdrop-saturate makes whatever's blurred behind it read as richer
- * glass. focus:ring is the one ring that's kept, as an interaction cue. */
+ * page. No backdrop-blur (removed for a more see-through look) — just
+ * backdrop-saturate, so whatever shows through still reads a touch richer
+ * than a plain see-through pane. focus:ring is the one ring that's kept,
+ * as an interaction cue. */
 export const fieldClass =
-  'rounded-lg bg-surface/5 text-text outline-none shadow-[inset_0_-2px_0_rgba(0,0,0,0.35),0_2px_4px_rgba(0,0,0,0.3),0_12px_32px_rgba(0,0,0,0.4)] backdrop-blur-sm backdrop-saturate-150 focus:ring-2 focus:ring-primary'
+  'rounded-lg bg-surface/5 text-text outline-none shadow-[inset_0_-2px_0_rgba(0,0,0,0.35),0_2px_4px_rgba(0,0,0,0.3),0_12px_32px_rgba(0,0,0,0.4)] backdrop-saturate-150 focus:ring-2 focus:ring-primary'
 
 /** Thin styled wrapper around <input>, same pattern as Button: the glass
  * look is baked in here, width/padding/icon-offset stay in the caller's
