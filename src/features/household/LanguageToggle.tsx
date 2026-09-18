@@ -1,6 +1,6 @@
 import { useLanguage } from './useLanguage'
 import type { Language } from './api'
-import { elevationShadow, pressedShadow } from '@/shared/ui/elevation'
+import { buttonShadow, pressedShadow } from '@/shared/ui/elevation'
 
 const OPTIONS: { value: Language; label: string }[] = [
   { value: 'en', label: 'EN' },
@@ -11,7 +11,7 @@ export function LanguageToggle() {
   const { lang, setLanguage } = useLanguage()
 
   return (
-    <div className={`flex overflow-hidden rounded-lg text-xs ${elevationShadow}`}>
+    <div className={`flex overflow-hidden rounded-lg text-xs ${buttonShadow}`}>
       {OPTIONS.map((opt) => (
         <button
           key={opt.value}
