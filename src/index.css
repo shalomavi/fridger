@@ -34,7 +34,7 @@
  * which sets data-theme="light" | "dark" on <html>. */
 :root {
   --color-bg: var(--color-slate-50);
-  --color-surface: var(--color-zinc-50);
+  --color-surface: var(--color-white);
   --color-surface-muted: var(--color-slate-200);
 
   --color-text: var(--color-slate-900);
