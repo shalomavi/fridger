@@ -4,6 +4,7 @@ import { setHouseholdPreferences } from '@/features/household/api'
 import { useHousehold, useInvalidateHousehold } from '@/features/household/useHousehold'
 import { useLanguage } from '@/features/household/useLanguage'
 import { Button } from '@/shared/ui/Button'
+import { fieldClass } from '@/shared/ui/Input'
 
 export function HouseholdPreferences() {
   const { t } = useLanguage()
@@ -39,7 +40,7 @@ export function HouseholdPreferences() {
         }}
         placeholder={t('preferencesPlaceholder')}
         rows={4}
-        className="w-full resize-none rounded-lg bg-surface px-4 py-3 text-text outline-none focus:ring-2 focus:ring-primary"
+        className={`w-full resize-none px-4 py-3 ${fieldClass}`}
       />
       <Button onClick={() => save.mutate(value)} disabled={!dirty || save.isPending} className="px-5 py-2 text-sm">
         {save.isPending ? '…' : t('save')}
