@@ -56,3 +56,12 @@ export async function consumeItem(id: string): Promise<void> {
     .eq('id', id)
   if (error) throw error
 }
+
+/** Reverses consumeItem — the "Undo" toast action after marking something used. */
+export async function undoConsumeItem(id: string): Promise<void> {
+  const { error } = await supabase
+    .from('pantry_items')
+    .update({ status: 'available', consumed_at: null })
+    .eq('id', id)
+  if (error) throw error
+}

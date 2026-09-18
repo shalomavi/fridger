@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   consumeItem,
+  undoConsumeItem,
   listPantryItems,
   updatePantryItemDetails,
   updatePantryItemCategory,
@@ -11,6 +12,7 @@ import type { Category } from '@/shared/categories'
 import { useLanguage } from '@/features/household/useLanguage'
 import { useToast } from '@/shared/alerts/ToastContext'
 import { itemConsumedToastContent } from '@/shared/alerts/itemConsumedToast'
+import { undoAction } from '@/shared/query/undoAction'
 
 export const pantryQueryKey = (householdId: string) => ['pantry-items', householdId] as const
 
@@ -37,7 +39,9 @@ export function usePantry(householdId: string) {
       const item = previous?.find((i) => i.id === id)
       if (item) {
         const { message, icon } = itemConsumedToastContent(item.name, t)
-        notify(message, 'success', icon)
+        const onUndo = () =>
+          undoAction(queryClient, key, previous, () => undoConsumeItem(id), () => notify(t('actionFailed'), 'error'))
+        notify(message, 'success', icon, onUndo)
       }
       return { previous }
     },

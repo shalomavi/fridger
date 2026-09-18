@@ -77,6 +77,12 @@ export async function deleteShoppingItem(id: string): Promise<void> {
   if (error) throw error
 }
 
+/** Reverses deleteShoppingItem — the "Undo" toast action, re-inserting the same row. */
+export async function restoreShoppingItem(item: ShoppingItem): Promise<void> {
+  const { error } = await supabase.from('shopping_items').insert(item)
+  if (error) throw error
+}
+
 /**
  * The shopping -> pantry transition (§1/§3 of the plan): the shopping row is
  * kept, marked purchased, for history — a new pantry row is created rather

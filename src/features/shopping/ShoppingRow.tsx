@@ -28,9 +28,8 @@ export function ShoppingRow({
 }) {
   const { lang } = useLanguage()
   const purchased = item.status === 'purchased'
-  // Deleting has no undo (unlike checking one off), so it plays a fade+
-  // collapse before the actual delete fires instead of the row just
-  // vanishing the instant the confirm dialog closes.
+  // Plays a fade+collapse before the actual delete fires instead of the row
+  // just vanishing the instant the confirm dialog closes.
   const [removing, setRemoving] = useState(false)
 
   function handleDelete() {

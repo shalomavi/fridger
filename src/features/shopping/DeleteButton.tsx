@@ -2,8 +2,9 @@ import { useConfirm } from '@/shared/alerts/ConfirmContext'
 import { useLanguage } from '@/features/household/useLanguage'
 import { TrashIcon } from '@/shared/ui/FormIcons'
 
-/** Trash icon button, gated behind a confirm — deleting an item has no
- * undo (unlike checking one off, which you can un-tap). */
+/** Trash icon button, gated behind a confirm — the confirm dialog is still
+ * worth it even with the toast's Undo (useShoppingList.ts) since the row is
+ * gone the instant you tap and Undo only lasts as long as the toast. */
 export function DeleteButton({
   onDelete,
   label,

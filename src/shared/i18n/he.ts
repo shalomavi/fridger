@@ -62,6 +62,7 @@ export const he: Record<keyof typeof en, string> = {
   movedToPantry: 'עבר למזווה',
   movedToShoppingList: 'עבר לרשימת הקניות',
   deleted: 'נמחק',
+  undo: 'בטל',
   mealTypeLabel: 'סוג ארוחה',
   mealType_healthy: 'בריא',
   mealType_fast: 'מהיר',

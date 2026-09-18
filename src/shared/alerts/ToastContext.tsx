@@ -8,11 +8,17 @@ import { createContext, useCallback, useContext, useState, type ReactNode } from
  * context/container stay unaware of what any particular toast's icon means.
  */
 export type ToastVariant = 'success' | 'error' | 'info'
-export type Toast = { id: string; variant: ToastVariant; message: string; icon?: ReactNode }
+export type Toast = {
+  id: string
+  variant: ToastVariant
+  message: string
+  icon?: ReactNode
+  onUndo?: () => void
+}
 
 type ToastContextValue = {
   toasts: Toast[]
-  notify: (message: string, variant?: ToastVariant, icon?: ReactNode) => void
+  notify: (message: string, variant?: ToastVariant, icon?: ReactNode, onUndo?: () => void) => void
   dismiss: (id: string) => void
 }
 
@@ -29,12 +35,12 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   // Same message already showing (e.g. a mutation error firing twice) is a
   // no-op, not a second stacked toast.
   const notify = useCallback(
-    (message: string, variant: ToastVariant = 'info', icon?: ReactNode) => {
+    (message: string, variant: ToastVariant = 'info', icon?: ReactNode, onUndo?: () => void) => {
       setToasts((current) => {
         if (current.some((toast) => toast.message === message)) return current
         const id = crypto.randomUUID()
         setTimeout(() => dismiss(id), TOAST_DURATION_MS)
-        return [...current, { id, variant, message, icon }]
+        return [...current, { id, variant, message, icon, onUndo }]
       })
     },
     [dismiss],
