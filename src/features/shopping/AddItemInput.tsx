@@ -29,7 +29,7 @@ export function AddItemInput({
   }
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-2">
+    <form onSubmit={onSubmit} className="flex flex-col gap-4">
       <Input
         value={name}
         onChange={(e) => setName(e.target.value)}
