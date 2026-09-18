@@ -7,13 +7,14 @@ import { HouseholdSetup } from '@/features/household/HouseholdSetup'
 import { LanguageToggle } from '@/features/household/LanguageToggle'
 import { ThemeToggle } from '@/shared/ui/ThemeToggle'
 import { ShoppingCartIcon, PantryIcon, MealsIcon, SettingsIcon } from '@/shared/ui/TabIcons'
+import { elevationShadow } from '@/shared/ui/elevation'
 import { ShoppingList } from '@/features/shopping/ShoppingList'
 import { PantryList } from '@/features/pantry/PantryList'
 import { MealsScreen } from '@/features/meals/MealsScreen'
 import { SettingsScreen } from '@/features/settings/SettingsScreen'
 
 function tabClass({ isActive }: { isActive: boolean }) {
-  return `flex flex-1 items-center justify-center rounded-lg py-3 transition-transform duration-300 active:scale-95 ${
+  return `flex flex-1 items-center justify-center rounded-lg py-3 transition-transform duration-300 active:scale-95 ${elevationShadow} ${
     isActive ? 'bg-primary text-white' : 'bg-surface text-text-muted'
   }`
 }

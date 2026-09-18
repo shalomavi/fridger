@@ -1,3 +1,5 @@
+import { elevationShadow } from './elevation'
+
 type ButtonVariant = 'primary' | 'secondary'
 
 /** Thin styled wrapper around <button> — variant picks the fill/text color
@@ -13,7 +15,7 @@ export function Button({
   return (
     <button
       {...props}
-      className={`rounded-lg font-medium transition-transform duration-300 active:scale-95 disabled:opacity-50 ${variantClass} ${className}`}
+      className={`rounded-lg font-medium transition-transform duration-300 active:scale-95 disabled:opacity-50 ${elevationShadow} ${variantClass} ${className}`}
     />
   )
 }
