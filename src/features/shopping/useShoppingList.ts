@@ -84,11 +84,13 @@ export function useShoppingList(householdId: string) {
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 
+  const pendingToggles = useRef(0)
   const toggleItem = useMutation({
     // Checking off writes to the pantry (§1/§3 of the plan: a transition, not a move); unchecking undoes that.
     mutationFn: (item: ShoppingItem) =>
       item.status === 'pending' ? markPurchased(item) : undoPurchase(item),
     onMutate: async (item) => {
+      pendingToggles.current += 1
       const previous = await snapshot()
       queryClient.setQueryData<ShoppingItem[]>(key, (items) =>
         items?.map((i) =>
@@ -99,7 +101,9 @@ export function useShoppingList(householdId: string) {
       return { previous }
     },
     onError: (_err, _item, context) => onMutationError(context),
+    // Refetching mid-sibling-toggle would overwrite its optimistic row, then blink it back on settle.
     onSettled: () => {
+      if (--pendingToggles.current > 0) return
       queryClient.invalidateQueries({ queryKey: key })
       queryClient.invalidateQueries({ queryKey: pantryQueryKey(householdId) })
     },
