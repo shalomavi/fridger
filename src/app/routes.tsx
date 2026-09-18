@@ -16,16 +16,8 @@ import { MealsScreen } from '@/features/meals/MealsScreen'
 import { SettingsScreen } from '@/features/settings/SettingsScreen'
 
 function tabClass({ isActive }: { isActive: boolean }) {
-  // Inactive tabs get a resting border — a plain border, not a ring, so it
-  // doesn't collide with elevationShadow's arbitrary box-shadow (a ring
-  // utility would replace the whole shadow instead of adding to it, the
-  // same conflict fixed in Input.tsx's focus state). Needed because
-  // bg-surface is plain white in light theme: elevationShadow's shadows
-  // read fine against dark theme's darker surface, but a white top sheen on
-  // a white button, and a soft shadow against light theme's pale gradient
-  // background, have almost no contrast to show up with.
   return `flex flex-1 items-center justify-center rounded-lg py-3 transition-transform duration-300 active:scale-95 ${elevationShadow} ${
-    isActive ? 'bg-primary text-white' : 'border border-surface-muted bg-surface text-text-muted'
+    isActive ? 'bg-primary text-white' : 'bg-surface text-text-muted'
   }`
 }
 

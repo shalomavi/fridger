@@ -47,14 +47,7 @@ export function MealTypeSettings() {
             key={type}
             onClick={() => toggle(type)}
             className={`rounded-full px-3 py-1.5 text-sm transition-transform duration-300 active:scale-95 ${elevationShadow} ${
-              // Unselected chips need a resting border for the same reason as
-              // routes.tsx's inactive nav tabs — bg-surface is plain white in
-              // light theme, so neither the top sheen nor the outer shadow has
-              // enough contrast to be visible there. A border, not a ring, to
-              // avoid overriding elevationShadow's box-shadow.
-              selected.includes(type)
-                ? 'bg-primary text-white'
-                : 'border border-surface-muted bg-surface text-text-soft'
+              selected.includes(type) ? 'bg-primary text-white' : 'bg-surface text-text-soft'
             }`}
           >
             {t(`mealType_${type}`)}
