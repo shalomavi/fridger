@@ -16,8 +16,13 @@ import { MealsScreen } from '@/features/meals/MealsScreen'
 import { SettingsScreen } from '@/features/settings/SettingsScreen'
 
 function tabClass({ isActive }: { isActive: boolean }) {
+  // elevationShadow's bottom bevel (dark) already shows against bg-surface's
+  // plain white in light theme; its top sheen (white) doesn't, since white
+  // on white has nothing to contrast against. Add a literal top border
+  // instead — dark rather than white, but lighter than the bottom's shadow,
+  // so it still reads as the brighter edge without disappearing.
   return `flex flex-1 items-center justify-center rounded-lg py-3 transition-transform duration-300 active:scale-95 ${elevationShadow} ${
-    isActive ? 'bg-primary text-white' : 'bg-surface text-text-muted'
+    isActive ? 'bg-primary text-white' : 'border-t border-t-black/10 bg-surface text-text-muted'
   }`
 }
 

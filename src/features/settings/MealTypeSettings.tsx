@@ -47,7 +47,13 @@ export function MealTypeSettings() {
             key={type}
             onClick={() => toggle(type)}
             className={`rounded-full px-3 py-1.5 text-sm transition-transform duration-300 active:scale-95 ${elevationShadow} ${
-              selected.includes(type) ? 'bg-primary text-white' : 'bg-surface text-text-soft'
+              // Same top-border-only fix as routes.tsx's inactive nav tabs —
+              // the bottom already shows via elevationShadow's dark inset
+              // bevel; the top needs a literal border since white-on-white
+              // shows nothing.
+              selected.includes(type)
+                ? 'bg-primary text-white'
+                : 'border-t border-t-black/10 bg-surface text-text-soft'
             }`}
           >
             {t(`mealType_${type}`)}
