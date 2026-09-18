@@ -26,7 +26,7 @@ export const buttonShadow =
  * already shows fine. */
 export const inactiveElevationShadow: Record<Theme, string> = {
   light:
-    'shadow-[inset_0_2px_3px_rgba(0,0,0,0.25),inset_0_-2px_0_rgba(0,0,0,0.25),0_2px_4px_rgba(0,0,0,0.3),0_8px_20px_rgba(0,0,0,0.35)]',
+    'shadow-[inset_0_2px_0_rgba(0,0,0,0.25),inset_0_-2px_0_rgba(0,0,0,0.25),0_2px_4px_rgba(0,0,0,0.3),0_8px_20px_rgba(0,0,0,0.35)]',
   dark: elevationShadow,
 }
 
