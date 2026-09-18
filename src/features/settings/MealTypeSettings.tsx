@@ -47,12 +47,7 @@ export function MealTypeSettings() {
             key={type}
             onClick={() => toggle(type)}
             className={`rounded-full px-3 py-1.5 text-sm transition-transform duration-300 active:scale-95 ${elevationShadow} ${
-              // Same top/bottom border as routes.tsx's inactive nav tabs — a
-              // white top sheen has nothing to contrast against on
-              // bg-surface's plain white in light theme.
-              selected.includes(type)
-                ? 'bg-primary text-white'
-                : 'border-t border-b border-t-black/10 border-b-black/25 bg-surface text-text-soft'
+              selected.includes(type) ? 'bg-primary text-white' : 'bg-surface text-text-soft'
             }`}
           >
             {t(`mealType_${type}`)}
