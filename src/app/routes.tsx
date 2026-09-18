@@ -8,6 +8,8 @@ import { LanguageToggle } from '@/features/household/LanguageToggle'
 import { ThemeToggle } from '@/shared/ui/ThemeToggle'
 import { ShoppingCartIcon, PantryIcon, MealsIcon, SettingsIcon } from '@/shared/ui/TabIcons'
 import { elevationShadow } from '@/shared/ui/elevation'
+import { titleTextClass, titleGlow } from '@/shared/ui/titleGlow'
+import { useTheme } from '@/shared/useTheme'
 import { ShoppingList } from '@/features/shopping/ShoppingList'
 import { PantryList } from '@/features/pantry/PantryList'
 import { MealsScreen } from '@/features/meals/MealsScreen'
@@ -21,6 +23,7 @@ function tabClass({ isActive }: { isActive: boolean }) {
 
 function Layout({ household, email }: { household: Household; email: string | undefined }) {
   const { lang, t } = useLanguage()
+  const { theme } = useTheme()
 
   return (
     <div
@@ -33,7 +36,7 @@ function Layout({ household, email }: { household: Household; email: string | un
          * columns (title+email vs. toggles+sign-out) previously left the
          * large title looking lower than the small toggle icons. */}
         <div className="flex items-center justify-between gap-4">
-          <h1 className="min-w-0 truncate text-2xl font-semibold text-primary-accent">
+          <h1 className={`min-w-0 truncate text-2xl font-semibold ${titleTextClass[theme]} ${titleGlow[theme]}`}>
             {household.name}
           </h1>
           <div className="flex shrink-0 items-center gap-2">

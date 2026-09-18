@@ -5,24 +5,9 @@ import { Input } from '@/shared/ui/Input'
 import { statusTextClass } from '@/shared/ui/Badge'
 import { AuthBackdrop } from '@/shared/ghostFibers/AuthBackdrop'
 import { useTheme } from '@/shared/useTheme'
+import { titleTextClass, titleGlow } from '@/shared/ui/titleGlow'
 
 type Mode = 'signin' | 'signup'
-
-// Dark mode gets a dedicated brighter shade (text-primary-accent's teal-600
-// still reads fine, but the glow needs something brighter under it to not
-// look mismatched); light mode keeps the original token — a bright teal
-// looked out of place against light theme's light background.
-const titleTextClass = { light: 'text-primary-accent', dark: 'text-teal-400' } as const
-
-// Same glow shape (tight + wide drop-shadow) in both themes, but dark mode
-// needs it weaker: the same bright cyan reads as subtle against
-// light-theme's light background, but overpowers the text against
-// dark-theme's dark one — the glow's contrast against the page, not just
-// against the text, is what changes between themes.
-const titleGlow = {
-  light: '[filter:drop-shadow(0_0_6px_rgba(94,234,212,0.65))_drop-shadow(0_0_24px_rgba(94,234,212,0.4))]',
-  dark: '[filter:drop-shadow(0_0_3px_rgba(94,234,212,0.5))_drop-shadow(0_0_12px_rgba(94,234,212,0.3))]',
-} as const
 
 export function LoginForm() {
   const { theme } = useTheme()

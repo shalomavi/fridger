@@ -7,6 +7,8 @@ import { Input } from '@/shared/ui/Input'
 import { Surface } from '@/shared/ui/Surface'
 import { statusTextClass } from '@/shared/ui/Badge'
 import { AuthBackdrop } from '@/shared/ghostFibers/AuthBackdrop'
+import { useTheme } from '@/shared/useTheme'
+import { titleTextClass, titleGlow } from '@/shared/ui/titleGlow'
 
 // PostgrestError isn't `instanceof Error`, so pull its message out explicitly
 // rather than falling back to a generic string that hides the real cause.
@@ -23,6 +25,7 @@ function describeError(e: unknown): string {
 /** Shown once, to whichever of the two users signs up first (create) and
  * second (join with the code the first user shares). */
 export function HouseholdSetup() {
+  const { theme } = useTheme()
   const [mode, setMode] = useState<'choose' | 'create' | 'join' | 'invite'>('choose')
   const [name, setName] = useState('Our household')
   const [code, setCode] = useState('')
@@ -64,7 +67,7 @@ export function HouseholdSetup() {
   return (
     <AuthBackdrop>
       <div className="relative w-full max-w-sm space-y-4 text-text">
-        <h1 className="text-center text-2xl font-semibold text-primary-accent">
+        <h1 className={`text-center text-2xl font-semibold ${titleTextClass[theme]} ${titleGlow[theme]}`}>
           Set up your household
         </h1>
 
