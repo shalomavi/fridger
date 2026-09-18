@@ -4,7 +4,8 @@ import { setHouseholdMealTypes } from '@/features/household/api'
 import { useHousehold, useInvalidateHousehold } from '@/features/household/useHousehold'
 import { useLanguage } from '@/features/household/useLanguage'
 import { MEAL_TYPES, type MealType } from '@/shared/mealTypes'
-import { elevationShadow } from '@/shared/ui/elevation'
+import { elevationShadow, inactiveElevationShadow } from '@/shared/ui/elevation'
+import { useTheme } from '@/shared/useTheme'
 
 /** Multi-select style nudge for meal suggestions (healthy, fast, etc.) — see
  * shared/mealTypes.ts. Chips toggle and save immediately, same as
@@ -12,6 +13,7 @@ import { elevationShadow } from '@/shared/ui/elevation'
  * tap is a complete, small change, not something worth batching. */
 export function MealTypeSettings() {
   const { t } = useLanguage()
+  const { theme } = useTheme()
   const { data: household } = useHousehold()
   const invalidate = useInvalidateHousehold()
   const [selected, setSelected] = useState<MealType[]>([])
@@ -46,14 +48,13 @@ export function MealTypeSettings() {
           <button
             key={type}
             onClick={() => toggle(type)}
-            className={`rounded-full px-3 py-1.5 text-sm transition-transform duration-300 active:scale-95 ${elevationShadow} ${
-              // Same top-border-only fix as routes.tsx's inactive nav tabs —
-              // the bottom already shows via elevationShadow's dark inset
-              // bevel; the top needs a literal border since white-on-white
-              // shows nothing.
+            className={`rounded-full px-3 py-1.5 text-sm transition-transform duration-300 active:scale-95 ${
+              // Same inactiveElevationShadow fix as routes.tsx's inactive nav
+              // tabs — a soft dark top inset instead of the invisible-on-white
+              // sheen, in light theme only.
               selected.includes(type)
-                ? 'bg-primary text-white'
-                : 'border-t border-t-black/10 bg-surface text-text-soft'
+                ? `${elevationShadow} bg-primary text-white`
+                : `${inactiveElevationShadow[theme]} bg-surface text-text-soft`
             }`}
           >
             {t(`mealType_${type}`)}

@@ -1,3 +1,5 @@
+import type { Theme } from '@/shared/useTheme'
+
 /** Shared shadow layering for the nav tab bar specifically — top sheen +
  * bottom bevel + contact/ambient shadow pairing as Input.tsx's fieldClass,
  * minus the blur/saturate (those only do anything against a translucent
@@ -13,6 +15,20 @@ export const elevationShadow =
 /** elevationShadow without the top sheen — see the note above. */
 export const buttonShadow =
   'shadow-[inset_0_-2px_0_rgba(0,0,0,0.25),0_2px_4px_rgba(0,0,0,0.3),0_8px_20px_rgba(0,0,0,0.35)]'
+
+/** elevationShadow, but for *inactive* bg-surface elements (inactive nav
+ * tabs, unselected MealTypeSettings chips) in light theme specifically: the
+ * white top sheen has nothing to contrast against on bg-surface's plain
+ * white fill there, so it's swapped for a soft dark inset instead — a
+ * shadow, not a border, to match the rest of the app's shadow-based depth
+ * rather than a hard line. Dark theme keeps plain elevationShadow
+ * unchanged, since bg-surface is a dark slate there and the white sheen
+ * already shows fine. */
+export const inactiveElevationShadow: Record<Theme, string> = {
+  light:
+    'shadow-[inset_0_2px_3px_rgba(0,0,0,0.12),inset_0_-2px_0_rgba(0,0,0,0.25),0_2px_4px_rgba(0,0,0,0.3),0_8px_20px_rgba(0,0,0,0.35)]',
+  dark: elevationShadow,
+}
 
 /** The inverse of elevationShadow, for a segment of a control (e.g. the
  * selected side of LanguageToggle/ThemeToggle) that should read as pressed
