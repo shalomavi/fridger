@@ -32,15 +32,30 @@ export function PantryRow({
   const [dragX, setDragX] = useState(0)
   const [leaving, setLeaving] = useState(false)
   const dragging = useRef<{ startX: number } | null>(null)
+  const consumed = useRef(false)
   const soon = isExpiringSoon(item.expires_at)
 
-  // Finishes the swipe (or the tap-to-consume button) by sliding the row
-  // the rest of the way off instead of cutting the gesture short — it
-  // vanishing mid-drag the instant the mutation resolves looked broken.
+  function fireConsume() {
+    if (consumed.current) return
+    consumed.current = true
+    onConsume()
+  }
+
+  // Finishes the swipe (or the tap-to-consume button) by sliding the row the
+  // rest of the way off instead of cutting the gesture short — it vanishing
+  // mid-drag the instant the mutation resolves looked broken. The row itself
+  // plays item-out (index.css, shared with ShoppingRow's delete) alongside
+  // the swipe, so pantry and shopping list rows leave the same way.
   function startConsume() {
     setDragX(-500)
     setLeaving(true)
-    setTimeout(onConsume, 500)
+    // Safety net if animationend never fires (e.g. the tab is backgrounded
+    // mid-animation) — comfortably past the 300ms animation.
+    setTimeout(fireConsume, 600)
+  }
+
+  function handleAnimationEnd(e: React.AnimationEvent<HTMLLIElement>) {
+    if (e.animationName === 'item-out') fireConsume()
   }
 
   function onPointerDown(e: React.PointerEvent) {
@@ -66,9 +81,9 @@ export function PantryRow({
 
   return (
     <li
-      className={`relative overflow-hidden rounded-lg transition-all duration-500 ${
-        leaving ? 'max-h-0 opacity-0' : 'max-h-56 opacity-100'
-      }`}
+      style={{ animation: leaving ? 'item-out 300ms ease-in forwards' : 'item-in 300ms ease-out' }}
+      onAnimationEnd={handleAnimationEnd}
+      className="relative overflow-hidden rounded-lg"
     >
       {/* The reveal is a fixed physical left-drag in both languages (see
        * the gesture note above), so it always uncovers on the physical
