@@ -8,6 +8,7 @@ import { ToastProvider } from '@/shared/alerts/ToastContext'
 import { ToastContainer } from '@/shared/alerts/ToastContainer'
 import { ConfirmProvider } from '@/shared/alerts/ConfirmContext'
 import { ConfirmDialog } from '@/shared/alerts/ConfirmDialog'
+import { ThemeProvider } from '@/shared/useTheme'
 import './index.css'
 
 // Polling stands in for Realtime: two people in one house cannot tell the
@@ -48,13 +49,15 @@ createRoot(document.getElementById('root')!).render(
         buster: 'v1',
       }}
     >
-      <ToastProvider>
-        <ConfirmProvider>
-          <AppRoutes />
-          <ToastContainer />
-          <ConfirmDialog />
-        </ConfirmProvider>
-      </ToastProvider>
+      <ThemeProvider>
+        <ToastProvider>
+          <ConfirmProvider>
+            <AppRoutes />
+            <ToastContainer />
+            <ConfirmDialog />
+          </ConfirmProvider>
+        </ToastProvider>
+      </ThemeProvider>
     </PersistQueryClientProvider>
   </StrictMode>,
 )
