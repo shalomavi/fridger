@@ -57,7 +57,7 @@ export function useShoppingList(householdId: string) {
       )
       if (!item.silent) {
         // Undo re-toggles: passing the post-toggle status flips it straight back the other way.
-        fireToast(itemMovedToastContent(item.status === 'pending' ? 'pantry' : 'shopping-list', t), () =>
+        fireToast(itemMovedToastContent(item.name, item.status === 'pending' ? 'pantry' : 'shopping-list', t), () =>
           toggleItem.mutate({ ...item, status: nextStatus, silent: true }),
         )
       }
