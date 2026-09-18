@@ -13,6 +13,6 @@ export const titleTextClass: Record<Theme, string> = {
  * dark-theme's dark one — the glow's contrast against the page, not just
  * against the text, is what changes between themes. */
 export const titleGlow: Record<Theme, string> = {
-  light: '[filter:drop-shadow(0_0_3px_rgba(94,234,212,0.4))_drop-shadow(0_0_12px_rgba(94,234,212,0.2))]',
-  dark: '[filter:drop-shadow(0_0_1.5px_rgba(94,234,212,0.3))_drop-shadow(0_0_6px_rgba(94,234,212,0.15))]',
+  light: '[filter:drop-shadow(0_0_4px_rgba(94,234,212,0.5))_drop-shadow(0_0_14px_rgba(94,234,212,0.25))]',
+  dark: '[filter:drop-shadow(0_0_2px_rgba(94,234,212,0.38))_drop-shadow(0_0_7px_rgba(94,234,212,0.2))]',
 }
