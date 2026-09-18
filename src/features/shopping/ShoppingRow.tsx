@@ -27,39 +27,55 @@ export function ShoppingRow({
   confirmDeleteMessage: string
 }) {
   const { lang } = useLanguage()
-  const purchased = item.status === 'purchased'
   // item-out (index.css) is the reverse of the item-in entrance below, so a
-  // deleted row plays the mirror image of how it arrived instead of a
-  // differently-timed, differently-shaped exit.
-  const [removing, setRemoving] = useState(false)
-  const deleted = useRef(false)
+  // row leaving — whether deleted or checked off/on, moving it to the other
+  // section — plays the mirror image of how it arrived, instead of each
+  // action having its own differently-timed, differently-shaped exit.
+  const [leaving, setLeaving] = useState(false)
+  // Toggling shows its new checked state through the exit instead of the
+  // stale one, since the real status only changes once the deferred action
+  // below actually fires.
+  const [checkOverride, setCheckOverride] = useState<boolean | null>(null)
+  const purchased = checkOverride ?? item.status === 'purchased'
+  const fired = useRef(false)
+  const pendingAction = useRef<(() => void) | null>(null)
 
-  function fireDelete() {
-    if (deleted.current) return
-    deleted.current = true
-    onDelete()
+  function fireAction() {
+    if (fired.current) return
+    fired.current = true
+    pendingAction.current?.()
+  }
+
+  function leave(action: () => void, nextChecked?: boolean) {
+    pendingAction.current = action
+    if (nextChecked !== undefined) setCheckOverride(nextChecked)
+    setLeaving(true)
+    // Safety net if animationend never fires (e.g. the tab is backgrounded
+    // mid-animation) — comfortably past the 300ms animation.
+    setTimeout(fireAction, 600)
   }
 
   function handleDelete() {
-    setRemoving(true)
-    // Safety net if animationend never fires (e.g. the tab is backgrounded
-    // mid-animation) — comfortably past the 300ms animation.
-    setTimeout(fireDelete, 600)
+    leave(onDelete)
+  }
+
+  function handleToggle() {
+    leave(onToggle, !purchased)
   }
 
   function handleAnimationEnd(e: React.AnimationEvent<HTMLLIElement>) {
-    if (e.animationName === 'item-out') fireDelete()
+    if (e.animationName === 'item-out') fireAction()
   }
 
   return (
     <Surface
       as="li"
-      style={{ animation: removing ? 'item-out 300ms ease-in forwards' : 'item-in 300ms ease-out' }}
+      style={{ animation: leaving ? 'item-out 300ms ease-in forwards' : 'item-in 300ms ease-out' }}
       onAnimationEnd={handleAnimationEnd}
       className="overflow-hidden p-3"
     >
       <div className="flex items-center gap-3">
-        <button onClick={onToggle} className="flex flex-1 items-center gap-3 text-start">
+        <button onClick={handleToggle} className="flex flex-1 items-center gap-3 text-start">
           <span
             className={`relative flex h-5 w-5 flex-none items-center justify-center rounded-full border-2 transition-colors duration-300 ${
               purchased ? 'border-primary bg-primary' : 'border-text-subtle'
