@@ -9,7 +9,7 @@ import type { Theme } from '@/shared/useTheme'
  * teal looked out of place against light theme's light background. */
 export const titleTextClass: Record<Theme, string> = {
   light: 'text-primary-accent',
-  dark: 'text-teal-400',
+  dark: 'text-teal-500',
 }
 
 /** Same glow shape (tight + wide drop-shadow) in both themes, but dark mode
