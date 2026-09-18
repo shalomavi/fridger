@@ -16,17 +16,30 @@ export const elevationShadow =
 export const buttonShadow =
   'shadow-[inset_0_-2px_0_rgba(0,0,0,0.25),0_2px_4px_rgba(0,0,0,0.3),0_8px_20px_rgba(0,0,0,0.35)]'
 
-/** elevationShadow, but for *inactive* nav tabs/chips (bg-surface) in light
- * theme specifically. bg-surface is zinc-50 there — near-white, close
- * enough to it that a bright top sheen still has almost nothing to
- * contrast against — so both insets stay dark, top lighter than the
- * bottom, rather than trying to push a white sheen brighter than an
- * already-near-white fill. Dark theme keeps plain elevationShadow
- * unchanged — its bg-surface was never the problem. */
+/** elevationShadow, but for *inactive* nav tabs/chips in light theme
+ * specifically. Paired with inactiveSurfaceClass's bg-surface-muted fill
+ * (a light gray, not plain white) below — with that fill in place, a
+ * bright top sheen has something to contrast against again, so this goes
+ * back to white (brighter than the muted fill) over the dark bottom bevel,
+ * rather than the dark-on-white workaround from before that fill existed.
+ * Dark theme keeps plain elevationShadow unchanged — its bg-surface was
+ * never the problem. */
 export const inactiveElevationShadow: Record<Theme, string> = {
   light:
-    'shadow-[inset_0_2px_0_rgba(0,0,0,0.3),inset_0_-2px_0_rgba(0,0,0,0.4),0_2px_4px_rgba(0,0,0,0.3),0_8px_20px_rgba(0,0,0,0.35)]',
+    'shadow-[inset_0_2px_0_rgba(255,255,255,0.9),inset_0_-2px_0_rgba(0,0,0,0.4),0_2px_4px_rgba(0,0,0,0.3),0_8px_20px_rgba(0,0,0,0.35)]',
   dark: elevationShadow,
+}
+
+/** Goes with inactiveElevationShadow: the fill itself, not just its shadow.
+ * bg-surface is plain white in light theme, which is *also* what makes the
+ * insets above hard to read — a dark top/bottom inset only reads as a bevel
+ * against a fill that isn't already the same lightness as the shadow is
+ * fading into. bg-surface-muted (a light gray) gives them something to sit
+ * against; dark theme's bg-surface already isn't that close to white, so it
+ * stays unchanged. */
+export const inactiveSurfaceClass: Record<Theme, string> = {
+  light: 'bg-surface-muted',
+  dark: 'bg-surface',
 }
 
 /** The inverse of elevationShadow, for a segment of a control (e.g. the
