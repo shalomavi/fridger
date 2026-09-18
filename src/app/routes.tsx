@@ -7,7 +7,7 @@ import { HouseholdSetup } from '@/features/household/HouseholdSetup'
 import { LanguageToggle } from '@/features/household/LanguageToggle'
 import { ThemeToggle } from '@/shared/ui/ThemeToggle'
 import { ShoppingCartIcon, PantryIcon, MealsIcon, SettingsIcon } from '@/shared/ui/TabIcons'
-import { elevationShadow, inactiveElevationShadow, inactiveSurfaceClass } from '@/shared/ui/elevation'
+import { elevationShadow, inactiveElevationShadow } from '@/shared/ui/elevation'
 import { titleTextClass, titleGlow } from '@/shared/ui/titleGlow'
 import { useTheme, type Theme } from '@/shared/useTheme'
 import { ShoppingList } from '@/features/shopping/ShoppingList'
@@ -25,7 +25,7 @@ function tabClass(theme: Theme) {
     `flex flex-1 items-center justify-center rounded-lg py-3 transition-transform duration-300 active:scale-95 ${
       isActive
         ? `${elevationShadow} bg-primary text-white`
-        : `${inactiveElevationShadow[theme]} ${inactiveSurfaceClass[theme]} text-text-muted`
+        : `${inactiveElevationShadow[theme]} bg-surface text-text-muted`
     }`
 }
 

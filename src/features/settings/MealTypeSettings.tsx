@@ -4,7 +4,7 @@ import { setHouseholdMealTypes } from '@/features/household/api'
 import { useHousehold, useInvalidateHousehold } from '@/features/household/useHousehold'
 import { useLanguage } from '@/features/household/useLanguage'
 import { MEAL_TYPES, type MealType } from '@/shared/mealTypes'
-import { elevationShadow, inactiveElevationShadow, inactiveSurfaceClass } from '@/shared/ui/elevation'
+import { elevationShadow, inactiveElevationShadow } from '@/shared/ui/elevation'
 import { useTheme } from '@/shared/useTheme'
 
 /** Multi-select style nudge for meal suggestions (healthy, fast, etc.) — see
@@ -54,7 +54,7 @@ export function MealTypeSettings() {
               // sheen, in light theme only.
               selected.includes(type)
                 ? `${elevationShadow} bg-primary text-white`
-                : `${inactiveElevationShadow[theme]} ${inactiveSurfaceClass[theme]} text-text-soft`
+                : `${inactiveElevationShadow[theme]} bg-surface text-text-soft`
             }`}
           >
             {t(`mealType_${type}`)}
