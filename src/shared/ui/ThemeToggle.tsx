@@ -56,7 +56,7 @@ export function ThemeToggle() {
   const { theme, setTheme } = useTheme()
 
   return (
-    <div className={`flex overflow-hidden rounded-lg border border-surface-muted text-xs ${elevationShadow}`}>
+    <div className={`flex overflow-hidden rounded-lg text-xs ${elevationShadow}`}>
       {OPTIONS.map(({ value, Icon }) => (
         <button
           key={value}
