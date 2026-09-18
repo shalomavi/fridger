@@ -31,7 +31,9 @@ export function LoginForm() {
   return (
     <AuthBackdrop>
       <form onSubmit={onSubmit} className="relative w-full max-w-sm space-y-4">
-        <h1 className="text-center text-3xl font-semibold text-primary-accent">Fridger</h1>
+        <h1 className="text-center text-3xl font-semibold text-primary-accent drop-shadow-[0_0_16px_color-mix(in_srgb,var(--color-primary-accent)_60%,transparent)]">
+          Fridger
+        </h1>
 
         <Input
           type="email"
