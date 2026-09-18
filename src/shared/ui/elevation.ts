@@ -30,6 +30,18 @@ export const inactiveElevationShadow: Record<Theme, string> = {
   dark: elevationShadow,
 }
 
+/** Goes with inactiveElevationShadow: the fill itself, not just its shadow.
+ * bg-surface is plain white in light theme, which is *also* what makes the
+ * insets above hard to read — a dark top/bottom inset only reads as a bevel
+ * against a fill that isn't already the same lightness as the shadow is
+ * fading into. bg-surface-muted (a light gray) gives them something to sit
+ * against; dark theme's bg-surface already isn't that close to white, so it
+ * stays unchanged. */
+export const inactiveSurfaceClass: Record<Theme, string> = {
+  light: 'bg-surface-muted',
+  dark: 'bg-surface',
+}
+
 /** The inverse of elevationShadow, for a segment of a control (e.g. the
  * selected side of LanguageToggle/ThemeToggle) that should read as pressed
  * in rather than lifted off the page — shadow falling inward from the top,
