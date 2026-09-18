@@ -68,7 +68,7 @@ export function ShoppingRow({
       as="li"
       style={{ animation: 'item-in 300ms ease-out' }}
       onTransitionEnd={handleTransitionEnd}
-      className={`grid overflow-hidden transition-all duration-500 ease-in ${
+      className={`grid overflow-hidden transition-all duration-500 ${
         removing ? 'grid-rows-[0fr] opacity-0' : 'grid-rows-[1fr] opacity-100'
       }`}
     >
