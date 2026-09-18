@@ -1,4 +1,5 @@
 import { useTheme, type Theme } from '@/shared/useTheme'
+import { elevationShadow } from './elevation'
 
 // Icons: Lucide (ISC license, lucide.dev). currentColor lets them inherit
 // each button's text color, so no separate light/dark icon variant needed.
@@ -55,7 +56,7 @@ export function ThemeToggle() {
   const { theme, setTheme } = useTheme()
 
   return (
-    <div className="flex overflow-hidden rounded-lg border border-surface-muted text-xs">
+    <div className={`flex overflow-hidden rounded-lg border border-surface-muted text-xs ${elevationShadow}`}>
       {OPTIONS.map(({ value, Icon }) => (
         <button
           key={value}
