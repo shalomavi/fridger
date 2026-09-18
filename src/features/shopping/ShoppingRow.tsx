@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { DeleteButton } from './DeleteButton'
 import type { ShoppingItem } from './api'
 import { useLanguage } from '@/features/household/useLanguage'
@@ -31,10 +31,20 @@ export function ShoppingRow({
   // Plays a fade+collapse before the actual delete fires instead of the row
   // just vanishing the instant the confirm dialog closes.
   const [removing, setRemoving] = useState(false)
+  const deleted = useRef(false)
 
   function handleDelete() {
     setRemoving(true)
-    setTimeout(onDelete, 500)
+  }
+
+  // A fixed setTimeout raced the actual transition (React's commit delay
+  // plus real paint time on a phone can easily push it past 500ms), cutting
+  // the animation off mid-collapse. Firing on the real transitionend instead
+  // keeps the two in sync regardless of how long it actually takes.
+  function handleTransitionEnd(e: React.TransitionEvent<HTMLLIElement>) {
+    if (!removing || deleted.current || e.target !== e.currentTarget) return
+    deleted.current = true
+    onDelete()
   }
 
   return (
@@ -45,6 +55,7 @@ export function ShoppingRow({
     <Surface
       as="li"
       style={{ animation: 'item-in 300ms ease-out' }}
+      onTransitionEnd={handleTransitionEnd}
       className={`grid overflow-hidden transition-all duration-500 ease-in ${
         removing ? 'grid-rows-[0fr] opacity-0' : 'grid-rows-[1fr] opacity-100'
       }`}
