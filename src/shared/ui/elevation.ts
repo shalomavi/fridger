@@ -23,7 +23,7 @@ export const buttonShadow =
  * not something "going out" of it. Used by Button.tsx's own variants
  * specifically — nav tabs/toggles/chips keep plain buttonShadow. */
 export const softButtonShadow =
-  'shadow-[inset_0_-2px_0_rgba(0,0,0,0.25),0_2px_5px_rgba(0,0,0,0.15),0_10px_24px_rgba(0,0,0,0.18)]'
+  'shadow-[inset_0_-2px_0_rgba(0,0,0,0.25),0_2px_5px_rgba(0,0,0,0.2),0_10px_24px_rgba(0,0,0,0.24)]'
 
 /** elevationShadow, but for *inactive* bg-surface elements (inactive nav
  * tabs, unselected MealTypeSettings chips) in light theme specifically: the
