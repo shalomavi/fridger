@@ -1,3 +1,5 @@
+import { softFieldShadow } from './elevation'
+
 /** The "glass" look shared by every text field and the Select trigger:
  * mostly-transparent surface, primary focus ring. Exported so non-<input>
  * elements that should look like a field (Select's button) can reuse the
@@ -22,7 +24,7 @@
  * the "weird" jump on focus. Repeating the resting shadow plus a solid
  * 2px outline (0_0_0_2px) keeps the same depth while focused. */
 export const fieldClass =
-  'rounded-lg bg-surface/5 text-text outline-none shadow-[inset_0_-2px_0_rgba(0,0,0,0.35),0_2px_4px_rgba(0,0,0,0.3),0_12px_32px_rgba(0,0,0,0.4)] backdrop-blur-sm backdrop-saturate-150 focus:shadow-[inset_0_-2px_0_rgba(0,0,0,0.35),0_2px_4px_rgba(0,0,0,0.3),0_12px_32px_rgba(0,0,0,0.4),0_0_0_2px_var(--color-primary)]'
+  `rounded-lg bg-surface/5 text-text outline-none shadow-[${softFieldShadow}] backdrop-blur-sm backdrop-saturate-150 focus:shadow-[${softFieldShadow},0_0_0_2px_var(--color-primary)]`
 
 /** Thin styled wrapper around <input>, same pattern as Button: the glass
  * look is baked in here, width/padding/icon-offset stay in the caller's

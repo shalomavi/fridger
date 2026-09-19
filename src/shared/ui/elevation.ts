@@ -16,14 +16,22 @@ export const elevationShadow =
 export const buttonShadow =
   'shadow-[inset_0_-2px_0_rgba(0,0,0,0.25),0_2px_4px_rgba(0,0,0,0.3),0_8px_20px_rgba(0,0,0,0.35)]'
 
-/** buttonShadow with its two outward-cast layers (contact + ambient) eased
- * down and spread wider instead of just dimmed, so the shadow fades out
- * softly past the button's edge rather than stopping abruptly; the inset
- * bottom bevel is left alone since that reads as part of the button itself,
- * not something "going out" of it. Used by Button.tsx's own variants
- * specifically — nav tabs/toggles/chips keep plain buttonShadow. */
-export const softButtonShadow =
-  'shadow-[inset_0_-2px_0_rgba(0,0,0,0.25),0_2px_5px_rgba(0,0,0,0.2),0_10px_24px_rgba(0,0,0,0.24)]'
+/** The outward-cast contact + ambient pair, eased down and spread wider
+ * instead of just dimmed, so the shadow fades out softly past an element's
+ * edge rather than stopping abruptly. Composed with each caller's own inset
+ * bevel below — that inset is left alone since it reads as part of the
+ * element itself, not something "going out" of it. */
+const softOuterShadow = '0_2px_5px_rgba(0,0,0,0.2),0_10px_24px_rgba(0,0,0,0.24)'
+
+/** buttonShadow with softOuterShadow — Button.tsx's own variants
+ * specifically; nav tabs/toggles/chips keep plain buttonShadow. */
+export const softButtonShadow = `shadow-[inset_0_-2px_0_rgba(0,0,0,0.25),${softOuterShadow}]`
+
+/** Input.tsx's fieldClass shadow (resting and focus) with softOuterShadow
+ * in place of its original heavier contact/ambient pair — same softening as
+ * softButtonShadow, kept as its own export since fields use a deeper inset
+ * (0.35, vs. buttons' 0.25) and add the focus ring layer on top. */
+export const softFieldShadow = `inset_0_-2px_0_rgba(0,0,0,0.35),${softOuterShadow}`
 
 /** elevationShadow, but for *inactive* bg-surface elements (inactive nav
  * tabs, unselected MealTypeSettings chips) in light theme specifically: the
