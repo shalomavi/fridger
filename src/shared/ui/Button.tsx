@@ -1,7 +1,11 @@
+import { useTheme } from '@/shared/useTheme'
 import { buttonShadow } from './elevation'
 
 type ButtonVariant = 'primary' | 'surface' | 'secondary'
 
+// surface is bg-surface in light theme, but bg-surface-muted (secondary's
+// fill) in dark theme — same per-theme split pattern as
+// inactiveElevationShadow in elevation.ts.
 const VARIANT_CLASS: Record<ButtonVariant, string> = {
   primary: `${buttonShadow} bg-primary text-white`,
   surface: `${buttonShadow} bg-surface text-text-soft`,
@@ -16,10 +20,12 @@ export function Button({
   className = '',
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: ButtonVariant }) {
+  const { theme } = useTheme()
+  const variantClass = variant === 'surface' && theme === 'dark' ? VARIANT_CLASS.secondary : VARIANT_CLASS[variant]
   return (
     <button
       {...props}
-      className={`rounded-lg font-medium transition-transform duration-300 active:scale-95 disabled:opacity-50 ${VARIANT_CLASS[variant]} ${className}`}
+      className={`rounded-lg font-medium transition-transform duration-300 active:scale-95 disabled:opacity-50 ${variantClass} ${className}`}
     />
   )
 }
