@@ -20,7 +20,13 @@ import { useStuck } from '@/shared/ui/useStuck'
  * room back in only while stuck — animated (transition-[padding]) rather
  * than toggled instantly, so the reflow it causes in whatever follows
  * reads as a smooth expand instead of a jump. No backdrop-blur, matching
- * Input.tsx's fieldClass — kept see-through rather than a blurred pane. */
+ * Input.tsx's fieldClass — kept see-through rather than a blurred pane.
+ *
+ * Renders as a single root div, not a fragment: both call sites
+ * (ShoppingList/PantryList) lay out their children with Tailwind's
+ * space-y-*, which puts a margin-top gap between every child it's given —
+ * a fragment here would hand it two (the sentinel + the sticky box) and
+ * open an extra unwanted gap between them. */
 export function SearchInput({
   value,
   onChange,
@@ -33,7 +39,7 @@ export function SearchInput({
   const { sentinelRef, stuck } = useStuck<HTMLDivElement>()
 
   return (
-    <>
+    <div>
       <div ref={sentinelRef} className="h-px" />
       <div
         className={`sticky top-0 z-10 -mx-6 bg-surface/5 px-6 transition-[padding] duration-200 ${stuck ? 'py-2' : ''}`}
@@ -50,6 +56,6 @@ export function SearchInput({
           <SearchIcon className="pointer-events-none absolute inset-y-0 start-3 my-auto text-text-subtle" />
         </div>
       </div>
-    </>
+    </div>
   )
 }
