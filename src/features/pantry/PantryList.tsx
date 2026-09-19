@@ -18,22 +18,27 @@ export function PantryList({ householdId }: { householdId: string }) {
     usePantry(householdId)
   const [query, setQuery] = useState('')
 
-  if (isLoading) return <p className="text-text-subtle">{t('loading')}</p>
-
-  if (!items || items.length === 0) {
-    return <p className="text-text-subtle">{t('pantryEmpty')}</p>
-  }
-
   const order = resolveCategoryOrder(household?.category_order)
-  const matched = filterByName(items, query)
-  const alerts = collectPantryAlerts(items)
+  const matched = filterByName(items ?? [], query)
+  const alerts = collectPantryAlerts(items ?? [])
 
   return (
     <div className="space-y-4">
-      <AlertBanner alerts={alerts} />
-      <SearchInput value={query} onChange={setQuery} placeholder={t('searchPlaceholder')} />
+      {!isLoading && items && items.length > 0 && (
+        <SearchInput value={query} onChange={setQuery} placeholder={t('searchPlaceholder')} />
+      )}
 
-      {matched.length === 0 && <p className="text-text-subtle">{t('noSearchResults')}</p>}
+      {isLoading && <p className="text-text-subtle">{t('loading')}</p>}
+
+      {!isLoading && (!items || items.length === 0) && (
+        <p className="text-text-subtle">{t('pantryEmpty')}</p>
+      )}
+
+      {!isLoading && items && items.length > 0 && matched.length === 0 && (
+        <p className="text-text-subtle">{t('noSearchResults')}</p>
+      )}
+
+      {!isLoading && items && items.length > 0 && <AlertBanner alerts={alerts} />}
 
       {groupByCategory(matched, order).map((group) => (
         <div key={group.category ?? 'uncategorized'}>
