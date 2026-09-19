@@ -1,13 +1,10 @@
 import { buttonShadow } from './elevation'
 
-type ButtonVariant = 'primary' | 'outline' | 'secondary'
+type ButtonVariant = 'primary' | 'surface' | 'secondary'
 
-// outline has no fill, so it skips buttonShadow (a shadow implying a lifted
-// solid surface would look wrong on a transparent background) in favor of
-// a border in the same accent color used for its text.
 const VARIANT_CLASS: Record<ButtonVariant, string> = {
   primary: `${buttonShadow} bg-primary text-white`,
-  outline: 'border border-primary-accent text-primary-accent',
+  surface: `${buttonShadow} bg-surface text-text-soft`,
   secondary: `${buttonShadow} bg-surface-muted text-text-soft`,
 }
 

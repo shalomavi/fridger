@@ -43,7 +43,7 @@ export function SuggestionCard({
           {cooking ? '…' : t('cookedThis')}
         </Button>
         <Button
-          variant="outline"
+          variant="surface"
           onClick={() => shareMealToWhatsApp(meal, lang)}
           className="flex-1 py-2 text-sm"
         >
