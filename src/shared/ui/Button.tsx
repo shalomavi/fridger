@@ -11,7 +11,7 @@ export function Button({
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: ButtonVariant }) {
   const variantClass =
-    variant === 'primary' ? 'bg-primary text-white' : 'bg-surface text-text'
+    variant === 'primary' ? 'bg-primary text-white' : 'bg-surface-raised text-text'
   return (
     <button
       {...props}
