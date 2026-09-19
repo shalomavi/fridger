@@ -17,8 +17,10 @@ import { useStuck } from '@/shared/ui/useStuck'
  * viewport once actually pinned there, which looks cramped. useStuck (a
  * sentinel + IntersectionObserver, the standard way to detect a pinned
  * sticky element since CSS has no selector for it) adds that breathing
- * room back in only while stuck. No backdrop-blur, matching Input.tsx's
- * fieldClass — kept see-through rather than a blurred pane. */
+ * room back in only while stuck — animated (transition-[padding]) rather
+ * than toggled instantly, so the reflow it causes in whatever follows
+ * reads as a smooth expand instead of a jump. No backdrop-blur, matching
+ * Input.tsx's fieldClass — kept see-through rather than a blurred pane. */
 export function SearchInput({
   value,
   onChange,
@@ -32,8 +34,10 @@ export function SearchInput({
 
   return (
     <>
-      <div ref={sentinelRef} />
-      <div className={`sticky top-0 z-10 -mx-6 bg-surface/5 px-6 ${stuck ? 'py-2' : ''}`}>
+      <div ref={sentinelRef} className="h-px" />
+      <div
+        className={`sticky top-0 z-10 -mx-6 bg-surface/5 px-6 transition-[padding] duration-200 ${stuck ? 'py-2' : ''}`}
+      >
         <div className="relative">
           <Input
             type="search"
