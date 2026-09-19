@@ -9,10 +9,6 @@
   --color-bg: var(--color-slate-900);
   --color-surface: var(--color-slate-800);
   --color-surface-muted: var(--color-slate-700);
-  /* Same as --color-surface in light theme, but mixed slightly brighter in
-   * dark theme below — for controls (e.g. Button's secondary variant) that
-   * would otherwise blend into a dark bg-surface card/background. */
-  --color-surface-raised: var(--color-slate-800);
   --color-text: var(--color-slate-100);
   --color-text-soft: var(--color-slate-200);
   --color-text-muted: var(--color-slate-300);
@@ -40,7 +36,6 @@
   --color-bg: var(--color-slate-50);
   --color-surface: var(--color-white);
   --color-surface-muted: var(--color-slate-200);
-  --color-surface-raised: var(--color-surface);
 
   --color-text: var(--color-slate-900);
   --color-text-soft: var(--color-slate-700);
@@ -70,7 +65,6 @@
     --color-bg: var(--color-slate-900);
     --color-surface: var(--color-slate-800);
     --color-surface-muted: var(--color-slate-700);
-    --color-surface-raised: color-mix(in srgb, var(--color-slate-800) 100%, white 10%);
 
     --color-text: var(--color-slate-100);
     --color-text-soft: var(--color-slate-200);
@@ -100,7 +94,6 @@
   --color-bg: var(--color-slate-900);
   --color-surface: var(--color-slate-800);
   --color-surface-muted: var(--color-slate-700);
-  --color-surface-raised: color-mix(in srgb, var(--color-slate-800) 100%, white 10%);
 
   --color-text: var(--color-slate-100);
   --color-text-soft: var(--color-slate-200);
