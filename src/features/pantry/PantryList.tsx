@@ -23,7 +23,7 @@ export function PantryList({ householdId }: { householdId: string }) {
   const alerts = collectPantryAlerts(items ?? [])
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {!isLoading && items && items.length > 0 && (
         <SearchInput value={query} onChange={setQuery} placeholder={t('searchPlaceholder')} />
       )}
@@ -40,23 +40,25 @@ export function PantryList({ householdId }: { householdId: string }) {
 
       {!isLoading && items && items.length > 0 && <AlertBanner alerts={alerts} />}
 
-      {groupByCategory(matched, order).map((group) => (
-        <div key={group.category ?? 'uncategorized'}>
-          <CategoryHeading category={group.category} />
-          <ul className="space-y-2">
-            {group.items.map((item) => (
-              <PantryRow
-                key={item.id}
-                item={item}
-                onConsume={() => consume.mutate(item.id)}
-                onUpdateDetails={(details) => updateDetails.mutate({ id: item.id, details })}
-                onUpdateCategory={(category) => updateCategory.mutate({ id: item.id, category })}
-                onUpdateExpiry={(expiresAt) => updateExpiry.mutate({ id: item.id, expiresAt })}
-              />
-            ))}
-          </ul>
-        </div>
-      ))}
+      <div className="space-y-4">
+        {groupByCategory(matched, order).map((group) => (
+          <div key={group.category ?? 'uncategorized'}>
+            <CategoryHeading category={group.category} />
+            <ul className="space-y-2">
+              {group.items.map((item) => (
+                <PantryRow
+                  key={item.id}
+                  item={item}
+                  onConsume={() => consume.mutate(item.id)}
+                  onUpdateDetails={(details) => updateDetails.mutate({ id: item.id, details })}
+                  onUpdateCategory={(category) => updateCategory.mutate({ id: item.id, category })}
+                  onUpdateExpiry={(expiresAt) => updateExpiry.mutate({ id: item.id, expiresAt })}
+                />
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
