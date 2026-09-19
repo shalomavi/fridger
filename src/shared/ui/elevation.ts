@@ -16,22 +16,37 @@ export const elevationShadow =
 export const buttonShadow =
   'shadow-[inset_0_-2px_0_rgba(0,0,0,0.25),0_2px_4px_rgba(0,0,0,0.3),0_8px_20px_rgba(0,0,0,0.35)]'
 
-/** The outward-cast contact + ambient pair, eased down and spread wider
- * instead of just dimmed, so the shadow fades out softly past an element's
- * edge rather than stopping abruptly. Composed with each caller's own inset
- * bevel below — that inset is left alone since it reads as part of the
- * element itself, not something "going out" of it. */
-const softOuterShadow = '0_2px_5px_rgba(0,0,0,0.2),0_10px_24px_rgba(0,0,0,0.24)'
+/** buttonShadow with its outward-cast contact + ambient pair eased down and
+ * spread wider instead of just dimmed, so the shadow fades out softly past
+ * the button's edge rather than stopping abruptly; the inset bottom bevel
+ * is left alone since it reads as part of the button itself, not something
+ * "going out" of it. Used by Button.tsx's own variants specifically — nav
+ * tabs/toggles/chips keep plain buttonShadow.
+ *
+ * Written out as one literal string (not composed from a shared fragment
+ * via template interpolation): Tailwind's build-time scanner matches class
+ * names by scanning source files as plain text, so a shadow-[...] built
+ * from `${'...'}` never appears as a complete literal anywhere and silently
+ * generates no CSS — the two soft-shadow constants below duplicate the same
+ * numbers instead of sharing them through JS. */
+export const softButtonShadow =
+  'shadow-[inset_0_-2px_0_rgba(0,0,0,0.25),0_2px_5px_rgba(0,0,0,0.2),0_10px_24px_rgba(0,0,0,0.24)]'
 
-/** buttonShadow with softOuterShadow — Button.tsx's own variants
- * specifically; nav tabs/toggles/chips keep plain buttonShadow. */
-export const softButtonShadow = `shadow-[inset_0_-2px_0_rgba(0,0,0,0.25),${softOuterShadow}]`
+/** Input.tsx's fieldClass shadow (resting) with the same softened
+ * contact/ambient pair as softButtonShadow in place of its original heavier
+ * one — kept as its own export since fields use a deeper inset (0.35, vs.
+ * buttons' 0.25). Exported as the complete `shadow-[...]` class (not just
+ * its inner value) so Input.tsx can drop it straight into its className
+ * string as one token — see softButtonShadow's comment for why the value
+ * has to be a full literal rather than composed via template interpolation. */
+export const softFieldShadow =
+  'shadow-[inset_0_-2px_0_rgba(0,0,0,0.35),0_2px_5px_rgba(0,0,0,0.2),0_10px_24px_rgba(0,0,0,0.24)]'
 
-/** Input.tsx's fieldClass shadow (resting and focus) with softOuterShadow
- * in place of its original heavier contact/ambient pair — same softening as
- * softButtonShadow, kept as its own export since fields use a deeper inset
- * (0.35, vs. buttons' 0.25) and add the focus ring layer on top. */
-export const softFieldShadow = `inset_0_-2px_0_rgba(0,0,0,0.35),${softOuterShadow}`
+/** softFieldShadow plus the focus-ring layer, under the `focus:` variant —
+ * same repeat-the-inset-and-outer-numbers reasoning, wrapped with `focus:`
+ * so Input.tsx can use it directly instead of building the variant itself. */
+export const softFieldFocusShadow =
+  'focus:shadow-[inset_0_-2px_0_rgba(0,0,0,0.35),0_2px_5px_rgba(0,0,0,0.2),0_10px_24px_rgba(0,0,0,0.24),0_0_0_2px_var(--color-primary)]'
 
 /** elevationShadow, but for *inactive* bg-surface elements (inactive nav
  * tabs, unselected MealTypeSettings chips) in light theme specifically: the
