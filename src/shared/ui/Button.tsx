@@ -1,5 +1,5 @@
 import { useTheme } from '@/shared/useTheme'
-import { buttonShadow } from './elevation'
+import { softButtonShadow } from './elevation'
 
 type ButtonVariant = 'primary' | 'surface' | 'secondary'
 
@@ -7,9 +7,9 @@ type ButtonVariant = 'primary' | 'surface' | 'secondary'
 // fill) in dark theme — same per-theme split pattern as
 // inactiveElevationShadow in elevation.ts.
 const VARIANT_CLASS: Record<ButtonVariant, string> = {
-  primary: `${buttonShadow} bg-primary text-white`,
-  surface: `${buttonShadow} bg-surface text-text-soft`,
-  secondary: `${buttonShadow} bg-surface-muted text-text-soft`,
+  primary: `${softButtonShadow} bg-primary text-white`,
+  surface: `${softButtonShadow} bg-surface text-text-soft`,
+  secondary: `${softButtonShadow} bg-surface-muted text-text-soft`,
 }
 
 /** Thin styled wrapper around <button> — variant picks the fill/text color

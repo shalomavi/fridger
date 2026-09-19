@@ -16,6 +16,15 @@ export const elevationShadow =
 export const buttonShadow =
   'shadow-[inset_0_-2px_0_rgba(0,0,0,0.25),0_2px_4px_rgba(0,0,0,0.3),0_8px_20px_rgba(0,0,0,0.35)]'
 
+/** buttonShadow with its two outward-cast layers (contact + ambient) eased
+ * down and spread wider instead of just dimmed, so the shadow fades out
+ * softly past the button's edge rather than stopping abruptly; the inset
+ * bottom bevel is left alone since that reads as part of the button itself,
+ * not something "going out" of it. Used by Button.tsx's own variants
+ * specifically — nav tabs/toggles/chips keep plain buttonShadow. */
+export const softButtonShadow =
+  'shadow-[inset_0_-2px_0_rgba(0,0,0,0.25),0_2px_5px_rgba(0,0,0,0.15),0_10px_24px_rgba(0,0,0,0.18)]'
+
 /** elevationShadow, but for *inactive* bg-surface elements (inactive nav
  * tabs, unselected MealTypeSettings chips) in light theme specifically: the
  * white top sheen has nothing to contrast against on bg-surface's plain
