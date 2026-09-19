@@ -11,6 +11,7 @@ export const MEAL_TYPES = [
   'unique',
   'budget',
   'comfort',
+  'dessert',
   'dairy',
   'meaty',
   'vegan',

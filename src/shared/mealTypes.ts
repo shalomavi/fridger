@@ -1,7 +1,8 @@
 /**
  * Multi-select meal-type preference, fed into the LLM prompt — matches the
- * check constraint in supabase/migrations/0015_household_meal_types.sql and
- * 0016_meal_types_vegan_vegetarian.sql. An empty set means no preference.
+ * check constraint in supabase/migrations/0015_household_meal_types.sql,
+ * 0016_meal_types_vegan_vegetarian.sql, and 0018_meal_types_dessert.sql. An
+ * empty set means no preference.
  *
  * Most of these are soft "favor this style" nudges (see
  * supabase/functions/suggest-meals/prompt.ts's STYLE_INSTRUCTIONS), but
@@ -17,6 +18,7 @@ export const MEAL_TYPES = [
   'unique',
   'budget',
   'comfort',
+  'dessert',
   'dairy',
   'meaty',
   'vegan',

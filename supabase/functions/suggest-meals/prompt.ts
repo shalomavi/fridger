@@ -16,6 +16,7 @@ const STYLE_INSTRUCTIONS = {
   unique: 'less common, more adventurous combinations rather than the obvious default dish',
   budget: 'cheap, few-ingredient meals that stretch the pantry rather than requiring extra purchases',
   comfort: 'hearty, warming, familiar comfort food',
+  dessert: 'sweet desserts rather than savory meals',
 } as const
 
 // Hard dietary constraints, unlike the style nudges above — every meal must

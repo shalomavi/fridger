@@ -66,6 +66,7 @@ export const en = {
   mealType_unique: 'Unique',
   mealType_budget: 'Budget',
   mealType_comfort: 'Comfort',
+  mealType_dessert: 'Dessert',
   mealType_dairy: 'Dairy',
   mealType_meaty: 'Meaty',
   mealType_vegan: 'Vegan',

@@ -70,6 +70,7 @@ export const he: Record<keyof typeof en, string> = {
   mealType_unique: 'יוצא דופן',
   mealType_budget: 'חסכוני',
   mealType_comfort: 'מפנק',
+  mealType_dessert: 'קינוח',
   mealType_dairy: 'חלבי',
   mealType_meaty: 'בשרי',
   mealType_vegan: 'טבעוני',
