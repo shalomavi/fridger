@@ -40,6 +40,7 @@ export const he: Record<keyof typeof en, string> = {
   expiringSoon: 'עומד לפוג בקרוב',
   deleteItem: 'מחיקת פריט',
   confirmDeleteItem: 'להסיר את הפריט הזה מהרשימה?',
+  scrollToTop: 'גלילה למעלה',
   categoryPlaceholder: 'קטגוריה',
   category_dairy: 'חלב וביצים',
   category_produce: 'ירקות ופירות',

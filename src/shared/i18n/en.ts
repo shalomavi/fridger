@@ -36,6 +36,7 @@ export const en = {
   expiringSoon: 'Expiring soon',
   deleteItem: 'Delete item',
   confirmDeleteItem: 'Remove this item from the list?',
+  scrollToTop: 'Scroll to top',
   categoryPlaceholder: 'Category',
   category_dairy: 'Dairy & eggs',
   category_produce: 'Produce',

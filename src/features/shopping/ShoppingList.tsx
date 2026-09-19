@@ -10,6 +10,7 @@ import { CategoryHeading } from '@/shared/ui/CategoryHeading'
 import { resolveCategoryOrder, type Category } from '@/shared/categories'
 import { groupByCategory } from '@/domain/groupByCategory'
 import { filterByName } from '@/domain/filterByName'
+import { ScrollToTopButton } from '@/shared/ui/ScrollToTopButton'
 
 /** Splits a status group into its category sections, in the household's
  * chosen order (settings/CategoryOrderSettings) — empty sections are
@@ -87,6 +88,8 @@ export function ShoppingList({ householdId }: { householdId: string }) {
           <GroupedItems items={purchased} order={order} row={row} />
         </div>
       )}
+
+      <ScrollToTopButton label={t('scrollToTop')} />
     </div>
   )
 }

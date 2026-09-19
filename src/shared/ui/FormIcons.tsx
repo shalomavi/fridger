@@ -102,6 +102,15 @@ export function CircleMinusIcon({ className }: { className?: string }) {
   )
 }
 
+export function ArrowUpIcon({ className }: { className?: string }) {
+  return (
+    <svg {...SHARED_PROPS} className={className}>
+      <path d="m5 12 7-7 7 7" />
+      <path d="M12 19V5" />
+    </svg>
+  )
+}
+
 // Was inline in DeleteButton.tsx — pulled out so the delete-toast can use
 // the exact same glyph the user just tapped.
 export function TrashIcon({ className }: { className?: string }) {

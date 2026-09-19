@@ -10,6 +10,7 @@ import { groupByCategory } from '@/domain/groupByCategory'
 import { filterByName } from '@/domain/filterByName'
 import { collectPantryAlerts } from '@/domain/alerts'
 import { AlertBanner } from '@/shared/alerts/AlertBanner'
+import { ScrollToTopButton } from '@/shared/ui/ScrollToTopButton'
 
 export function PantryList({ householdId }: { householdId: string }) {
   const { t } = useLanguage()
@@ -59,6 +60,8 @@ export function PantryList({ householdId }: { householdId: string }) {
           </div>
         ))}
       </div>
+
+      <ScrollToTopButton label={t('scrollToTop')} />
     </div>
   )
 }
