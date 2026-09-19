@@ -1,6 +1,12 @@
 import { buttonShadow } from './elevation'
 
-type ButtonVariant = 'primary' | 'secondary'
+type ButtonVariant = 'primary' | 'accent' | 'secondary'
+
+const VARIANT_CLASS: Record<ButtonVariant, string> = {
+  primary: 'bg-primary text-white',
+  accent: 'bg-primary-accent text-white',
+  secondary: 'bg-surface-muted text-text-soft',
+}
 
 /** Thin styled wrapper around <button> — variant picks the fill/text color
  * from the semantic tokens; width, padding, and text size stay in the
@@ -10,8 +16,7 @@ export function Button({
   className = '',
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: ButtonVariant }) {
-  const variantClass =
-    variant === 'primary' ? 'bg-primary text-white' : 'bg-surface-muted text-text-soft'
+  const variantClass = VARIANT_CLASS[variant]
   return (
     <button
       {...props}

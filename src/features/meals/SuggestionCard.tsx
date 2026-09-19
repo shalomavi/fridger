@@ -42,7 +42,11 @@ export function SuggestionCard({
         <Button onClick={onCookedThis} disabled={cooking} className="flex-1 py-2 text-sm">
           {cooking ? '…' : t('cookedThis')}
         </Button>
-        <Button onClick={() => shareMealToWhatsApp(meal, lang)} className="flex-1 py-2 text-sm">
+        <Button
+          variant="accent"
+          onClick={() => shareMealToWhatsApp(meal, lang)}
+          className="flex-1 py-2 text-sm"
+        >
           {t('shareMeal')}
         </Button>
       </div>
