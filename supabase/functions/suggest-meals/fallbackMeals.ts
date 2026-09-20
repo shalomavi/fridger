@@ -1,4 +1,4 @@
-import type { Language } from './schema.ts'
+import type { Language, Unit } from './schema.ts'
 
 /**
  * Shown when the LLM call fails or returns something that doesn't parse —
@@ -9,7 +9,7 @@ import type { Language } from './schema.ts'
  */
 export const FALLBACK_MEALS: Record<
   Language,
-  { name: string; uses: string[]; missing: string[]; steps: string[] }[]
+  { name: string; uses: { name: string; quantity: number; unit: Unit }[]; missing: string[]; steps: string[] }[]
 > = {
   en: [
     {

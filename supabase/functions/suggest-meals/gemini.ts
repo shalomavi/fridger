@@ -12,7 +12,18 @@ const RESPONSE_SCHEMA = {
         type: 'object',
         properties: {
           name: { type: 'string' },
-          uses: { type: 'array', items: { type: 'string' } },
+          uses: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                name: { type: 'string' },
+                quantity: { type: 'number' },
+                unit: { type: 'string', enum: ['count', 'g', 'kg', 'ml', 'l'] },
+              },
+              required: ['name', 'quantity', 'unit'],
+            },
+          },
           missing: { type: 'array', items: { type: 'string' } },
           steps: { type: 'array', items: { type: 'string' } },
         },

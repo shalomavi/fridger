@@ -5,9 +5,11 @@
  * than read from i18n directly, keeping this file free of app-level imports.
  */
 
+import { formatQuantity, type Unit } from './units'
+
 export type ShareableMeal = {
   name: string
-  uses: string[]
+  uses: { name: string; quantity: number; unit: Unit }[]
   missing: string[]
   steps: string[]
 }
@@ -19,7 +21,7 @@ export function formatMealShareText(
   const lines = [meal.name, '']
 
   if (meal.uses.length > 0) {
-    lines.push(`${labels.uses} ${meal.uses.join(', ')}`)
+    lines.push(`${labels.uses} ${meal.uses.map((u) => `${u.name} ${formatQuantity(u.quantity, u.unit)}`).join(', ')}`)
   }
   if (meal.missing.length > 0) {
     lines.push(`${labels.alsoNeed} ${meal.missing.join(', ')}`)

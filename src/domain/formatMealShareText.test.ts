@@ -8,7 +8,10 @@ describe('formatMealShareText', () => {
     const text = formatMealShareText(
       {
         name: 'Shakshuka',
-        uses: ['eggs', 'tomatoes'],
+        uses: [
+          { name: 'eggs', quantity: 2, unit: 'count' },
+          { name: 'tomatoes', quantity: 3, unit: 'count' },
+        ],
         missing: ['bread'],
         steps: ['Fry onions', 'Add tomatoes and eggs'],
       },
@@ -19,7 +22,7 @@ describe('formatMealShareText', () => {
       [
         'Shakshuka',
         '',
-        'Uses: eggs, tomatoes',
+        'Uses: eggs ×2, tomatoes ×3',
         "You'll also need: bread",
         '',
         '1. Fry onions',

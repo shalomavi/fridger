@@ -21,13 +21,35 @@ export function PlusIcon({ className }: { className?: string }) {
   )
 }
 
-export function DetailsIcon({ className }: { className?: string }) {
+export function HashIcon({ className }: { className?: string }) {
   return (
     <svg {...SHARED_PROPS} className={className}>
       <line x1="4" x2="20" y1="9" y2="9" />
       <line x1="4" x2="20" y1="15" y2="15" />
       <line x1="10" x2="8" y1="3" y2="21" />
       <line x1="16" x2="14" y1="3" y2="21" />
+    </svg>
+  )
+}
+
+export function NotesIcon({ className }: { className?: string }) {
+  return (
+    <svg {...SHARED_PROPS} className={className}>
+      <path d="M21 6.1H3" />
+      <path d="M17 12.1H3" />
+      <path d="M13 18H3" />
+    </svg>
+  )
+}
+
+export function RulerIcon({ className }: { className?: string }) {
+  return (
+    <svg {...SHARED_PROPS} className={className}>
+      <path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.4 2.4 0 0 1 0-3.4l2.6-2.6a2.4 2.4 0 0 1 3.4 0Z" />
+      <path d="m14.5 12.5 2-2" />
+      <path d="m11.5 9.5 2-2" />
+      <path d="m8.5 6.5 2-2" />
+      <path d="m17.5 15.5 2-2" />
     </svg>
   )
 }

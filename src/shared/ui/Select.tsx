@@ -89,16 +89,16 @@ export function Select({
         {selectedLabel}
       </button>
       {LeadingIcon && (
-        <LeadingIcon className="pointer-events-none absolute inset-y-0 start-2.5 my-auto text-text-subtle" />
+        <LeadingIcon className="pointer-events-none absolute inset-y-0 inset-s-2.5 my-auto text-text-subtle" />
       )}
-      <ChevronDownIcon className="pointer-events-none absolute inset-y-0 end-2.5 my-auto h-3.5 w-3.5 text-text-subtle" />
+      <ChevronDownIcon className="pointer-events-none absolute inset-y-0 inset-e-2.5 my-auto h-3.5 w-3.5 text-text-subtle" />
       {open && (
         <ul
           role="listbox"
           tabIndex={-1}
           onKeyDown={onListKeyDown}
           ref={(el) => el?.focus()}
-          className="absolute start-0 top-full z-20 mt-1 max-h-60 w-full min-w-max overflow-auto rounded-lg bg-surface py-1 shadow-lg ring-1 ring-inset ring-surface-muted/60"
+          className="absolute inset-s-0 top-full z-20 mt-1 max-h-60 w-full min-w-max overflow-auto rounded-lg bg-surface py-1 shadow-lg ring-1 ring-inset ring-surface-muted/60"
         >
           {options.map((o, i) => (
             <li

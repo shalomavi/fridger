@@ -3,15 +3,18 @@ import { DeleteButton } from './DeleteButton'
 import type { ShoppingItem } from './api'
 import { useLanguage } from '@/features/household/useLanguage'
 import { DetailsEditor } from '@/shared/ui/DetailsEditor'
+import { QuantityEditor } from '@/shared/ui/QuantityEditor'
 import { CategoryPicker } from '@/shared/ui/CategoryPicker'
 import { Surface } from '@/shared/ui/Surface'
 import { glowShadow } from '@/shared/ui/elevation'
 import type { Category } from '@/shared/categories'
+import type { Unit } from '@/domain/units'
 
 export function ShoppingRow({
   item,
   onToggle,
   onUpdateDetails,
+  onUpdateQuantity,
   onUpdateCategory,
   onDelete,
   detailsPlaceholder,
@@ -21,6 +24,7 @@ export function ShoppingRow({
   item: ShoppingItem
   onToggle: () => void
   onUpdateDetails: (details: string | null) => void
+  onUpdateQuantity: (quantity: number, unit: Unit) => void
   onUpdateCategory: (category: Category | null) => void
   onDelete: () => void
   detailsPlaceholder: string
@@ -109,6 +113,7 @@ export function ShoppingRow({
       </div>
       {/* ps-8 lines this row up under the name text (h-5 checkbox + gap-3). */}
       <div className="mt-1.5 flex items-center gap-3 ps-8">
+        <QuantityEditor quantity={item.quantity} unit={item.unit} onSave={onUpdateQuantity} />
         <CategoryPicker category={item.category} onSave={onUpdateCategory} />
         <DetailsEditor details={item.details} onSave={onUpdateDetails} placeholder={detailsPlaceholder} />
       </div>

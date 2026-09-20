@@ -1,10 +1,13 @@
 import { supabase } from '@/shared/supabase'
 import type { Language } from '@/shared/i18n'
 import type { MealType } from '@/shared/mealTypes'
+import type { Unit } from '@/domain/units'
+
+export type UsedIngredient = { name: string; quantity: number; unit: Unit }
 
 export type Meal = {
   name: string
-  uses: string[]
+  uses: UsedIngredient[]
   missing: string[]
   steps: string[]
 }

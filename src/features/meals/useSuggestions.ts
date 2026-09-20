@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { suggestMeals, type Meal, type SuggestResponse } from './api'
-import { listPantryItems, consumeItem } from '@/features/pantry/api'
+import { listPantryItems, consumeItem, updatePantryItemQuantity } from '@/features/pantry/api'
 import { pantryQueryKey } from '@/features/pantry/usePantry'
 import { matchUsedIngredients } from '@/domain/matchIngredients'
 import type { Language } from '@/shared/i18n'
@@ -41,9 +41,13 @@ export function useSuggestions(householdId: string) {
   const cookedThis = useMutation({
     mutationFn: async (meal: Meal) => {
       const pantry = await listPantryItems(householdId)
-      const matchedIds = matchUsedIngredients(pantry, meal.uses)
-      await Promise.all(matchedIds.map((id) => consumeItem(id)))
-      return matchedIds.length
+      const matches = matchUsedIngredients(pantry, meal.uses)
+      await Promise.all(
+        matches.map(({ id, remainingQuantity, unit }) =>
+          remainingQuantity > 0 ? updatePantryItemQuantity(id, remainingQuantity, unit) : consumeItem(id),
+        ),
+      )
+      return matches.length
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: pantryQueryKey(householdId) }),
   })

@@ -4,11 +4,13 @@ import {
   undoConsumeItem,
   listPantryItems,
   updatePantryItemDetails,
+  updatePantryItemQuantity,
   updatePantryItemCategory,
   updatePantryItemExpiry,
   type PantryItem,
 } from './api'
 import type { Category } from '@/shared/categories'
+import type { Unit } from '@/domain/units'
 import { useLanguage } from '@/features/household/useLanguage'
 import { useToast } from '@/shared/alerts/ToastContext'
 import { itemConsumedToastContent } from '@/shared/alerts/itemConsumedToast'
@@ -64,6 +66,21 @@ export function usePantry(householdId: string) {
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 
+  const updateQuantity = useMutation({
+    mutationFn: ({ id, quantity, unit }: { id: string; quantity: number; unit: Unit }) =>
+      updatePantryItemQuantity(id, quantity, unit),
+    onMutate: async ({ id, quantity, unit }) => {
+      await queryClient.cancelQueries({ queryKey: key })
+      const previous = queryClient.getQueryData<PantryItem[]>(key)
+      queryClient.setQueryData<PantryItem[]>(key, (items) =>
+        items?.map((i) => (i.id === id ? { ...i, quantity, unit } : i)),
+      )
+      return { previous }
+    },
+    onError: (_err, _vars, context) => onMutationError(context),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
+  })
+
   const updateCategory = useMutation({
     mutationFn: ({ id, category }: { id: string; category: Category | null }) =>
       updatePantryItemCategory(id, category),
@@ -94,7 +111,7 @@ export function usePantry(householdId: string) {
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 
-  return { ...query, consume, updateDetails, updateCategory, updateExpiry }
+  return { ...query, consume, updateDetails, updateQuantity, updateCategory, updateExpiry }
 }
 
 export function useInvalidatePantry(householdId: string) {

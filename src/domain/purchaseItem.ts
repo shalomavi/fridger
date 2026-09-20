@@ -5,12 +5,16 @@
  * framework-free.
  */
 
+import type { Unit } from './units'
+
 export type PurchasableItem = {
   id: string
   household_id: string
   name: string
   details: string | null
   category: string | null
+  quantity: number
+  unit: Unit
 }
 
 export type NewPantryItem = {
@@ -18,6 +22,8 @@ export type NewPantryItem = {
   name: string
   details: string | null
   category: string | null
+  quantity: number
+  unit: Unit
   source_item_id: string
   status: 'available'
 }
@@ -28,6 +34,8 @@ export function purchaseItem(item: PurchasableItem): NewPantryItem {
     name: item.name,
     details: item.details,
     category: item.category,
+    quantity: item.quantity,
+    unit: item.unit,
     source_item_id: item.id,
     status: 'available',
   }

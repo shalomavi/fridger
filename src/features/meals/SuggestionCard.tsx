@@ -1,5 +1,6 @@
 import type { Meal } from './api'
 import { shareMealToWhatsApp } from './shareMeal'
+import { formatQuantity } from '@/domain/units'
 import { useLanguage } from '@/features/household/useLanguage'
 import { Surface } from '@/shared/ui/Surface'
 import { Button } from '@/shared/ui/Button'
@@ -22,7 +23,7 @@ export function SuggestionCard({
       {meal.uses.length > 0 && (
         <p className="text-sm text-text-muted">
           <span className="text-text-subtle">{t('uses')} </span>
-          {meal.uses.join(', ')}
+          {meal.uses.map((u) => `${u.name} ${formatQuantity(u.quantity, u.unit)}`).join(', ')}
         </p>
       )}
       {meal.missing.length > 0 && (

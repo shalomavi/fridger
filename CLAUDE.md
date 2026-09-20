@@ -64,9 +64,19 @@ splitting). One concern per file under `features/*`.
 - Never bypass RLS from the client. The Edge Function is the only place that
   may run with elevated privilege, and it must check household membership
   itself before touching anything.
-- No unit-conversion table. No ingredient taxonomy. `details` is a single
-  free-text field, nullable, no number+unit split — do not build validation
-  that forces a number or a unit picker.
+- `quantity` + `unit` live on shopping/pantry items (quantity: positive
+  numeric, default 1; unit: `src/domain/units.ts`'s fixed `UNITS` —
+  `'count' | 'g' | 'kg' | 'ml' | 'l'`, default `'count'`). Merging (a
+  duplicate add to the pending list, or a purchase merging into an existing
+  pantry row) converts within a unit group (`g`↔`kg`, `ml`↔`l`, via
+  `domain/units.ts`'s `convertQuantity`) and adds; across incompatible
+  groups (e.g. `kg` vs `ml`) it does **not** merge — a second row is added
+  instead, never a guessed conversion. `UNITS` is a small fixed set, not a
+  general unit-conversion table users can extend or a picker for arbitrary
+  strings — don't add new units without updating `convertQuantity`'s
+  groups. `details` stays a single free-text field, nullable, for anything
+  quantity+unit don't capture ("organic", "the red one", "a bag") — still
+  no ingredient taxonomy.
 - Name normalization is `lowercase + trim + collapse whitespace`, nothing
   more. Do not add English singularization/stemming — it corrupts Hebrew
   input, and this app takes mixed Hebrew/English entry.
@@ -85,9 +95,13 @@ splitting). One concern per file under `features/*`.
   type error, not a silent runtime fallback. Read it with `useLanguage()`
   from the household feature, not a new i18n library. Auth/household-setup
   screens run before a household exists and stay English-only by design. In
-  the LLM prompt, `uses` must stay the pantry's exact strings regardless of
-  language — translating them would break `matchUsedIngredients()`'s
-  exact-match "cooked this" deduction.
+  the LLM prompt, each `uses` entry's `name` must stay the pantry's exact
+  string regardless of language — translating it would break
+  `matchUsedIngredients()`'s exact-match "cooked this" deduction; its
+  `quantity`/`unit` are how much of that pantry entry the recipe uses (the
+  model picks whichever of `UNITS` fits), converted into the pantry row's
+  own unit and subtracted (or fully consuming, at zero) when "cooked this"
+  fires — see `domain/matchIngredients.ts`.
 
 ## Build order
 

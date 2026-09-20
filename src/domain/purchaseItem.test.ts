@@ -9,6 +9,8 @@ describe('purchaseItem', () => {
       name: 'Milk',
       details: '1L',
       category: 'dairy',
+      quantity: 2,
+      unit: 'count',
     })
 
     expect(pantryItem).toEqual({
@@ -16,6 +18,8 @@ describe('purchaseItem', () => {
       name: 'Milk',
       details: '1L',
       category: 'dairy',
+      quantity: 2,
+      unit: 'count',
       source_item_id: 'shop-1',
       status: 'available',
     })
@@ -28,6 +32,8 @@ describe('purchaseItem', () => {
       name: 'Bread',
       details: null,
       category: null,
+      quantity: 1,
+      unit: 'count',
     })
 
     expect(pantryItem.details).toBeNull()
@@ -40,6 +46,8 @@ describe('purchaseItem', () => {
       name: 'Eggs',
       details: '1 dozen',
       category: null,
+      quantity: 1,
+      unit: 'count',
     })
 
     expect(pantryItem.source_item_id).toBe('shop-3')

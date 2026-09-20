@@ -69,6 +69,6 @@ editing beyond the original plan. See `CLAUDE.md` for details.
 Verified: auto-deploy connected via GitHub 2026-08-21.
 
 Migration history table is in sync with the live database as of
-2026-09-17 — all of `0001`-`0017` show as applied via `npx supabase
+2026-09-17 — all of `0001`-`0020` show as applied via `npx supabase
 migration list`. `npm run build`, `npx vitest run`, and `npm run lint` all
 pass.

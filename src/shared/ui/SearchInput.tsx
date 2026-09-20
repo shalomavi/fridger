@@ -38,9 +38,9 @@ export function SearchInput({
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           autoComplete="off"
-          className="w-full py-3 ps-10 pe-4"
+          className="w-full py-3 ps-8 pe-3"
         />
-        <SearchIcon className="pointer-events-none absolute inset-y-0 start-3 my-auto text-text-subtle" />
+        <SearchIcon className="pointer-events-none absolute inset-y-0 start-2.5 my-auto text-text-subtle" />
       </div>
     </div>
   )

@@ -23,9 +23,20 @@ export function isMealType(value: string): value is MealType {
   return (MEAL_TYPES as readonly string[]).includes(value)
 }
 
+// Same set as src/domain/units.ts — duplicated for the same
+// cross-module-graph reason as normalizeName/isExpiringSoon below.
+export const UNITS = ['count', 'g', 'kg', 'ml', 'l'] as const
+export type Unit = (typeof UNITS)[number]
+
+const UsedIngredientSchema = z.object({
+  name: z.string().min(1),
+  quantity: z.number().positive(),
+  unit: z.enum(UNITS),
+})
+
 export const MealSchema = z.object({
   name: z.string().min(1),
-  uses: z.array(z.string()),
+  uses: z.array(UsedIngredientSchema),
   missing: z.array(z.string()),
   steps: z.array(z.string()).min(1),
 })

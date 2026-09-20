@@ -1,5 +1,6 @@
 import { supabase } from '@/shared/supabase'
 import type { Category } from '@/shared/categories'
+import type { Unit } from '@/domain/units'
 
 export type PantryItem = {
   id: string
@@ -7,6 +8,8 @@ export type PantryItem = {
   name: string
   details: string | null
   category: Category | null
+  quantity: number
+  unit: Unit
   status: 'available' | 'consumed'
   added_at: string
   consumed_at: string | null
@@ -27,6 +30,11 @@ export async function listPantryItems(householdId: string): Promise<PantryItem[]
 
 export async function updatePantryItemDetails(id: string, details: string | null): Promise<void> {
   const { error } = await supabase.from('pantry_items').update({ details }).eq('id', id)
+  if (error) throw error
+}
+
+export async function updatePantryItemQuantity(id: string, quantity: number, unit: Unit): Promise<void> {
+  const { error } = await supabase.from('pantry_items').update({ quantity, unit }).eq('id', id)
   if (error) throw error
 }
 

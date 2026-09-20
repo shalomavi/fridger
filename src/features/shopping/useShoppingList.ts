@@ -4,15 +4,16 @@ import {
   deleteShoppingItem,
   restoreShoppingItem,
   listShoppingItems,
-  markPurchased,
-  undoPurchase,
   updateShoppingItemDetails,
   updateShoppingItemCategory,
+  updateShoppingItemQuantity,
   type ShoppingItem,
 } from './api'
+import { markPurchased, undoPurchase } from './purchase'
 import { useAddShoppingItem } from './useAddShoppingItem'
 import { pantryQueryKey } from '@/features/pantry/usePantry'
 import type { Category } from '@/shared/categories'
+import type { Unit } from '@/domain/units'
 import { useLanguage } from '@/features/household/useLanguage'
 import { useToast } from '@/shared/alerts/ToastContext'
 import { undoAction } from '@/shared/query/undoAction'
@@ -86,6 +87,20 @@ export function useShoppingList(householdId: string) {
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 
+  const updateQuantity = useMutation({
+    mutationFn: ({ id, quantity, unit }: { id: string; quantity: number; unit: Unit }) =>
+      updateShoppingItemQuantity(id, quantity, unit),
+    onMutate: async ({ id, quantity, unit }) => {
+      const previous = await snapshot()
+      queryClient.setQueryData<ShoppingItem[]>(key, (items) =>
+        items?.map((i) => (i.id === id ? { ...i, quantity, unit } : i)),
+      )
+      return { previous }
+    },
+    onError: (_err, _vars, context) => onMutationError(context),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
+  })
+
   const updateCategory = useMutation({
     mutationFn: ({ id, category }: { id: string; category: Category | null }) =>
       updateShoppingItemCategory(id, category),
@@ -119,5 +134,5 @@ export function useShoppingList(householdId: string) {
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 
-  return { ...query, addItem, toggleItem, updateDetails, updateCategory, deleteItem }
+  return { ...query, addItem, toggleItem, updateDetails, updateQuantity, updateCategory, deleteItem }
 }

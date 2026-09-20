@@ -39,8 +39,16 @@ function GroupedItems({
 export function ShoppingList({ householdId }: { householdId: string }) {
   const { t } = useLanguage()
   const { data: household } = useHousehold()
-  const { data: items, isLoading, addItem, toggleItem, updateDetails, updateCategory, deleteItem } =
-    useShoppingList(householdId)
+  const {
+    data: items,
+    isLoading,
+    addItem,
+    toggleItem,
+    updateDetails,
+    updateQuantity,
+    updateCategory,
+    deleteItem,
+  } = useShoppingList(householdId)
   const [query, setQuery] = useState('')
 
   const order = resolveCategoryOrder(household?.category_order)
@@ -55,6 +63,7 @@ export function ShoppingList({ householdId }: { householdId: string }) {
         item={item}
         onToggle={() => toggleItem.mutate(item)}
         onUpdateDetails={(details) => updateDetails.mutate({ id: item.id, details })}
+        onUpdateQuantity={(quantity, unit) => updateQuantity.mutate({ id: item.id, quantity, unit })}
         onUpdateCategory={(category) => updateCategory.mutate({ id: item.id, category })}
         onDelete={() => deleteItem.mutate(item.id)}
         detailsPlaceholder={t('detailsPlaceholder')}
@@ -66,7 +75,11 @@ export function ShoppingList({ householdId }: { householdId: string }) {
 
   return (
     <div className="space-y-6">
-      <AddItemInput onAdd={(name, details, category) => addItem.mutate({ name, details, category })} />
+      <AddItemInput
+        onAdd={(name, details, category, quantity, unit) =>
+          addItem.mutate({ name, details, category, quantity, unit })
+        }
+      />
 
       {!isLoading && items && items.length > 0 && (
         <SearchInput value={query} onChange={setQuery} placeholder={t('searchPlaceholder')} />

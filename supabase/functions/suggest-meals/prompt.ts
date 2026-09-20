@@ -98,8 +98,13 @@ name, missing, steps — in ${LANGUAGE_NAME[lang]}.
 
 For each meal, give:
 - name: the meal's name
-- uses: pantry ingredients it uses — copy these EXACTLY as spelled in the pantry list above, in their original
-  language, do not translate or rewrite them, even though the rest of your answer is in ${LANGUAGE_NAME[lang]}
+- uses: pantry ingredients it uses. For each, give:
+  - name: copy this EXACTLY as spelled in the pantry list above, in its original language, do not translate or
+    rewrite it, even though the rest of your answer is in ${LANGUAGE_NAME[lang]}
+  - quantity: a number, how much of that ingredient the recipe uses
+  - unit: one of "count" (a whole item with no natural unit, e.g. an egg or an onion), "g", "kg", "ml", or "l" —
+    pick whichever naturally fits (e.g. quantity 500, unit "g" for half a kilo of cheese; quantity 2, unit
+    "count" for two eggs)
 - missing: any extra ingredients needed that aren't in the pantry (can be empty)
 - steps: 3-5 short steps to make it, including rough quantities sized for 2 people`
 }

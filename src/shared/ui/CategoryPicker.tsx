@@ -35,9 +35,11 @@ export function CategoryPicker({
         aria-label={t('categoryPlaceholder')}
         className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
       >
-        <option value="">{t('categoryPlaceholder')}</option>
+        <option value="" className="bg-surface text-text">
+          {t('categoryPlaceholder')}
+        </option>
         {CATEGORIES.map((c) => (
-          <option key={c} value={c}>
+          <option key={c} value={c} className="bg-surface text-text">
             {t(`category_${c}`)}
           </option>
         ))}
