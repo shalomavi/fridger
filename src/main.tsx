@@ -46,7 +46,7 @@ createRoot(document.getElementById('root')!).render(
         // Bump this if a cached query's shape ever changes incompatibly
         // (e.g. a renamed field) — invalidates every previously-persisted
         // cache on the next load instead of rendering stale-shaped data.
-        buster: 'v2',
+        buster: 'v1',
       }}
     >
       <ThemeProvider>
