@@ -101,7 +101,13 @@ splitting). One concern per file under `features/*`.
   `quantity`/`unit` are how much of that pantry entry the recipe uses (the
   model picks whichever of `UNITS` fits), converted into the pantry row's
   own unit and subtracted (or fully consuming, at zero) when "cooked this"
-  fires — see `domain/matchIngredients.ts`.
+  fires — see `domain/matchIngredients.ts`. Displaying a unit (e.g. `kg` →
+  "ק"ג") is a UI concern, not a domain one: `domain/units.ts`'s
+  `formatQuantity` takes an already-translated `unitLabel` string rather
+  than importing `t()` itself, same as `formatMealShareText`'s `labels` —
+  call sites (`QuantityEditor`, `SuggestionCard`, `shareMeal.ts`) do the
+  `t(\`unit_${unit}\`)` lookup and pass the result in, keeping `domain/`
+  framework- and i18n-free per the boundary above.
 
 ## Build order
 

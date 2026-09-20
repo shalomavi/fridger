@@ -80,7 +80,7 @@ export function ShoppingRow({
       className={`overflow-hidden p-3 ${glowShadow}`}
     >
       <div className="flex items-center gap-3">
-        <button onClick={handleToggle} className="flex flex-1 items-center gap-3 text-start">
+        <button onClick={handleToggle} className="flex min-w-0 items-center gap-3 text-start">
           <span
             className={`relative flex h-5 w-5 flex-none items-center justify-center rounded-full border-2 transition-colors duration-300 ${
               purchased ? 'border-primary bg-primary' : 'border-text-subtle'
@@ -102,18 +102,19 @@ export function ShoppingRow({
             </svg>
           </span>
           <span
-            className={`flex-1 transition-colors duration-300 ${lang === 'he' ? 'font-list-he' : 'font-list-en'} ${
+            className={`truncate transition-colors duration-300 ${lang === 'he' ? 'font-list-he' : 'font-list-en'} ${
               purchased ? 'text-text-subtle line-through' : 'text-text'
             }`}
           >
             {item.name}
           </span>
         </button>
+        <QuantityEditor quantity={item.quantity} unit={item.unit} onSave={onUpdateQuantity} />
+        <span className="flex-1" />
         <DeleteButton onDelete={handleDelete} label={deleteLabel} confirmMessage={confirmDeleteMessage} />
       </div>
       {/* ps-8 lines this row up under the name text (h-5 checkbox + gap-3). */}
       <div className="mt-1.5 flex items-center gap-3 ps-8">
-        <QuantityEditor quantity={item.quantity} unit={item.unit} onSave={onUpdateQuantity} />
         <CategoryPicker category={item.category} onSave={onUpdateCategory} />
         <DetailsEditor details={item.details} onSave={onUpdateDetails} placeholder={detailsPlaceholder} />
       </div>

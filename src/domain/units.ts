@@ -30,22 +30,15 @@ export function convertQuantity(value: number, from: Unit, to: Unit): number | n
   return (value * BASE_PER_UNIT[from]) / BASE_PER_UNIT[to]
 }
 
-const UNIT_ABBREVIATION: Record<Unit, string> = { count: '×', g: 'g', kg: 'kg', ml: 'ml', l: 'l' }
-
-/** Same abbreviation in both languages — these are unit symbols, not UI
- * copy, so unlike everything else they don't go through i18n. */
-export function unitAbbreviation(unit: Unit): string {
-  return UNIT_ABBREVIATION[unit]
-}
-
 /** Trims to 2 decimal places without trailing zeros. */
 export function formatNumber(value: number): string {
   return Number(value.toFixed(2)).toString()
 }
 
-/** Compact one-string display: "×2" for a plain count, "500g"/"1.5kg" etc
- * for a unit. */
-export function formatQuantity(quantity: number, unit: Unit): string {
+/** Compact one-string display: "×2" for a plain count, "1.5 kg" etc for a
+ * unit. `unitLabel` is passed in (already translated) rather than read from
+ * i18n here, keeping this file free of app-level imports. */
+export function formatQuantity(quantity: number, unit: Unit, unitLabel: string): string {
   const trimmed = formatNumber(quantity)
-  return unit === 'count' ? `×${trimmed}` : `${trimmed}${unit}`
+  return unit === 'count' ? `×${trimmed}` : `${trimmed} ${unitLabel}`
 }

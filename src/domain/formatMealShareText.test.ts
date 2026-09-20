@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { formatMealShareText } from './formatMealShareText'
 
 const labels = { uses: 'Uses:', alsoNeed: "You'll also need:" }
+const unitLabels = { count: 'Count', g: 'g', kg: 'kg', ml: 'ml', l: 'L' }
 
 describe('formatMealShareText', () => {
   it('includes name, uses, missing, and numbered steps', () => {
@@ -16,6 +17,7 @@ describe('formatMealShareText', () => {
         steps: ['Fry onions', 'Add tomatoes and eggs'],
       },
       labels,
+      unitLabels,
     )
 
     expect(text).toBe(
@@ -32,7 +34,11 @@ describe('formatMealShareText', () => {
   })
 
   it('omits uses/missing lines entirely when both are empty', () => {
-    const text = formatMealShareText({ name: 'Toast', uses: [], missing: [], steps: ['Toast it'] }, labels)
+    const text = formatMealShareText(
+      { name: 'Toast', uses: [], missing: [], steps: ['Toast it'] },
+      labels,
+      unitLabels,
+    )
 
     expect(text).toBe(['Toast', '', '1. Toast it'].join('\n'))
   })

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { UNITS, formatNumber, unitAbbreviation, type Unit } from '@/domain/units'
+import { UNITS, formatNumber, type Unit } from '@/domain/units'
 import { useLanguage } from '@/features/household/useLanguage'
 
 /**
@@ -33,56 +33,71 @@ export function QuantityEditor({
     if (parsed !== quantity) onSave(parsed, unit)
   }
 
+  const quantityControl = editing ? (
+    <input
+      autoFocus
+      type="number"
+      min={0.01}
+      step="any"
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      onClick={(e) => e.stopPropagation()}
+      onPointerDown={(e) => e.stopPropagation()}
+      onBlur={saveQuantity}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault()
+          saveQuantity()
+        }
+        if (e.key === 'Escape') setEditing(false)
+      }}
+      className="w-14 rounded bg-surface-muted px-2 py-0.5 text-sm text-text outline-none"
+    />
+  ) : (
+    <button
+      onClick={startEditing}
+      onPointerDown={(e) => e.stopPropagation()}
+      className="text-sm text-text-subtle underline decoration-dotted underline-offset-2"
+    >
+      {formatNumber(quantity)}
+    </button>
+  )
+
+  const unitControl = (
+    <span className="relative inline-flex items-center">
+      <span className="text-sm text-text-subtle underline decoration-dotted underline-offset-2">
+        {unit === 'count' ? '×' : t(`unit_${unit}`)}
+      </span>
+      <select
+        value={unit}
+        onClick={(e) => e.stopPropagation()}
+        onPointerDown={(e) => e.stopPropagation()}
+        onChange={(e) => onSave(quantity, e.target.value as Unit)}
+        aria-label={t('unitPlaceholder')}
+        className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+      >
+        {UNITS.map((u) => (
+          <option key={u} value={u} className="bg-surface text-text">
+            {t(`unit_${u}`)}
+          </option>
+        ))}
+      </select>
+    </span>
+  )
+
   return (
     <span className="inline-flex items-center gap-1">
-      {editing ? (
-        <input
-          autoFocus
-          type="number"
-          min={0.01}
-          step="any"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          onClick={(e) => e.stopPropagation()}
-          onPointerDown={(e) => e.stopPropagation()}
-          onBlur={saveQuantity}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault()
-              saveQuantity()
-            }
-            if (e.key === 'Escape') setEditing(false)
-          }}
-          className="w-14 rounded bg-surface-muted px-2 py-0.5 text-sm text-text outline-none"
-        />
+      {unit === 'count' ? (
+        <>
+          {unitControl}
+          {quantityControl}
+        </>
       ) : (
-        <button
-          onClick={startEditing}
-          onPointerDown={(e) => e.stopPropagation()}
-          className="text-sm text-text-subtle underline decoration-dotted underline-offset-2"
-        >
-          {formatNumber(quantity)}
-        </button>
+        <>
+          {quantityControl}
+          {unitControl}
+        </>
       )}
-      <span className="relative inline-flex items-center">
-        <span className="text-xs text-text-subtle underline decoration-dotted underline-offset-2">
-          {unitAbbreviation(unit)}
-        </span>
-        <select
-          value={unit}
-          onClick={(e) => e.stopPropagation()}
-          onPointerDown={(e) => e.stopPropagation()}
-          onChange={(e) => onSave(quantity, e.target.value as Unit)}
-          aria-label={t('unitPlaceholder')}
-          className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-        >
-          {UNITS.map((u) => (
-            <option key={u} value={u} className="bg-surface text-text">
-              {t(`unit_${u}`)}
-            </option>
-          ))}
-        </select>
-      </span>
     </span>
   )
 }

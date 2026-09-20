@@ -30,12 +30,12 @@ describe('convertQuantity', () => {
 })
 
 describe('formatQuantity', () => {
-  it('shows a plain count with a × prefix', () => {
-    expect(formatQuantity(2, 'count')).toBe('×2')
+  it('shows a plain count with a × prefix, ignoring the unit label', () => {
+    expect(formatQuantity(2, 'count', 'Count')).toBe('×2')
   })
 
-  it('shows a unit suffix and trims trailing zeros', () => {
-    expect(formatQuantity(0.5, 'kg')).toBe('0.5kg')
-    expect(formatQuantity(500, 'g')).toBe('500g')
+  it('shows the given unit label and trims trailing zeros', () => {
+    expect(formatQuantity(0.5, 'kg', 'kg')).toBe('0.5 kg')
+    expect(formatQuantity(500, 'g', 'גרם')).toBe('500 גרם')
   })
 })

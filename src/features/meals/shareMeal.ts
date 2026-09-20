@@ -1,5 +1,6 @@
 import type { Meal } from './api'
 import { formatMealShareText } from '@/domain/formatMealShareText'
+import { UNITS } from '@/domain/units'
 import type { Language } from '@/shared/i18n'
 import { t } from '@/shared/i18n'
 
@@ -12,7 +13,15 @@ import { t } from '@/shared/i18n'
  * want a clipboard failure to block opening WhatsApp.
  */
 export async function shareMealToWhatsApp(meal: Meal, lang: Language): Promise<void> {
-  const text = formatMealShareText(meal, { uses: t(lang, 'uses'), alsoNeed: t(lang, 'alsoNeed') })
+  const unitLabels = Object.fromEntries(UNITS.map((u) => [u, t(lang, `unit_${u}`)])) as Record<
+    (typeof UNITS)[number],
+    string
+  >
+  const text = formatMealShareText(
+    meal,
+    { uses: t(lang, 'uses'), alsoNeed: t(lang, 'alsoNeed') },
+    unitLabels,
+  )
 
   try {
     await navigator.clipboard.writeText(text)

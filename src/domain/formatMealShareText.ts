@@ -17,11 +17,14 @@ export type ShareableMeal = {
 export function formatMealShareText(
   meal: ShareableMeal,
   labels: { uses: string; alsoNeed: string },
+  unitLabels: Record<Unit, string>,
 ): string {
   const lines = [meal.name, '']
 
   if (meal.uses.length > 0) {
-    lines.push(`${labels.uses} ${meal.uses.map((u) => `${u.name} ${formatQuantity(u.quantity, u.unit)}`).join(', ')}`)
+    lines.push(
+      `${labels.uses} ${meal.uses.map((u) => `${u.name} ${formatQuantity(u.quantity, u.unit, unitLabels[u.unit])}`).join(', ')}`,
+    )
   }
   if (meal.missing.length > 0) {
     lines.push(`${labels.alsoNeed} ${meal.missing.join(', ')}`)

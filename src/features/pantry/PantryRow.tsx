@@ -111,10 +111,13 @@ export function PantryRow({
           soon ? 'bg-surface ring-1 ring-inset ring-warning-ring/40' : 'bg-surface'
         }`}
       >
-        <div className="flex items-center justify-between gap-3">
-          <span className={`text-text ${lang === 'he' ? 'font-list-he' : 'font-list-en'}`}>
-            {item.name}
-          </span>
+        <div className="flex items-center gap-3">
+          <div className="flex min-w-0 flex-1 items-center gap-3">
+            <span className={`truncate text-text ${lang === 'he' ? 'font-list-he' : 'font-list-en'}`}>
+              {item.name}
+            </span>
+            <QuantityEditor quantity={item.quantity} unit={item.unit} onSave={onUpdateQuantity} />
+          </div>
           <button
             onClick={startConsume}
             onPointerDown={(e) => e.stopPropagation()}
@@ -124,7 +127,6 @@ export function PantryRow({
           </button>
         </div>
         <div className="flex items-center gap-3">
-          <QuantityEditor quantity={item.quantity} unit={item.unit} onSave={onUpdateQuantity} />
           <CategoryPicker category={item.category} onSave={onUpdateCategory} />
           <ExpiryEditor
             expiresAt={item.expires_at}

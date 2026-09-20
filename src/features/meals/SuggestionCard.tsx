@@ -23,7 +23,9 @@ export function SuggestionCard({
       {meal.uses.length > 0 && (
         <p className="text-sm text-text-muted">
           <span className="text-text-subtle">{t('uses')} </span>
-          {meal.uses.map((u) => `${u.name} ${formatQuantity(u.quantity, u.unit)}`).join(', ')}
+          {meal.uses
+            .map((u) => `${u.name} ${formatQuantity(u.quantity, u.unit, t(`unit_${u.unit}`))}`)
+            .join(', ')}
         </p>
       )}
       {meal.missing.length > 0 && (
