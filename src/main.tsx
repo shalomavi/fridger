@@ -16,7 +16,7 @@ import './index.css'
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchInterval: 5000,
+      refetchInterval: 10000,
       refetchOnWindowFocus: true,
       staleTime: 2000,
       // Must be >= persistOptions.maxAge below, or react-query garbage
