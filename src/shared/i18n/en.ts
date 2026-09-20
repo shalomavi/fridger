@@ -79,4 +79,5 @@ export const en = {
   mealType_meaty: 'Meaty',
   mealType_vegan: 'Vegan',
   mealType_vegetarian: 'Vegetarian',
+  mealType_pregnancy: 'Pregnancy-safe',
 } as const

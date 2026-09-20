@@ -22,12 +22,17 @@ const STYLE_INSTRUCTIONS = {
 // Hard dietary constraints, unlike the style nudges above — every meal must
 // comply, not just lean that way. dairy/meaty specifically exclude each
 // other's ingredient (kosher-style meat/dairy separation), not just favor
-// one over the other.
+// one over the other. pregnancy is a food-safety constraint, not a style —
+// it excludes specific risks rather than a food group.
 const DIET_INSTRUCTIONS = {
   dairy: 'dairy-based meals only — no meat, poultry, or fish (kosher-style meat/dairy separation)',
   meaty: 'meat-based meals only — no dairy products (kosher-style meat/dairy separation)',
   vegan: 'fully vegan — no meat, poultry, fish, dairy, eggs, or any other animal product',
   vegetarian: 'vegetarian — no meat, poultry, or fish (dairy and eggs are fine)',
+  pregnancy:
+    'pregnancy-safe — no raw or undercooked meat, fish, shellfish, or eggs; no unpasteurized dairy or juice; ' +
+    'no high-mercury fish (e.g. swordfish, shark, king mackerel); no unheated deli/cured meats; no alcohol; ' +
+    'no raw sprouts; keep caffeine to a minimum',
 } as const
 
 type StyleType = keyof typeof STYLE_INSTRUCTIONS
