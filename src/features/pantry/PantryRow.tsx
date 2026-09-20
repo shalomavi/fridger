@@ -111,17 +111,15 @@ export function PantryRow({
           soon ? 'bg-surface ring-1 ring-inset ring-warning-ring/40' : 'bg-surface'
         }`}
       >
-        <div className="flex items-center gap-3">
-          <div className="flex min-w-0 flex-1 items-center gap-3">
-            <span className={`truncate text-text ${lang === 'he' ? 'font-list-he' : 'font-list-en'}`}>
-              {item.name}
-            </span>
-            <QuantityEditor quantity={item.quantity} unit={item.unit} onSave={onUpdateQuantity} />
-          </div>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <span className={`text-text ${lang === 'he' ? 'font-list-he' : 'font-list-en'}`}>
+            {item.name}
+          </span>
+          <QuantityEditor quantity={item.quantity} unit={item.unit} onSave={onUpdateQuantity} />
           <button
             onClick={startConsume}
             onPointerDown={(e) => e.stopPropagation()}
-            className="flex-none rounded-md bg-surface-muted px-2 py-1 text-xs text-text-soft transition-transform duration-300 active:scale-95"
+            className="ms-auto flex-none rounded-md bg-surface-muted px-2 py-1 text-xs text-text-soft transition-transform duration-300 active:scale-95"
           >
             {t('used')}
           </button>

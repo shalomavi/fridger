@@ -79,8 +79,8 @@ export function ShoppingRow({
       onAnimationEnd={handleAnimationEnd}
       className={`overflow-hidden p-3 ${glowShadow}`}
     >
-      <div className="flex items-center gap-3">
-        <button onClick={handleToggle} className="flex min-w-0 items-center gap-3 text-start">
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+        <button onClick={handleToggle} className="flex items-center gap-3 text-start">
           <span
             className={`relative flex h-5 w-5 flex-none items-center justify-center rounded-full border-2 transition-colors duration-300 ${
               purchased ? 'border-primary bg-primary' : 'border-text-subtle'
@@ -102,7 +102,7 @@ export function ShoppingRow({
             </svg>
           </span>
           <span
-            className={`truncate transition-colors duration-300 ${lang === 'he' ? 'font-list-he' : 'font-list-en'} ${
+            className={`transition-colors duration-300 ${lang === 'he' ? 'font-list-he' : 'font-list-en'} ${
               purchased ? 'text-text-subtle line-through' : 'text-text'
             }`}
           >
@@ -110,8 +110,9 @@ export function ShoppingRow({
           </span>
         </button>
         <QuantityEditor quantity={item.quantity} unit={item.unit} onSave={onUpdateQuantity} />
-        <span className="flex-1" />
-        <DeleteButton onDelete={handleDelete} label={deleteLabel} confirmMessage={confirmDeleteMessage} />
+        <span className="ms-auto">
+          <DeleteButton onDelete={handleDelete} label={deleteLabel} confirmMessage={confirmDeleteMessage} />
+        </span>
       </div>
       {/* ps-8 lines this row up under the name text (h-5 checkbox + gap-3). */}
       <div className="mt-1.5 flex items-center gap-3 ps-8">
