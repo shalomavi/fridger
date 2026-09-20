@@ -21,3 +21,20 @@ declare module '@supabase/supabase-js' {
 declare module 'zod' {
   export const z: any
 }
+
+declare module 'zod/v4' {
+  const z: any
+  export = z
+}
+
+declare module '@modelcontextprotocol/server' {
+  export const createMcpHandler: any
+  export class McpServer {
+    constructor(...args: any[])
+    registerTool(...args: any[]): any
+  }
+  export const requireBearerAuth: any
+  export const requireScopes: any
+  export const oauthMetadataResponse: any
+  export const getOAuthProtectedResourceMetadataUrl: any
+}

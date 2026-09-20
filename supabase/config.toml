@@ -423,3 +423,14 @@ entrypoint = "./functions/suggest-meals/index.ts"
 # Specifies static files to be bundled with the function. Supports glob patterns.
 # For example, if you want to serve static HTML pages in your function:
 # static_files = [ "./functions/suggest-meals/*.html" ]
+
+[functions.mcp]
+enabled = true
+# The /mcp protocol route is authenticated with our own static per-household
+# bearer token (mcp_tokens table), not a Supabase-issued JWT, and the
+# /mcp/tokens management route does its own manual JWT check (see
+# suggest-meals's pattern) — so platform-level JWT verification must be off
+# for the whole function.
+verify_jwt = false
+import_map = "./functions/mcp/deno.json"
+entrypoint = "./functions/mcp/index.ts"

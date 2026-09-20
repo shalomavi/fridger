@@ -12,10 +12,12 @@ React + Vite + TypeScript + Tailwind v4. TanStack Query for server state
 (polling via `refetchInterval`, not Supabase Realtime), persisted to
 localStorage via `@tanstack/react-query-persist-client` so the last-fetched
 data renders offline/on cold start — reads only; writes still need a live
-connection. Supabase for Postgres + Auth + RLS. **One** Supabase Edge
-Function (`supabase/functions/suggest-meals`) holds the Gemini key and does
-the LLM call — the only server-side code in this project. No FastAPI, no
-second backend.
+connection. Supabase for Postgres + Auth + RLS. Two Supabase Edge Functions
+are the only server-side code in this project: `supabase/functions/suggest-meals`
+(holds the Gemini key, does the LLM call) and `supabase/functions/mcp` (MCP
+protocol server exposing shopping list/pantry tools to connected LLM apps
+like Claude, plus household MCP-token issuance). No FastAPI, no separate
+backend framework, no third function without updating this file.
 
 ## The two boundaries that matter
 
@@ -37,9 +39,10 @@ If you only enforce two things in review, enforce these.
 - `npx vitest run` — domain unit tests.
 - `npx supabase ...` — CLI for migrations/functions (once linked).
 - `npm run build && netlify deploy --prod --dir=dist` — deploy to production
-  (https://fridger-app.netlify.app). Frontend only; the Edge Function
-  deploys separately via `npx supabase functions deploy suggest-meals`, and
-  migrations via `npx supabase db push`.
+  (https://fridger-app.netlify.app). Frontend only; the Edge Functions
+  deploy separately via `npx supabase functions deploy suggest-meals` and
+  `npx supabase functions deploy mcp`, and migrations via `npx supabase db
+  push`.
 - `python3 scripts/sync-icon-color.py '#rrggbb'` — after changing
   `--color-primary` in `src/index.css`, run this with the same hex to
   recolor `favicon.svg`, the three PWA icon PNGs, `index.html`'s

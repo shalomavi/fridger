@@ -3,6 +3,7 @@ import { InviteButton } from '@/features/household/InviteButton'
 import { HouseholdPreferences } from './HouseholdPreferences'
 import { CategoryOrderSettings } from './CategoryOrderSettings'
 import { MealTypeSettings } from './MealTypeSettings'
+import { McpTokenSettings } from './McpTokenSettings'
 
 export function SettingsScreen() {
   const { data: household } = useHousehold()
@@ -13,6 +14,7 @@ export function SettingsScreen() {
       <MealTypeSettings />
       <HouseholdPreferences />
       <CategoryOrderSettings />
+      <McpTokenSettings />
     </div>
   )
 }
