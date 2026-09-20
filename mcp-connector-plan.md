@@ -103,12 +103,40 @@ token is rejected before it touches household data.
    `get_shopping_list`, `get_pantry` — lower blast radius than the write
    tools while the auth plumbing is still being proven out).
 4. MCP Inspector testing.
-5. Deploy (`npx supabase functions deploy mcp`), connect from Claude first,
-   then try ChatGPT/Gemini.
+5. Deploy (`npx supabase functions deploy mcp`), then connect from Claude
+   following §7 below, before trying ChatGPT/Gemini.
 
 ---
 
-## 7. Non-goals for v1
+## 7. Connecting from the Claude app (including on the phone)
+
+Claude's connectors are tied to the Anthropic **account**, not a specific
+device, so most of this is one-time setup done from wherever the fuller
+settings UI lives — not something done separately on the phone.
+
+1. **Function must be deployed** (§6 step 5) — a phone app can't reach a
+   local `supabase functions serve` instance, only a real
+   `https://<project>.functions.supabase.co/mcp`-style URL.
+2. **Generate a household token** from Fridger's Settings screen (§4).
+3. **Add the custom connector once**, from claude.ai (web) or the desktop
+   app: Settings → Connectors → Add custom connector → paste the deployed
+   URL and the token. This step syncs to the account, so it does not need
+   to be repeated on the phone.
+4. **On the phone**, open a chat, enable the Fridger connector for that
+   conversation (toggle/picker near the message box), and ask things like
+   "what's on the shopping list" or "add eggs" — Claude calls the MCP tools
+   from there.
+
+**To verify before finalizing the auth design in §2:** exactly how Claude's
+custom-connector flow wants the credential. Some custom-connector setups
+take a bearer token or custom header directly; others push toward a full
+OAuth handshake. If it turns out to require OAuth, that's more work than
+§2's token model assumes — check Anthropic's current custom-connector UI
+early, before the rest of §2/§3 is built around the token assumption.
+
+---
+
+## 8. Non-goals for v1
 
 - No OAuth / public connector-directory listing — this is a private
   household tool, not a published integration.
