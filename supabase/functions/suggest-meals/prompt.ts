@@ -11,7 +11,7 @@ const LANGUAGE_NAME: Record<Language, string> = { en: 'English', he: 'Hebrew' }
 // fighting each other outright. Selected types join into one line below.
 const STYLE_INSTRUCTIONS = {
   healthy: 'lighter, nutrient-dense meals — more vegetables and lean protein, less deep-frying or heavy cream/cheese',
-  fast: 'the quickest options — under 15 minutes hands-on, as few steps and dishes as possible',
+  fast: 'the quickest options — under 20 minutes hands-on, as few steps and dishes as possible',
   trending: 'currently popular dishes and flavor combinations, not old-fashioned staples',
   unique: 'less common, more adventurous combinations rather than the obvious default dish',
   budget: 'cheap, few-ingredient meals that stretch the pantry rather than requiring extra purchases',
@@ -48,7 +48,7 @@ function isDietType(type: MealType): type is DietType {
 
 export const SYSTEM_INSTRUCTION = `You suggest simple weeknight home-cook meals for a 2-person household, based on
 what's in their shared pantry.
-Reply only with meals realistic to cook in about 30 minutes or less with basic kitchen equipment, using mostly what's listed.
+Reply only with meals realistic to cook with basic kitchen equipment, using mostly what's listed.
 It's fine to suggest 1-2 small extra ingredients that aren't listed, but call them out as missing.
 Prefer meals that use more of the listed pantry over ones that use only one or two items and leave the rest as
 missing — reducing pantry waste is the point of this feature.
@@ -96,6 +96,13 @@ export function buildPrompt(
       `ignoring an expiring-soon item, meal-type style, or dietary requirement above: ${preferences.trim()}`
     : ''
 
+  const unitsNote =
+    lang === 'he'
+      ? ' Write quantities in the steps using Hebrew unit words (e.g. גרם, ק"ג, מ"ל, ליטר, יחידה/יחידות), not ' +
+        'English abbreviations like "g" or "ml" — this applies only to the steps text, not the "uses" unit field ' +
+        'below, which must stay one of the fixed English values.'
+      : ''
+
   return `Pantry contents: ${pantryList}${expiringLine}${mealTypesLine}${dietLine}${preferencesLine}${avoidLine}
 
 Suggest 3 different meals, with portions sized for 2 people. Except for "uses" (see below), write everything —
@@ -111,5 +118,5 @@ For each meal, give:
     pick whichever naturally fits (e.g. quantity 500, unit "g" for half a kilo of cheese; quantity 2, unit
     "count" for two eggs)
 - missing: any extra ingredients needed that aren't in the pantry (can be empty)
-- steps: 3-5 short steps to make it, including rough quantities sized for 2 people`
+- steps: 3-5 short steps to make it, including rough quantities sized for 2 people${unitsNote}`
 }
