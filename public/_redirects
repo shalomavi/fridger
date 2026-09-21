@@ -1,1 +1,15 @@
+# OAuth discovery proxy for the MCP connector (Gemini, §7c of
+# mcp-connector-plan.md): Supabase Edge Functions only route requests whose
+# first path segment matches the function name, so a root-level
+# /.well-known/... request can never reach supabase/functions/mcp directly —
+# confirmed by curling it (404 at the gateway, before Deno even runs).
+# Proxying it through Netlify, which has no such restriction, lets an OAuth
+# client that does plain RFC 8414 root-level discovery (rather than MCP's
+# WWW-Authenticate indirection) find these documents.
+/.well-known/oauth-authorization-server      https://mnwcypcbnvuopakkbbht.functions.supabase.co/mcp/.well-known/oauth-authorization-server   200
+/.well-known/oauth-authorization-server/mcp  https://mnwcypcbnvuopakkbbht.functions.supabase.co/mcp/.well-known/oauth-authorization-server   200
+/.well-known/oauth-protected-resource        https://mnwcypcbnvuopakkbbht.functions.supabase.co/mcp/.well-known/oauth-protected-resource   200
+/.well-known/oauth-protected-resource/mcp    https://mnwcypcbnvuopakkbbht.functions.supabase.co/mcp/.well-known/oauth-protected-resource   200
+/mcp/*                                       https://mnwcypcbnvuopakkbbht.functions.supabase.co/mcp/:splat   200
+
 /*    /index.html   200

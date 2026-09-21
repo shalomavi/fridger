@@ -25,14 +25,20 @@ this plan being written:
   model. Treated as a deferred v2 phase (§7b), not part of v1.
 - **Gemini**: solid custom-MCP support exists for **Gemini
   Business/Enterprise** (GCP service-account auth, admin-configured) — a
-  different product from the personal Gemini app. The consumer app has a
-  "Connected Apps" MCP option, but it's new enough that its auth model for
-  an individual account isn't confirmed yet. Treated as "verify
-  empirically, best effort" (§7c).
+  different product from the personal Gemini app. The consumer app's
+  "Connected Apps" MCP option does require full OAuth 2.1 + Dynamic Client
+  Registration, confirmed empirically (§7c) — a full OAuth authorization
+  server was built for it, verified working end-to-end by hand, but
+  Gemini's own connector UI still rejects it with no diagnosable error.
+  Currently blocked on Gemini's platform, not on anything in this repo.
 
 ---
 
 ## 2. Auth: a per-household access token (v1) — covers Claude only
+
+(An OAuth 2.1 authorization server for clients that need it — Gemini,
+confirmed, and likely ChatGPT — was later built alongside this; see §9.
+This section describes the original, still-current Claude path.)
 
 MCP's spec wants OAuth for servers listed in a public connector directory,
 but this isn't going into a directory — it's one household connecting its own
@@ -159,35 +165,114 @@ catching early — fall back to checking whether the beta needs to be
 explicitly enabled somewhere, before assuming the whole auth model needs to
 change.
 
-## 7b. ChatGPT — deferred, requires OAuth (not v1)
+## 7b. ChatGPT — OAuth server now exists, untested against ChatGPT itself
 
 ChatGPT's custom MCP connectors require OAuth 2.1 with Dynamic Client
-Registration; there is no bearer-token or API-key option. Supporting ChatGPT
-means the `mcp` function also needs to act as a small OAuth authorization
-server (or front one) — issuing/validating authorization codes and tokens
-per the DCR flow — which is materially more than §2's token table. Not
-worth building until Claude support (§7a) is proven out and there's an
-actual reason to add ChatGPT specifically; tracked here as a known, larger
-follow-up rather than folded into v1's scope.
+Registration; there is no bearer-token or API-key option. The OAuth server
+built for Gemini (§7c, §9) implements exactly this and should serve ChatGPT
+too without further backend work — it was designed to be client-agnostic.
+Not yet actually tried against a ChatGPT connector; that's the next step
+whenever there's a reason to add ChatGPT specifically. Worth re-running the
+same empirical-first approach used for Gemini (§7c) rather than assuming it
+will just work.
 
-## 7c. Gemini — best effort, verify empirically (not v1)
+## 7c. Gemini — built, verified end-to-end by hand, blocked on Gemini's side
 
-The personal Gemini app's "Connected Apps" MCP support is new enough that
-its auth model for an individual account isn't confirmed by documentation
-(the well-documented custom-MCP path is Gemini Business/Enterprise, a
-different, admin-managed product). Once §7a is working, worth a quick
-empirical check — try adding the same deployed URL as a Gemini "Connected
-App" and see what it actually asks for — rather than designing auth for it
-in advance. If it needs OAuth like ChatGPT, it likely piggybacks on
-whatever gets built for §7b instead of needing a third auth model.
+Confirmed empirically: the personal Gemini app's "Connected Apps" MCP
+option requires full OAuth 2.1 + Dynamic Client Registration — no
+bearer/static-header fallback exists on that surface (the UI's own probe
+of a bearer-only URL returns "Gemini requires standard OAuth for server
+connections").
+
+An OAuth 2.1 authorization server was built in response (§9) and every
+piece of it was verified directly (not just "should work"):
+
+- Discovery documents resolve correctly in all three conventions a client
+  might use: root-level (`/.well-known/oauth-authorization-server`, proxied
+  via Netlify since Supabase's function routing can't serve root-level
+  paths — see §9), the plain suffix form under `/mcp`, and RFC 8414's
+  path-insertion form.
+- The `401` response from `/mcp` carries a correct
+  `WWW-Authenticate: Bearer resource_metadata="..."` header, with
+  `Access-Control-Expose-Headers` set so browser-side code can actually
+  read it.
+- `POST /register` (DCR) issues a working client_id/secret.
+- `GET /authorize` redirects correctly to the SPA's `/connect` consent
+  screen with all params forwarded.
+- Manually registering a client with the exact redirect URI Gemini's own
+  dialog generates, then pasting that client_id/secret into Gemini's
+  "Additional settings" fields, still didn't get past Gemini's UI.
+
+Despite all of that, Gemini's connector dialog still shows "This MCP server
+uses an authentication method that Gemini doesn't support" — a message that
+turned out to be a static one-time check tied to the URL field, not a live
+per-attempt probe result (it didn't change after entering valid
+credentials, retrying, or waiting out a possible cache). Browser DevTools
+showed no direct request from the browser to our domain at all during the
+attempt — Gemini's own backend does the actual server-to-server probing,
+which is entirely opaque to us; there's no way to see what request it sends
+or why it decides the server is unsupported.
+
+Ruled out along the way: caching (cache-busted URLs didn't help), the
+account-eligibility prerequisites Google documents (18+, US, personal
+Google Account, English — all confirmed to apply here).
+
+**Conclusion**: this is blocked on Gemini's platform behavior, not on
+anything in this repo. Revisit if Google's implementation matures, or if
+tackling ChatGPT (§7b) first turns out to shake something loose here too
+(same server, so worth re-testing Gemini after that).
 
 ---
 
-## 8. Non-goals for v1
+## 9. OAuth 2.1 authorization server (built for §7b/§7c)
 
-- No OAuth / public connector-directory listing, and by extension **no
-  ChatGPT support** (§7b) — this is a private household tool for Claude
-  first, not a published integration.
+Added alongside the v1 static-token path (§2), not replacing it — Claude's
+setup (§7a) is untouched; `verifyBearerToken` in `auth.ts` now checks an
+OAuth access token first, falling back to `mcp_tokens`.
+
+**New tables** (`0023_oauth.sql`), all RLS-enabled with no policies —
+service-role only, same posture as everything else the `mcp` function's
+admin client touches:
+
+```
+oauth_clients               id, client_id, client_secret_hash, client_name,
+                             redirect_uris, created_at
+oauth_authorization_codes   id, code_hash, client_id, household_id, user_id,
+                             redirect_uri, code_challenge,
+                             code_challenge_method, expires_at, used_at
+oauth_tokens                id, client_id, household_id, user_id,
+                             access_token_hash, access_token_expires_at,
+                             refresh_token_hash, revoked_at, last_used_at
+```
+
+**New files** under `supabase/functions/mcp/oauth/`: `store.ts` (clients +
+auth codes), `tokenStore.ts` (access/refresh tokens, connections
+list/revoke), `pkce.ts` (S256 check), `metadata.ts` (discovery documents),
+`register.ts` (DCR + public client-name lookup), `authorize.ts` (GET
+validate+redirect to the SPA, POST approve from the SPA), `token.ts`
+(authorization_code and refresh_token grants). `shared.ts` holds
+`admin`/`sha256Hex`/`generateRawToken`, split out of `auth.ts` to avoid a
+circular import with `oauth/tokenStore.ts`.
+
+**Frontend**: `src/features/oauthConsent/` (the `/connect` consent screen,
+reachable outside the app's nav chrome) and
+`src/features/settings/ConnectedAppsSettings.tsx` (list/revoke OAuth
+grants — these rows have no client-side RLS access, unlike `mcp_tokens`,
+so it goes through `/oauth/connections` instead of a direct table query).
+
+**Routing quirk**: Supabase Edge Functions route requests by matching the
+function name as the first path segment, so a request to
+`/.well-known/oauth-authorization-server` (no `/mcp` prefix) 404s at the
+gateway before ever reaching Deno code — confirmed by curling it directly.
+`public/_redirects` proxies the root-level and RFC 8414 path-insertion
+`.well-known` conventions through Netlify (which has no such routing
+restriction) to the real Supabase endpoints, so a client using either
+convention can still find them.
+
+## 8. Non-goals
+
+- No public connector-directory listing — this is a private household
+  tool, not a published integration.
 - No write access beyond the tools listed above (no deleting items, no
   editing household preferences/settings via the LLM) — keep the blast
   radius of a leaked or misused token small.

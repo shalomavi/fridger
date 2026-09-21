@@ -1,20 +1,8 @@
 import { createClient } from '@supabase/supabase-js'
+import { admin, SUPABASE_URL, SERVICE_ROLE_KEY, sha256Hex } from './shared.ts'
+import { lookupAccessToken } from './oauth/tokenStore.ts'
 
-const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
-const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-
-export const admin = createClient(SUPABASE_URL, SERVICE_ROLE_KEY)
-
-export async function sha256Hex(text: string): Promise<string> {
-  const bytes = new TextEncoder().encode(text)
-  const digest = await crypto.subtle.digest('SHA-256', bytes)
-  return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('')
-}
-
-export function generateRawToken(): string {
-  const bytes = crypto.getRandomValues(new Uint8Array(32))
-  return [...bytes].map((b) => b.toString(16).padStart(2, '0')).join('')
-}
+export { admin, sha256Hex, generateRawToken } from './shared.ts'
 
 /** Verifies the caller's own Supabase session JWT and that they belong to
  * the household they claim — same pattern as suggest-meals/index.ts. Used
@@ -46,13 +34,18 @@ export async function verifyHouseholdMember(
   return { userId: user.id }
 }
 
-/** Verifies an mcp_tokens bearer token for the /mcp protocol route. No
- * client-supplied householdId anywhere in this path — the token itself is
- * already scoped to exactly one household (mcp-connector-plan.md §2), so
- * there's nothing to cross-check like verifyHouseholdMember does. */
+/** Verifies a bearer token for the /mcp protocol route — either the static
+ * per-household token (Claude, §2/§7a) or an OAuth access token (Gemini and
+ * future clients requiring real OAuth, §7b/§7c/oauth/). No client-supplied
+ * householdId anywhere in this path — either token kind is already scoped
+ * to exactly one household, so there's nothing to cross-check like
+ * verifyHouseholdMember does. */
 export async function verifyBearerToken(req: Request): Promise<{ householdId: string } | null> {
   const token = req.headers.get('Authorization')?.match(/^Bearer\s+(.+)$/i)?.[1]
   if (!token) return null
+
+  const oauthMatch = await lookupAccessToken(token)
+  if (oauthMatch) return oauthMatch
 
   const tokenHash = await sha256Hex(token)
   const { data: row } = await admin

@@ -4,6 +4,7 @@ import { HouseholdPreferences } from './HouseholdPreferences'
 import { CategoryOrderSettings } from './CategoryOrderSettings'
 import { MealTypeSettings } from './MealTypeSettings'
 import { McpTokenSettings } from './McpTokenSettings'
+import { ConnectedAppsSettings } from './ConnectedAppsSettings'
 
 export function SettingsScreen() {
   const { data: household } = useHousehold()
@@ -15,6 +16,7 @@ export function SettingsScreen() {
       <HouseholdPreferences />
       <CategoryOrderSettings />
       <McpTokenSettings />
+      <ConnectedAppsSettings />
     </div>
   )
 }

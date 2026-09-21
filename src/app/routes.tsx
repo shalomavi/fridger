@@ -14,6 +14,7 @@ import { ShoppingList } from '@/features/shopping/ShoppingList'
 import { PantryList } from '@/features/pantry/PantryList'
 import { MealsScreen } from '@/features/meals/MealsScreen'
 import { SettingsScreen } from '@/features/settings/SettingsScreen'
+import { OAuthConsentScreen } from '@/features/oauthConsent/OAuthConsentScreen'
 
 // Curried on theme (a plain function, not a component, so it can't call
 // useTheme() itself) — inactive tabs need inactiveElevationShadow's
@@ -93,6 +94,9 @@ function HomeScreen({ email }: { email: string | undefined }) {
   return (
     <div className="max-w-5xl mx-auto">
       <Routes>
+        {/* Outside Layout on purpose — an OAuth consent hand-off (Gemini,
+         * §7c) shouldn't show the app's nav chrome. */}
+        <Route path="/connect" element={<OAuthConsentScreen household={household} />} />
         <Route element={<Layout household={household} email={email} />}>
           <Route path="/" element={<ShoppingList householdId={household.id} />} />
           <Route path="/pantry" element={<PantryList householdId={household.id} />} />
