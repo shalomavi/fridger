@@ -115,11 +115,6 @@ export function AddItemInput({
           leadingIcon={TagIcon}
           className="flex-1"
         />
-        <AddToPantryCheckbox
-          checked={addToPantry}
-          onChange={setAddToPantry}
-          label={t('addDirectlyToPantry')}
-        />
         <Button
           type="submit"
           disabled={!name.trim()}
@@ -128,6 +123,11 @@ export function AddItemInput({
         >
           <PlusIcon />
         </Button>
+        <AddToPantryCheckbox
+          checked={addToPantry}
+          onChange={setAddToPantry}
+          label={t('addDirectlyToPantry')}
+        />
       </div>
     </form>
   )
