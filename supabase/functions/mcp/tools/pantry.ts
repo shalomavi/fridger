@@ -1,6 +1,7 @@
 import type { McpServer } from '@modelcontextprotocol/server'
 import * as z from 'zod/v4'
 import { admin } from '../auth.ts'
+import { UNITS, CATEGORIES } from '../domain.ts'
 
 export function registerPantryTools(server: McpServer, householdId: string) {
   server.registerTool(
@@ -37,6 +38,40 @@ export function registerPantryTools(server: McpServer, householdId: string) {
       if (error) throw new Error('Could not update pantry item')
 
       return { content: [{ type: 'text', text: 'Marked consumed' }] }
+    },
+  )
+
+  server.registerTool(
+    'update_pantry_item',
+    {
+      description:
+        'Edit fields on an existing pantry item. Only the fields provided are changed; pass category as null to clear it.',
+      inputSchema: z.object({
+        itemId: z.string().uuid(),
+        name: z.string().min(1).optional(),
+        details: z.string().nullable().optional(),
+        category: z.enum(CATEGORIES).nullable().optional(),
+        quantity: z.number().positive().optional(),
+        unit: z.enum(UNITS).optional(),
+      }),
+    },
+    async ({ itemId, name, details, category, quantity, unit }) => {
+      const updates: Record<string, unknown> = {}
+      if (name !== undefined) updates.name = name.trim()
+      if (details !== undefined) updates.details = details?.trim() || null
+      if (category !== undefined) updates.category = category
+      if (quantity !== undefined) updates.quantity = quantity
+      if (unit !== undefined) updates.unit = unit
+      if (Object.keys(updates).length === 0) throw new Error('No fields to update')
+
+      const { error } = await admin
+        .from('pantry_items')
+        .update(updates)
+        .eq('id', itemId)
+        .eq('household_id', householdId)
+      if (error) throw new Error('Could not update pantry item')
+
+      return { content: [{ type: 'text', text: 'Updated' }] }
     },
   )
 }

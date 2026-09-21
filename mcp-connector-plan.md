@@ -81,8 +81,10 @@ speaking the MCP Streamable HTTP protocol instead of a one-shot POST.
 |---|---|
 | `get_shopping_list` | `listShoppingItems` |
 | `add_shopping_item` | `addShoppingItem` |
+| `update_shopping_item` | edit name/details/category/quantity/unit on an existing pending item |
 | `mark_item_purchased` | `markPurchased` |
 | `get_pantry` | `listPantryItems` |
+| `update_pantry_item` | edit name/details/category/quantity/unit on an existing pantry item |
 | `consume_pantry_item` | `consumeItem` |
 | `suggest_meals` | proxies to `suggest-meals` |
 

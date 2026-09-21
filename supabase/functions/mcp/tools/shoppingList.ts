@@ -1,7 +1,7 @@
 import type { McpServer } from '@modelcontextprotocol/server'
 import * as z from 'zod/v4'
 import { admin } from '../auth.ts'
-import { isSameIngredient, mergeQuantity, mergeDetails, UNITS, type Unit } from '../domain.ts'
+import { isSameIngredient, mergeQuantity, mergeDetails, UNITS, CATEGORIES, type Unit } from '../domain.ts'
 
 export function registerShoppingListTools(server: McpServer, householdId: string) {
   server.registerTool(
@@ -62,6 +62,40 @@ export function registerShoppingListTools(server: McpServer, householdId: string
       }
 
       return { content: [{ type: 'text', text: 'Added' }] }
+    },
+  )
+
+  server.registerTool(
+    'update_shopping_item',
+    {
+      description:
+        'Edit fields on an existing shopping-list item. Only the fields provided are changed; pass category as null to clear it.',
+      inputSchema: z.object({
+        itemId: z.string().uuid(),
+        name: z.string().min(1).optional(),
+        details: z.string().nullable().optional(),
+        category: z.enum(CATEGORIES).nullable().optional(),
+        quantity: z.number().positive().optional(),
+        unit: z.enum(UNITS).optional(),
+      }),
+    },
+    async ({ itemId, name, details, category, quantity, unit }) => {
+      const updates: Record<string, unknown> = {}
+      if (name !== undefined) updates.name = name.trim()
+      if (details !== undefined) updates.details = details?.trim() || null
+      if (category !== undefined) updates.category = category
+      if (quantity !== undefined) updates.quantity = quantity
+      if (unit !== undefined) updates.unit = unit
+      if (Object.keys(updates).length === 0) throw new Error('No fields to update')
+
+      const { error } = await admin
+        .from('shopping_items')
+        .update(updates)
+        .eq('id', itemId)
+        .eq('household_id', householdId)
+      if (error) throw new Error('Could not update shopping item')
+
+      return { content: [{ type: 'text', text: 'Updated' }] }
     },
   )
 }
