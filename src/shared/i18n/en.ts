@@ -17,7 +17,7 @@ export const en = {
   unit_kg: 'kg',
   unit_ml: 'ml',
   unit_l: 'L',
-  addDirectlyToPantry: 'Already have it in the pantry',
+  addDirectlyToPantry: 'Add to pantry',
   add: 'Add',
   loading: 'Loading…',
   nothingOnList: 'Nothing on the list yet.',
