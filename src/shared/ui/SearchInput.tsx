@@ -24,10 +24,12 @@ export function SearchInput({
   value,
   onChange,
   placeholder,
+  suggestions,
 }: {
   value: string
   onChange: (value: string) => void
   placeholder: string
+  suggestions?: string[]
 }) {
   return (
     <div className="sticky top-2 z-10 -mx-6 bg-surface/5 px-6">
@@ -38,10 +40,18 @@ export function SearchInput({
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
           autoComplete="off"
+          list={suggestions ? 'search-suggestions' : undefined}
           className="w-full py-3 ps-8 pe-3"
         />
         <SearchIcon className="pointer-events-none absolute inset-y-0 start-2.5 my-auto text-text-subtle" />
       </div>
+      {suggestions && (
+        <datalist id="search-suggestions">
+          {suggestions.map((s) => (
+            <option key={s} value={s} />
+          ))}
+        </datalist>
+      )}
     </div>
   )
 }

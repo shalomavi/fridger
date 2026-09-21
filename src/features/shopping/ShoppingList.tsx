@@ -11,6 +11,7 @@ import { resolveCategoryOrder, type Category } from '@/shared/categories'
 import { groupByCategory } from '@/domain/groupByCategory'
 import { filterByName } from '@/domain/filterByName'
 import { purchaseSuggestions } from '@/domain/purchaseSuggestions'
+import { itemNameSuggestions } from '@/domain/itemNameSuggestions'
 import { ScrollToTopButton } from '@/shared/ui/ScrollToTopButton'
 
 /** Splits a status group into its category sections, in the household's
@@ -57,6 +58,7 @@ export function ShoppingList({ householdId }: { householdId: string }) {
   const pending = matched.filter((i) => i.status === 'pending')
   const purchased = matched.filter((i) => i.status === 'purchased')
   const suggestions = purchaseSuggestions(items ?? [])
+  const searchSuggestions = itemNameSuggestions(items ?? [])
 
   function row(item: ShoppingItem) {
     return (
@@ -85,7 +87,12 @@ export function ShoppingList({ householdId }: { householdId: string }) {
       />
 
       {!isLoading && items && items.length > 0 && (
-        <SearchInput value={query} onChange={setQuery} placeholder={t('searchPlaceholder')} />
+        <SearchInput
+          value={query}
+          onChange={setQuery}
+          placeholder={t('searchPlaceholder')}
+          suggestions={searchSuggestions}
+        />
       )}
 
       {isLoading && <p className="text-text-subtle">{t('loading')}</p>}

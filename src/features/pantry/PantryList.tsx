@@ -8,6 +8,7 @@ import { CategoryHeading } from '@/shared/ui/CategoryHeading'
 import { resolveCategoryOrder } from '@/shared/categories'
 import { groupByCategory } from '@/domain/groupByCategory'
 import { filterByName } from '@/domain/filterByName'
+import { itemNameSuggestions } from '@/domain/itemNameSuggestions'
 import { collectPantryAlerts } from '@/domain/alerts'
 import { AlertBanner } from '@/shared/alerts/AlertBanner'
 import { ScrollToTopButton } from '@/shared/ui/ScrollToTopButton'
@@ -26,7 +27,12 @@ export function PantryList({ householdId }: { householdId: string }) {
   return (
     <div className="space-y-6">
       {!isLoading && items && items.length > 0 && (
-        <SearchInput value={query} onChange={setQuery} placeholder={t('searchPlaceholder')} />
+        <SearchInput
+          value={query}
+          onChange={setQuery}
+          placeholder={t('searchPlaceholder')}
+          suggestions={itemNameSuggestions(items)}
+        />
       )}
 
       {isLoading && <p className="text-text-subtle">{t('loading')}</p>}
