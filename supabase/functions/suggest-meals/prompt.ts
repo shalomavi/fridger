@@ -141,7 +141,12 @@ For each meal, give:
   - unit: one of "count" (a whole item with no natural unit, e.g. an egg or an onion), "g", "kg", "ml", or "l" —
     pick whichever naturally fits (e.g. quantity 500, unit "g" for half a kilo of cheese; quantity 2, unit
     "count" for two eggs)
-- missing: ingredients needed that aren't in the pantry${mode === 'pantry' ? ' (can be empty)' : ' (expect most or all of a meal\'s ingredients here — that\'s normal for this mode)'}. For each, give:
+- missing: ingredients needed that aren't in the pantry${mode === 'pantry' ? ' (can be empty)' : ' (expect most or all of a meal\'s ingredients here — that\'s normal for this mode)'}.
+  Before listing anything here, re-read the pantry list above and check for it, including basic staples that are
+  easy to assume are missing without checking — salt, pepper, oil, sugar, and the like. Also check for near-exact
+  matches (e.g. "מלח" already covers a recipe that just needs plain salt — don't list it again just because the
+  pantry also separately has "מלח גס"/coarse salt). Only list something here if it genuinely isn't covered by any
+  pantry entry. For each, give:
   - name: the ingredient's name, in ${LANGUAGE_NAME[lang]}
   - quantity: a number, how much of it the recipe needs
   - unit: one of "count", "g", "kg", "ml", or "l" — same rule as "uses"' unit above
