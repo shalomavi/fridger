@@ -1,9 +1,10 @@
-/** Same circular-checkmark look as ShoppingRow's toggle, at a smaller size
- * (h-4 vs h-5) since this is a secondary option on AddItemInput, not a
- * row-level action. A real checkbox input, visually hidden, drives it via
- * peer-checked — keeps native keyboard/screen-reader semantics instead of a
- * div faking a checkbox. Split out of AddItemInput to keep that file under
- * the size limit. */
+/** Same checkmark-toggle look as ShoppingRow's, but a small rounded square
+ * (rounded-md) instead of a full circle, at a smaller size (h-4 vs h-5)
+ * since this is a secondary option on AddItemInput, not a row-level action.
+ * A real checkbox input, visually hidden, drives it via peer-checked — keeps
+ * native keyboard/screen-reader semantics instead of a div faking a
+ * checkbox. Split out of AddItemInput to keep that file under the size
+ * limit. */
 export function AddToPantryCheckbox({
   checked,
   onChange,
@@ -22,7 +23,7 @@ export function AddToPantryCheckbox({
           onChange={(e) => onChange(e.target.checked)}
           className="peer absolute inset-0 h-4 w-4 cursor-pointer opacity-0"
         />
-        <span className="pointer-events-none absolute inset-0 rounded-full border-2 border-text-subtle backdrop-blur-md backdrop-saturate-150 transition-colors duration-300 peer-checked:border-primary peer-checked:bg-primary/30" />
+        <span className="pointer-events-none absolute inset-0 rounded-md border-2 border-text-subtle backdrop-blur-md backdrop-saturate-150 transition-colors duration-300 peer-checked:border-primary peer-checked:bg-primary/30" />
         <svg
           width="9"
           height="9"
