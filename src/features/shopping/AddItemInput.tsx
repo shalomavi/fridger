@@ -123,12 +123,12 @@ export function AddItemInput({
         >
           <PlusIcon />
         </Button>
-        <AddToPantryCheckbox
-          checked={addToPantry}
-          onChange={setAddToPantry}
-          label={t('addDirectlyToPantry')}
-        />
       </div>
+      <AddToPantryCheckbox
+        checked={addToPantry}
+        onChange={setAddToPantry}
+        label={t('addDirectlyToPantry')}
+      />
     </form>
   )
 }
