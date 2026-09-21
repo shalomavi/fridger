@@ -6,6 +6,7 @@ import { useLanguage } from '@/features/household/useLanguage'
 import { HouseholdSetup } from '@/features/household/HouseholdSetup'
 import { LanguageToggle } from '@/features/household/LanguageToggle'
 import { ThemeToggle } from '@/shared/ui/ThemeToggle'
+import { AppLoader } from '@/shared/ui/AppLoader'
 import { ShoppingCartIcon, PantryIcon, MealsIcon, SettingsIcon } from '@/shared/ui/TabIcons'
 import { elevationShadow, inactiveElevationShadow } from '@/shared/ui/elevation'
 import { titleTextClass, titleGlow } from '@/shared/ui/titleGlow'
@@ -84,7 +85,7 @@ function HomeScreen({ email }: { email: string | undefined }) {
   const { data: household, isLoading } = useHousehold()
 
   if (isLoading) {
-    return <div className="min-h-dvh bg-app" />
+    return <AppLoader />
   }
 
   if (!household) {
@@ -113,7 +114,7 @@ export function AppRoutes() {
   const { session, loading } = useSession()
 
   if (loading) {
-    return <div className="min-h-dvh bg-app" />
+    return <AppLoader />
   }
 
   if (!session) {
