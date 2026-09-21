@@ -24,7 +24,7 @@ export function AddToPantryCheckbox({
           onChange={(e) => onChange(e.target.checked)}
           className="peer absolute inset-0 h-4 w-4 cursor-pointer opacity-0"
         />
-        <span className="pointer-events-none absolute inset-0 rounded-full border-2 border-text-subtle backdrop-blur-md transition-colors duration-300 peer-checked:border-primary peer-checked:bg-primary/15" />
+        <span className="pointer-events-none absolute inset-0 rounded-full border-2 border-text-subtle backdrop-blur-md backdrop-saturate-150 transition-colors duration-300 peer-checked:border-primary peer-checked:bg-primary/30" />
         <svg
           width="9"
           height="9"
