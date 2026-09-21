@@ -1,5 +1,3 @@
-import { PantryIcon } from '@/shared/ui/FormIcons'
-
 /** Same circular-checkmark look as ShoppingRow's toggle, at a smaller size
  * (h-4 vs h-5) since this is a secondary option on AddItemInput, not a
  * row-level action. A real checkbox input, visually hidden, drives it via
@@ -40,7 +38,6 @@ export function AddToPantryCheckbox({
           <path d="M20 6 9 17l-5-5" />
         </svg>
       </span>
-      <PantryIcon className="text-text-subtle" />
       {label}
     </label>
   )
