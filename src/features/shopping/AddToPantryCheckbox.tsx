@@ -14,7 +14,7 @@ export function AddToPantryCheckbox({
   label: string
 }) {
   return (
-    <label className="flex items-center gap-2 text-sm text-text-muted">
+    <label className="flex flex-none items-center gap-2 whitespace-nowrap text-sm text-text-muted">
       <span className="relative flex h-4 w-4 flex-none items-center justify-center">
         <input
           type="checkbox"

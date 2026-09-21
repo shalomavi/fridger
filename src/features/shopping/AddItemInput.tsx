@@ -105,13 +105,7 @@ export function AddItemInput({
           <NotesIcon className="pointer-events-none absolute inset-y-0 inset-s-2.5 my-auto text-text-subtle" />
         </div>
       </div>
-      <AddToPantryCheckbox
-        checked={addToPantry}
-        onChange={setAddToPantry}
-        label={t('addDirectlyToPantry')}
-      />
-
-      <div className="flex gap-2">
+      <div className="flex items-center gap-2">
         <Select
           value={category}
           onChange={(v) => setCategory(v as Category | '')}
@@ -120,6 +114,11 @@ export function AddItemInput({
           ariaLabel={t('categoryPlaceholder')}
           leadingIcon={TagIcon}
           className="flex-1"
+        />
+        <AddToPantryCheckbox
+          checked={addToPantry}
+          onChange={setAddToPantry}
+          label={t('addDirectlyToPantry')}
         />
         <Button
           type="submit"
