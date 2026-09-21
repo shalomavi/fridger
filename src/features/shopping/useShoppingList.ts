@@ -21,7 +21,8 @@ import { undoAction } from '@/shared/query/undoAction'
 import { itemMovedToastContent } from '@/shared/alerts/itemMovedToast'
 import { itemDeletedToastContent } from '@/shared/alerts/itemDeletedToast'
 
-const queryKey = (householdId: string) => ['shopping-items', householdId] as const
+export const shoppingQueryKey = (householdId: string) => ['shopping-items', householdId] as const
+const queryKey = shoppingQueryKey
 
 export function useShoppingList(householdId: string) {
   const queryClient = useQueryClient()

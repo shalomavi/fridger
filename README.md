@@ -72,3 +72,14 @@ Migration history table is in sync with the live database as of
 2026-09-17 — all of `0001`-`0020` show as applied via `npx supabase
 migration list`. `npm run build`, `npx vitest run`, and `npm run lint` all
 pass.
+
+**In progress (2026-09-21):** meal suggestions gained a "From pantry" / "Any
+meal" mode toggle — pantry mode keeps the original "use mostly what's
+listed" behavior, any-meal mode drops that constraint — and each suggestion's
+missing ingredients now carry quantity/unit/category (LLM-assigned) with an
+"Add to shopping list" button that skips anything already in the pantry or
+pending shopping list. Code is written and domain logic unit-tested, but not
+yet build-verified (`npm run build` / `npx vitest run` / `npm run lint`),
+not manually tested in the browser, and not deployed — the edge function
+changes need `npx supabase functions deploy suggest-meals` before they're
+live.

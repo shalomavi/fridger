@@ -2,7 +2,7 @@
 // The household's pantry contents are the only user data sent; no names,
 // emails, or user ids ever go into the prompt.
 
-import type { Language, MealType } from './schema.ts'
+import { CATEGORIES, type Language, type MealType, type SuggestionMode } from './schema.ts'
 
 const LANGUAGE_NAME: Record<Language, string> = { en: 'English', he: 'Hebrew' }
 
@@ -46,16 +46,39 @@ function isDietType(type: MealType): type is DietType {
   return type in DIET_INSTRUCTIONS
 }
 
-export const SYSTEM_INSTRUCTION = `You suggest simple weeknight home-cook meals for a 2-person household, based on
+// One system instruction per suggestion mode — 'pantry' anchors on what's on
+// hand and caps how much can be missing; 'any' drops that constraint so the
+// household can browse meals regardless of pantry contents, buying most or
+// all of what a meal needs. Both still report pantry matches under "uses"
+// and everything else under "missing" — see buildPrompt below — so the same
+// downstream schema and "add missing to shopping list" flow serve either.
+const SYSTEM_INSTRUCTION_BY_MODE: Record<SuggestionMode, string> = {
+  pantry: `You suggest simple weeknight home-cook meals for a 2-person household, based on
 what's in their shared pantry.
 Reply only with meals realistic to cook with basic kitchen equipment, using mostly what's listed.
 It's fine to suggest 1-2 small extra ingredients that aren't listed, but call them out as missing.
 Prefer meals that use more of the listed pantry over ones that use only one or two items and leave the rest as
-missing — reducing pantry waste is the point of this feature.
+missing — reducing pantry waste is the point of this mode.
 Make the 3 suggested meals genuinely different from each other — vary the main ingredient, cuisine, or dish type,
 not just the seasoning on the same base dish.
 Keep steps short and practical — a few sentences, not a full recipe. The pantry may include
-Hebrew and English ingredient names in the same list; that's expected, treat them as one list.`
+Hebrew and English ingredient names in the same list; that's expected, treat them as one list.`,
+  any: `You suggest simple weeknight home-cook meals for a 2-person household. Choose whatever meals genuinely fit
+the household's preferences and meal-type requests below — do not limit yourself to what's in their pantry, and
+do not favor a meal just because it happens to use more of it. It's fine, and expected, for most or all of a
+meal's ingredients to need buying.
+Reply only with meals realistic to cook with basic kitchen equipment.
+Still check the pantry list below: if an ingredient a meal needs matches something already there, report it under
+"uses" instead of "missing" so the household isn't told to buy something they already have.
+Make the 3 suggested meals genuinely different from each other — vary the main ingredient, cuisine, or dish type,
+not just the seasoning on the same base dish.
+Keep steps short and practical — a few sentences, not a full recipe. The pantry may include
+Hebrew and English ingredient names in the same list; that's expected, treat them as one list.`,
+}
+
+export function systemInstructionFor(mode: SuggestionMode): string {
+  return SYSTEM_INSTRUCTION_BY_MODE[mode]
+}
 
 export function buildPrompt(
   pantryNames: string[],
@@ -64,6 +87,7 @@ export function buildPrompt(
   preferences: string | null,
   expiringSoonNames: string[],
   mealTypes: MealType[],
+  mode: SuggestionMode,
 ): string {
   const pantryList = pantryNames.length > 0 ? pantryNames.join(', ') : '(nothing logged yet)'
 
@@ -117,6 +141,12 @@ For each meal, give:
   - unit: one of "count" (a whole item with no natural unit, e.g. an egg or an onion), "g", "kg", "ml", or "l" —
     pick whichever naturally fits (e.g. quantity 500, unit "g" for half a kilo of cheese; quantity 2, unit
     "count" for two eggs)
-- missing: any extra ingredients needed that aren't in the pantry (can be empty)
+- missing: ingredients needed that aren't in the pantry${mode === 'pantry' ? ' (can be empty)' : ' (expect most or all of a meal\'s ingredients here — that\'s normal for this mode)'}. For each, give:
+  - name: the ingredient's name, in ${LANGUAGE_NAME[lang]}
+  - quantity: a number, how much of it the recipe needs
+  - unit: one of "count", "g", "kg", "ml", or "l" — same rule as "uses"' unit above
+  - category: the single best fit from this fixed list — ${CATEGORIES.join(', ')} — for where it belongs on a
+    grocery shopping list (e.g. cheese is "dairy", a bell pepper is "produce", raw chicken is "meat", rice or
+    canned goods are "pantry")
 - steps: 3-5 short steps to make it, including rough quantities sized for 2 people${unitsNote}`
 }

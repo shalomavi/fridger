@@ -42,7 +42,7 @@ Deno.serve(async (req) => {
   } catch {
     return json({ error: 'Expected JSON body with householdId' }, 400)
   }
-  const { householdId, regenerate, lang, preferences, mealTypes } = body
+  const { householdId, regenerate, lang, preferences, mealTypes, mode } = body
 
   // Identify the caller from their own JWT — this is a real auth check,
   // not just trusting whatever householdId the client sends.
@@ -91,7 +91,7 @@ Deno.serve(async (req) => {
   const expiringSoonNames = (pantryRows ?? [])
     .filter((r) => isExpiringSoon(r.expires_at as string | null))
     .map((r) => r.name as string)
-  const hash = await pantryHash(pantryNames, lang, preferences, mealTypes)
+  const hash = await pantryHash(pantryNames, lang, preferences, mealTypes, mode)
 
   if (!regenerate) {
     const { data: cached } = await admin
@@ -127,6 +127,7 @@ Deno.serve(async (req) => {
       preferences,
       expiringSoonNames,
       mealTypes,
+      mode,
     )
     const parsed = SuggestionsSchema.parse(raw)
     payload = { meals: parsed.meals, fallback: false }

@@ -1,9 +1,13 @@
-/** Manual category tag for a shopping/pantry item — matches the check
- * constraint in supabase/migrations/0012_item_categories.sql. Assignment is
- * manual only (the user picks one), not guessed from the name: this app
- * takes mixed Hebrew/English entry and CLAUDE.md rules out building a name
- * lookup table (see "no ingredient taxonomy"), which is exactly what
- * auto-guessing would need. */
+/** Category tag for a shopping/pantry item — matches the check constraint in
+ * supabase/migrations/0012_item_categories.sql. Assignment is manual by
+ * default (the user picks one), not guessed from the name: this app takes
+ * mixed Hebrew/English entry and CLAUDE.md rules out building a name lookup
+ * table (see "no ingredient taxonomy"), which is exactly what auto-guessing
+ * would need. The one exception is supabase/functions/suggest-meals: there
+ * the LLM assigns a category to each "missing" ingredient it names, as part
+ * of the same structured response as its unit/quantity — that's the model
+ * reasoning about an ingredient it just produced, not a name-matching
+ * lookup, so it doesn't reintroduce the taxonomy this rule guards against. */
 export const CATEGORIES = [
   'dairy',
   'produce',

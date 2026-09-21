@@ -1,5 +1,5 @@
-import { SYSTEM_INSTRUCTION, buildPrompt } from './prompt.ts'
-import type { Language, MealType } from './schema.ts'
+import { systemInstructionFor, buildPrompt } from './prompt.ts'
+import type { Language, MealType, SuggestionMode } from './schema.ts'
 
 const MODEL = 'gemini-2.5-flash'
 
@@ -24,7 +24,34 @@ const RESPONSE_SCHEMA = {
               required: ['name', 'quantity', 'unit'],
             },
           },
-          missing: { type: 'array', items: { type: 'string' } },
+          missing: {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                name: { type: 'string' },
+                quantity: { type: 'number' },
+                unit: { type: 'string', enum: ['count', 'g', 'kg', 'ml', 'l'] },
+                category: {
+                  type: 'string',
+                  enum: [
+                    'dairy',
+                    'produce',
+                    'meat',
+                    'bakery',
+                    'pantry',
+                    'frozen',
+                    'beverages',
+                    'snacks',
+                    'household',
+                    'hygiene',
+                    'other',
+                  ],
+                },
+              },
+              required: ['name', 'quantity', 'unit', 'category'],
+            },
+          },
           steps: { type: 'array', items: { type: 'string' } },
         },
         required: ['name', 'uses', 'missing', 'steps'],
@@ -48,6 +75,7 @@ export async function callGemini(
   preferences: string | null,
   expiringSoonNames: string[],
   mealTypes: MealType[],
+  mode: SuggestionMode,
 ): Promise<unknown> {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`
 
@@ -55,7 +83,7 @@ export async function callGemini(
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
     body: JSON.stringify({
-      systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
+      systemInstruction: { parts: [{ text: systemInstructionFor(mode) }] },
       contents: [
         {
           parts: [
@@ -67,6 +95,7 @@ export async function callGemini(
                 preferences,
                 expiringSoonNames,
                 mealTypes,
+                mode,
               ),
             },
           ],

@@ -1,4 +1,6 @@
-import type { Language, Unit } from './schema.ts'
+import type { Category, Language, Unit } from './schema.ts'
+
+type MissingIngredient = { name: string; quantity: number; unit: Unit; category: Category }
 
 /**
  * Shown when the LLM call fails or returns something that doesn't parse —
@@ -9,13 +11,17 @@ import type { Language, Unit } from './schema.ts'
  */
 export const FALLBACK_MEALS: Record<
   Language,
-  { name: string; uses: { name: string; quantity: number; unit: Unit }[]; missing: string[]; steps: string[] }[]
+  { name: string; uses: { name: string; quantity: number; unit: Unit }[]; missing: MissingIngredient[]; steps: string[] }[]
 > = {
   en: [
     {
       name: 'Pasta aglio e olio',
       uses: [],
-      missing: ['pasta', 'olive oil', 'garlic'],
+      missing: [
+        { name: 'pasta', quantity: 1, unit: 'count', category: 'pantry' },
+        { name: 'olive oil', quantity: 1, unit: 'count', category: 'pantry' },
+        { name: 'garlic', quantity: 1, unit: 'count', category: 'produce' },
+      ],
       steps: [
         'Boil pasta until al dente.',
         'Gently fry sliced garlic in olive oil until golden.',
@@ -25,7 +31,11 @@ export const FALLBACK_MEALS: Record<
     {
       name: 'Simple omelette',
       uses: [],
-      missing: ['eggs', 'salt', 'oil or butter'],
+      missing: [
+        { name: 'eggs', quantity: 3, unit: 'count', category: 'dairy' },
+        { name: 'salt', quantity: 1, unit: 'count', category: 'pantry' },
+        { name: 'oil or butter', quantity: 1, unit: 'count', category: 'pantry' },
+      ],
       steps: [
         'Beat eggs with a pinch of salt.',
         'Cook in a hot pan with oil or butter, folding once set.',
@@ -34,7 +44,11 @@ export const FALLBACK_MEALS: Record<
     {
       name: 'Grilled cheese sandwich',
       uses: [],
-      missing: ['bread', 'cheese', 'butter'],
+      missing: [
+        { name: 'bread', quantity: 1, unit: 'count', category: 'bakery' },
+        { name: 'cheese', quantity: 1, unit: 'count', category: 'dairy' },
+        { name: 'butter', quantity: 1, unit: 'count', category: 'dairy' },
+      ],
       steps: [
         'Butter two slices of bread.',
         'Add cheese between them.',
@@ -46,19 +60,31 @@ export const FALLBACK_MEALS: Record<
     {
       name: 'פסטה בשמן זית ושום',
       uses: [],
-      missing: ['פסטה', 'שמן זית', 'שום'],
+      missing: [
+        { name: 'פסטה', quantity: 1, unit: 'count', category: 'pantry' },
+        { name: 'שמן זית', quantity: 1, unit: 'count', category: 'pantry' },
+        { name: 'שום', quantity: 1, unit: 'count', category: 'produce' },
+      ],
       steps: ['מבשלים פסטה עד שהיא אל דנטה.', 'מטגנים קלות שום פרוס בשמן זית עד להזהבה.', 'מערבבים את הפסטה עם השום והשמן, מתבלים ומגישים.'],
     },
     {
       name: 'חביתה פשוטה',
       uses: [],
-      missing: ['ביצים', 'מלח', 'שמן או חמאה'],
+      missing: [
+        { name: 'ביצים', quantity: 3, unit: 'count', category: 'dairy' },
+        { name: 'מלח', quantity: 1, unit: 'count', category: 'pantry' },
+        { name: 'שמן או חמאה', quantity: 1, unit: 'count', category: 'pantry' },
+      ],
       steps: ['טורפים ביצים עם קורט מלח.', 'מבשלים במחבת חמה עם שמן או חמאה, מקפלים כשמוצק.'],
     },
     {
       name: 'טוסט גבינה',
       uses: [],
-      missing: ['לחם', 'גבינה', 'חמאה'],
+      missing: [
+        { name: 'לחם', quantity: 1, unit: 'count', category: 'bakery' },
+        { name: 'גבינה', quantity: 1, unit: 'count', category: 'dairy' },
+        { name: 'חמאה', quantity: 1, unit: 'count', category: 'dairy' },
+      ],
       steps: ['מורחים חמאה על שתי פרוסות לחם.', 'מוסיפים גבינה ביניהן.', 'מטגנים משני הצדדים עד להזהבה והמסה.'],
     },
   ],

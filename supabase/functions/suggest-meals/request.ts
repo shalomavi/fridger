@@ -1,4 +1,4 @@
-import { isMealType, type Language, type MealType } from './schema.ts'
+import { isMealType, isSuggestionMode, type Language, type MealType, type SuggestionMode } from './schema.ts'
 
 export type RequestBody = {
   householdId: string
@@ -6,6 +6,7 @@ export type RequestBody = {
   lang: Language
   preferences: string | null
   mealTypes: MealType[]
+  mode: SuggestionMode
 }
 
 /** Parses and validates the POST body — throws (caller returns 400) if
@@ -21,5 +22,6 @@ export async function parseRequestBody(req: Request): Promise<RequestBody> {
     lang: body.lang === 'he' || body.lang === 'en' ? body.lang : 'en',
     preferences: typeof body.preferences === 'string' ? body.preferences : null,
     mealTypes: Array.isArray(body.mealTypes) ? body.mealTypes.filter(isMealType) : [],
+    mode: isSuggestionMode(body.mode) ? body.mode : 'pantry',
   }
 }

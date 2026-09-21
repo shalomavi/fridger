@@ -9,10 +9,14 @@ export function SuggestionCard({
   meal,
   onCookedThis,
   cooking,
+  onAddMissing,
+  addingMissing,
 }: {
   meal: Meal
   onCookedThis: () => void
   cooking: boolean
+  onAddMissing: () => void
+  addingMissing: boolean
 }) {
   const { t, lang } = useLanguage()
 
@@ -31,7 +35,9 @@ export function SuggestionCard({
       {meal.missing.length > 0 && (
         <p className="text-sm text-text-muted">
           <span className="text-text-subtle">{t('alsoNeed')} </span>
-          {meal.missing.join(', ')}
+          {meal.missing
+            .map((m) => `${m.name} ${formatQuantity(m.quantity, m.unit, t(`unit_${m.unit}`))}`)
+            .join(', ')}
         </p>
       )}
 
@@ -53,6 +59,17 @@ export function SuggestionCard({
           {t('shareMeal')}
         </Button>
       </div>
+
+      {meal.missing.length > 0 && (
+        <Button
+          variant="surface"
+          onClick={onAddMissing}
+          disabled={addingMissing}
+          className="w-full py-2 text-sm"
+        >
+          {addingMissing ? '…' : t('addMissingToShoppingList')}
+        </Button>
+      )}
     </Surface>
   )
 }

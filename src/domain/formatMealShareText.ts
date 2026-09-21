@@ -10,7 +10,7 @@ import { formatQuantity, type Unit } from './units'
 export type ShareableMeal = {
   name: string
   uses: { name: string; quantity: number; unit: Unit }[]
-  missing: string[]
+  missing: { name: string; quantity: number; unit: Unit }[]
   steps: string[]
 }
 
@@ -27,7 +27,9 @@ export function formatMealShareText(
     )
   }
   if (meal.missing.length > 0) {
-    lines.push(`${labels.alsoNeed} ${meal.missing.join(', ')}`)
+    lines.push(
+      `${labels.alsoNeed} ${meal.missing.map((m) => `${m.name} ${formatQuantity(m.quantity, m.unit, unitLabels[m.unit])}`).join(', ')}`,
+    )
   }
   if (meal.uses.length > 0 || meal.missing.length > 0) {
     lines.push('')
