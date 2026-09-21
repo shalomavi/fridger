@@ -12,8 +12,10 @@ import { UNITS, type Unit } from '@/domain/units'
  * details is one free-text field, optional, for anything quantity+unit
  * don't capture; category is an optional manual tag (shared/categories.ts). */
 export function AddItemInput({
+  suggestions,
   onAdd,
 }: {
+  suggestions: string[]
   onAdd: (
     name: string,
     details: string | undefined,
@@ -49,8 +51,14 @@ export function AddItemInput({
         onChange={(e) => setName(e.target.value)}
         placeholder={t('addItemPlaceholder')}
         autoComplete="off"
+        list="shopping-item-suggestions"
         className="w-full px-4 py-3"
       />
+      <datalist id="shopping-item-suggestions">
+        {suggestions.map((s) => (
+          <option key={s} value={s} />
+        ))}
+      </datalist>
       <div className="flex gap-2">
         <div className="relative w-18 min-w-0 flex-none">
           <Input
