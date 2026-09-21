@@ -21,6 +21,7 @@ export const he: Record<keyof typeof en, string> = {
   unit_kg: 'ק"ג',
   unit_ml: 'מ"ל',
   unit_l: 'ליטר',
+  addDirectlyToPantry: 'כבר יש לי — הוספה ישירה למזווה',
   add: 'הוספה',
   loading: 'טוען…',
   nothingOnList: 'הרשימה עדיין ריקה.',

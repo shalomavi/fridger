@@ -11,6 +11,7 @@ import {
 } from './api'
 import { markPurchased, undoPurchase } from './purchase'
 import { useAddShoppingItem } from './useAddShoppingItem'
+import { useAddAndPurchase } from './useAddAndPurchase'
 import { pantryQueryKey } from '@/features/pantry/usePantry'
 import type { Category } from '@/shared/categories'
 import type { Unit } from '@/domain/units'
@@ -42,6 +43,7 @@ export function useShoppingList(householdId: string) {
   }
 
   const addItem = useAddShoppingItem(householdId, key, snapshot)
+  const addAndPurchase = useAddAndPurchase(householdId, key)
 
   const pendingToggles = useRef(0)
   const toggleItem = useMutation({
@@ -134,5 +136,5 @@ export function useShoppingList(householdId: string) {
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 
-  return { ...query, addItem, toggleItem, updateDetails, updateQuantity, updateCategory, deleteItem }
+  return { ...query, addItem, addAndPurchase, toggleItem, updateDetails, updateQuantity, updateCategory, deleteItem }
 }

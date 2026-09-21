@@ -3,7 +3,7 @@ import { useLanguage } from '@/features/household/useLanguage'
 import { Button } from '@/shared/ui/Button'
 import { Input } from '@/shared/ui/Input'
 import { Select } from '@/shared/ui/Select'
-import { PlusIcon, HashIcon, NotesIcon, RulerIcon, TagIcon } from '@/shared/ui/FormIcons'
+import { PlusIcon, HashIcon, NotesIcon, RulerIcon, TagIcon, PantryIcon } from '@/shared/ui/FormIcons'
 import { CATEGORIES, type Category } from '@/shared/categories'
 import { UNITS, type Unit } from '@/domain/units'
 
@@ -22,6 +22,7 @@ export function AddItemInput({
     category: Category | null,
     quantity: number,
     unit: Unit,
+    addToPantry: boolean,
   ) => void
 }) {
   const { t } = useLanguage()
@@ -30,18 +31,20 @@ export function AddItemInput({
   const [unit, setUnit] = useState<Unit>('count')
   const [details, setDetails] = useState('')
   const [category, setCategory] = useState<Category | ''>('')
+  const [addToPantry, setAddToPantry] = useState(false)
 
   function onSubmit(e: FormEvent) {
     e.preventDefault()
     const trimmedName = name.trim()
     if (!trimmedName) return
     const parsedQuantity = Math.max(0.01, Number(quantity) || 1)
-    onAdd(trimmedName, details.trim() || undefined, category || null, parsedQuantity, unit)
+    onAdd(trimmedName, details.trim() || undefined, category || null, parsedQuantity, unit, addToPantry)
     setName('')
     setQuantity('1')
     setUnit('count')
     setDetails('')
     setCategory('')
+    setAddToPantry(false)
   }
 
   return (
@@ -92,6 +95,17 @@ export function AddItemInput({
           <NotesIcon className="pointer-events-none absolute inset-y-0 inset-s-2.5 my-auto text-text-subtle" />
         </div>
       </div>
+      <label className="flex items-center gap-2 text-sm text-text-muted">
+        <input
+          type="checkbox"
+          checked={addToPantry}
+          onChange={(e) => setAddToPantry(e.target.checked)}
+          className="accent-primary"
+        />
+        <PantryIcon className="text-text-subtle" />
+        {t('addDirectlyToPantry')}
+      </label>
+
       <div className="flex gap-2">
         <Select
           value={category}

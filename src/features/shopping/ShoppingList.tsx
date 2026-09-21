@@ -45,6 +45,7 @@ export function ShoppingList({ householdId }: { householdId: string }) {
     data: items,
     isLoading,
     addItem,
+    addAndPurchase,
     toggleItem,
     updateDetails,
     updateQuantity,
@@ -81,8 +82,8 @@ export function ShoppingList({ householdId }: { householdId: string }) {
     <div className="space-y-6">
       <AddItemInput
         suggestions={suggestions}
-        onAdd={(name, details, category, quantity, unit) =>
-          addItem.mutate({ name, details, category, quantity, unit })
+        onAdd={(name, details, category, quantity, unit, addToPantry) =>
+          (addToPantry ? addAndPurchase : addItem).mutate({ name, details, category, quantity, unit })
         }
       />
 
