@@ -4,6 +4,7 @@ import { Button } from '@/shared/ui/Button'
 import { Input } from '@/shared/ui/Input'
 import { Select } from '@/shared/ui/Select'
 import { PlusIcon, HashIcon, NotesIcon, RulerIcon, TagIcon, PantryIcon } from '@/shared/ui/FormIcons'
+import { SuggestionList } from '@/shared/ui/SuggestionList'
 import { CATEGORIES, type Category } from '@/shared/categories'
 import { UNITS, type Unit } from '@/domain/units'
 
@@ -32,6 +33,7 @@ export function AddItemInput({
   const [details, setDetails] = useState('')
   const [category, setCategory] = useState<Category | ''>('')
   const [addToPantry, setAddToPantry] = useState(false)
+  const [nameFocused, setNameFocused] = useState(false)
 
   function onSubmit(e: FormEvent) {
     e.preventDefault()
@@ -49,19 +51,26 @@ export function AddItemInput({
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-4">
-      <Input
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        placeholder={t('addItemPlaceholder')}
-        autoComplete="off"
-        list="shopping-item-suggestions"
-        className="w-full px-4 py-3"
-      />
-      <datalist id="shopping-item-suggestions">
-        {suggestions.map((s) => (
-          <option key={s} value={s} />
-        ))}
-      </datalist>
+      <div className="relative">
+        <Input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          onFocus={() => setNameFocused(true)}
+          onBlur={() => setNameFocused(false)}
+          placeholder={t('addItemPlaceholder')}
+          autoComplete="off"
+          className="w-full px-4 py-3"
+        />
+        <SuggestionList
+          suggestions={suggestions}
+          query={name}
+          visible={nameFocused}
+          onSelect={(s) => {
+            setName(s)
+            setNameFocused(false)
+          }}
+        />
+      </div>
       <div className="flex gap-2">
         <div className="relative w-18 min-w-0 flex-none">
           <Input

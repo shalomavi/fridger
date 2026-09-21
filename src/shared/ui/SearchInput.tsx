@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { SearchIcon } from '@/shared/ui/FormIcons'
 import { Input } from '@/shared/ui/Input'
+import { SuggestionList } from '@/shared/ui/SuggestionList'
 
 /** Plain text search box, styled to match AddItemInput's fields, with a
  * leading magnifying-glass icon in place of relying on the placeholder text
@@ -31,6 +33,7 @@ export function SearchInput({
   placeholder: string
   suggestions?: string[]
 }) {
+  const [focused, setFocused] = useState(false)
   return (
     <div className="sticky top-2 z-10 -mx-6 bg-surface/5 px-6">
       <div className="relative">
@@ -38,20 +41,25 @@ export function SearchInput({
           type="search"
           value={value}
           onChange={(e) => onChange(e.target.value)}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
           placeholder={placeholder}
           autoComplete="off"
-          list={suggestions ? 'search-suggestions' : undefined}
           className="w-full py-3 ps-8 pe-3"
         />
         <SearchIcon className="pointer-events-none absolute inset-y-0 start-2.5 my-auto text-text-subtle" />
+        {suggestions && (
+          <SuggestionList
+            suggestions={suggestions}
+            query={value}
+            visible={focused}
+            onSelect={(name) => {
+              onChange(name)
+              setFocused(false)
+            }}
+          />
+        )}
       </div>
-      {suggestions && (
-        <datalist id="search-suggestions">
-          {suggestions.map((s) => (
-            <option key={s} value={s} />
-          ))}
-        </datalist>
-      )}
     </div>
   )
 }
