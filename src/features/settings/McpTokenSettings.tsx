@@ -6,6 +6,7 @@ import { useLanguage } from '@/features/household/useLanguage'
 import { useConfirm } from '@/shared/alerts/ConfirmContext'
 import { useToast } from '@/shared/alerts/ToastContext'
 import { Surface } from '@/shared/ui/Surface'
+import { TrashIcon } from '@/shared/ui/FormIcons'
 
 /** Settings section for connecting an LLM app (Claude, v1) to this
  * household's data via a static bearer token — see mcp-connector-plan.md.
@@ -90,8 +91,12 @@ function TokenList({ tokens, onRevoke }: { tokens: McpToken[]; onRevoke: (id: st
       {active.map((token) => (
         <li key={token.id} className="flex items-center justify-between text-sm">
           <span>{token.label}</span>
-          <button onClick={() => handleRevoke(token.id)} className="text-xs text-red-500 underline">
-            {t('mcpRevoke')}
+          <button
+            onClick={() => handleRevoke(token.id)}
+            aria-label={t('mcpRevoke')}
+            className="flex-none p-1 text-danger transition-transform duration-300 active:scale-95"
+          >
+            <TrashIcon />
           </button>
         </li>
       ))}
