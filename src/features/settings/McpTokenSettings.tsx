@@ -19,7 +19,7 @@ const primaryFieldShadow =
 const primaryFieldFocusShadow =
   'focus:shadow-[inset_0_-2px_0_rgba(0,0,0,0.35),0_2px_5px_2px_rgba(0,0,0,0.3),0_10px_24px_6px_rgba(0,0,0,0.3),0_0_0_2px_var(--color-primary)]'
 const primaryFieldClass =
-  `rounded-lg bg-primary/85 text-white outline-none ${primaryFieldShadow} backdrop-blur-lg backdrop-saturate-150 ${primaryFieldFocusShadow}`
+  `rounded-lg bg-primary/85 brightness-90 text-white outline-none ${primaryFieldShadow} backdrop-blur-lg backdrop-saturate-150 ${primaryFieldFocusShadow}`
 
 /** Settings section for connecting an LLM app (Claude, v1) to this
  * household's data via a static bearer token — see mcp-connector-plan.md.
