@@ -7,8 +7,8 @@ import { useConfirm } from '@/shared/alerts/ConfirmContext'
 import { useToast } from '@/shared/alerts/ToastContext'
 import { Surface } from '@/shared/ui/Surface'
 import { Input } from '@/shared/ui/Input'
-import { Button } from '@/shared/ui/Button'
 import { TrashIcon } from '@/shared/ui/FormIcons'
+import { softFieldShadow } from '@/shared/ui/elevation'
 
 /** Settings section for connecting an LLM app (Claude, v1) to this
  * household's data via a static bearer token — see mcp-connector-plan.md.
@@ -36,13 +36,13 @@ export function McpTokenSettings() {
           placeholder={t('mcpTokenLabelPlaceholder')}
           className="h-12 flex-1 px-4"
         />
-        <Button
+        <button
           onClick={() => generate.mutate(label, { onSuccess: () => setLabel('') })}
           disabled={generate.isPending}
-          className="flex h-12 flex-none items-center justify-center px-3 text-sm"
+          className={`flex h-12 flex-none items-center justify-center rounded-lg bg-primary px-3 text-sm font-medium text-white outline-none transition-transform duration-300 active:scale-95 disabled:opacity-50 ${softFieldShadow}`}
         >
           {t('mcpGenerateToken')}
-        </Button>
+        </button>
       </div>
 
       <TokenList tokens={tokens.data ?? []} onRevoke={(id) => revoke.mutate(id)} />
