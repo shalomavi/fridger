@@ -12,7 +12,7 @@ import { TrashIcon } from '@/shared/ui/FormIcons'
 // Same shape as Input's softFieldShadow, opacity tuned down further for
 // this button's solid bg-primary fill.
 const darkButtonShadow =
-  'shadow-[inset_0_-2px_3px_0_rgba(0,0,0,0.15),0_2px_5px_2px_rgba(0,0,0,0.1),0_10px_24px_4px_rgba(0,0,0,0.1)]'
+  'shadow-[inset_0_-2px_5px_1px_rgba(0,0,0,0.4),0_4px_10px_4px_rgba(0,0,0,0.3),0_14px_32px_8px_rgba(0,0,0,0.35)]'
 
 /** Settings section for connecting an LLM app (Claude, v1) to this
  * household's data via a static bearer token — see mcp-connector-plan.md.
