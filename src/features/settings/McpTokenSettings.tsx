@@ -8,7 +8,15 @@ import { useToast } from '@/shared/alerts/ToastContext'
 import { Surface } from '@/shared/ui/Surface'
 import { Input } from '@/shared/ui/Input'
 import { TrashIcon } from '@/shared/ui/FormIcons'
-import { softFieldShadow } from '@/shared/ui/elevation'
+
+// Same shadow as Input's softFieldShadow, but with each layer's opacity
+// raised — against Input's near-white fill, softFieldShadow's black reads
+// clearly; against this button's solid bg-primary teal fill, the same
+// opacity blends into the fill instead of standing out, so the shadow needs
+// to be darker here to read as a distinct edge rather than melting into the
+// button's own color.
+const darkButtonShadow =
+  'shadow-[inset_0_-2px_0_rgba(0,0,0,0.5),0_2px_5px_rgba(0,0,0,0.35),0_10px_24px_rgba(0,0,0,0.4)]'
 
 /** Settings section for connecting an LLM app (Claude, v1) to this
  * household's data via a static bearer token — see mcp-connector-plan.md.
@@ -39,7 +47,7 @@ export function McpTokenSettings() {
         <button
           onClick={() => generate.mutate(label, { onSuccess: () => setLabel('') })}
           disabled={generate.isPending}
-          className={`flex h-12 flex-none items-center justify-center rounded-lg bg-primary px-3 text-sm font-medium text-white outline-none transition-transform duration-300 active:scale-95 disabled:opacity-50 ${softFieldShadow}`}
+          className={`flex h-12 flex-none items-center justify-center rounded-lg bg-primary px-3 text-sm font-medium text-white outline-none transition-transform duration-300 active:scale-95 disabled:opacity-50 ${darkButtonShadow}`}
         >
           {t('mcpGenerateToken')}
         </button>
