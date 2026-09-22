@@ -34,12 +34,12 @@ export function McpTokenSettings() {
           value={label}
           onChange={(e) => setLabel(e.target.value)}
           placeholder={t('mcpTokenLabelPlaceholder')}
-          className="flex-1 px-4 py-3"
+          className="h-12 flex-1 px-4"
         />
         <Button
           onClick={() => generate.mutate(label, { onSuccess: () => setLabel('') })}
           disabled={generate.isPending}
-          className="px-3 py-2 text-sm"
+          className="flex h-12 flex-none items-center justify-center px-3 text-sm"
         >
           {t('mcpGenerateToken')}
         </Button>
