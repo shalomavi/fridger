@@ -41,19 +41,14 @@ export function MealsScreen({ householdId }: { householdId: string }) {
     })
   }
 
-  function requestSuggestion(regenerate: boolean, requestMode: SuggestionMode = mode) {
+  function requestSuggestion(regenerate: boolean) {
     suggest.mutate({
       regenerate,
       lang,
       preferences: household?.preferences ?? null,
       mealTypes: household?.meal_types ?? [],
-      mode: requestMode,
+      mode,
     })
-  }
-
-  function onModeChange(next: SuggestionMode) {
-    setMode(next)
-    if (suggestion.data) requestSuggestion(false, next)
   }
 
   return (
@@ -62,7 +57,7 @@ export function MealsScreen({ householdId }: { householdId: string }) {
         {SUGGESTION_MODES.map((m) => (
           <button
             key={m}
-            onClick={() => onModeChange(m)}
+            onClick={() => setMode(m)}
             className={`flex-1 rounded-lg px-3 py-1.5 text-sm transition-transform duration-300 active:scale-95 ${
               mode === m
                 ? `${elevationShadow} bg-primary text-white`
