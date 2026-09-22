@@ -6,13 +6,8 @@ import { useLanguage } from '@/features/household/useLanguage'
 import { useConfirm } from '@/shared/alerts/ConfirmContext'
 import { useToast } from '@/shared/alerts/ToastContext'
 import { Surface } from '@/shared/ui/Surface'
-import { Input } from '@/shared/ui/Input'
+import { Input, fieldClass } from '@/shared/ui/Input'
 import { TrashIcon } from '@/shared/ui/FormIcons'
-
-// Same shape as Input's softFieldShadow, opacity tuned down further for
-// this button's solid bg-primary fill.
-const darkButtonShadow =
-  'shadow-[inset_0_-2px_5px_1px_rgba(0,0,0,0.4),0_4px_10px_4px_rgba(0,0,0,0.3),0_14px_32px_8px_rgba(0,0,0,0.35)]'
 
 /** Settings section for connecting an LLM app (Claude, v1) to this
  * household's data via a static bearer token — see mcp-connector-plan.md.
@@ -43,7 +38,7 @@ export function McpTokenSettings() {
         <button
           onClick={() => generate.mutate(label, { onSuccess: () => setLabel('') })}
           disabled={generate.isPending}
-          className={`flex h-12 flex-none items-center justify-center rounded-lg bg-primary px-3 text-sm font-medium text-white outline-none transition-transform duration-300 active:scale-95 disabled:opacity-50 ${darkButtonShadow}`}
+          className={`flex h-12 flex-none items-center justify-center px-3 text-sm font-medium transition-transform duration-300 active:scale-95 disabled:opacity-50 ${fieldClass}`}
         >
           {t('mcpGenerateToken')}
         </button>
