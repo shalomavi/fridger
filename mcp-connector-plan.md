@@ -219,10 +219,25 @@ Ruled out along the way: caching (cache-busted URLs didn't help), the
 account-eligibility prerequisites Google documents (18+, US, personal
 Google Account, English — all confirmed to apply here).
 
+Also ruled out: a domain-pattern allowlist (e.g. rejecting `*.supabase.co`
+specifically). `public/_redirects` proxies `/mcp/*` through to the same
+Supabase function, so `https://fridger-app.netlify.app/mcp` is a fully
+working alternate domain for the same server — tried directly against
+Gemini and got the identical instant rejection as the raw
+`*.functions.supabase.co` URL. Since two different domains fail the same
+way, this isn't about the domain string, it's Gemini's check itself.
+
 **Conclusion**: this is blocked on Gemini's platform behavior, not on
 anything in this repo. Revisit if Google's implementation matures, or if
 tackling ChatGPT (§7b) first turns out to shake something loose here too
 (same server, so worth re-testing Gemini after that).
+
+**Untested next step**: the Gemini CLI (`~/.gemini/settings.json`,
+`httpUrl` pointing at `.../mcp`) is a separate code path from the
+gemini.google.com web client and may run a standard programmatic OAuth
+discovery sequence instead of the web UI's static front-end check that's
+blocking this. Worth trying before assuming Gemini is unreachable
+entirely — cheap to test, no server-side changes needed either way.
 
 ---
 
