@@ -7,13 +7,8 @@ import { useConfirm } from '@/shared/alerts/ConfirmContext'
 import { useToast } from '@/shared/alerts/ToastContext'
 import { Surface } from '@/shared/ui/Surface'
 import { Input } from '@/shared/ui/Input'
+import { Button } from '@/shared/ui/Button'
 import { TrashIcon } from '@/shared/ui/FormIcons'
-
-// Same as Button.tsx's primary variant (solid bg-primary, softButtonShadow)
-// — the look AddItemInput's submit button uses — but with an explicit
-// spread radius added to the contact/ambient shadow layers.
-const primaryButtonClass =
-  'rounded-lg font-medium transition-transform duration-300 active:scale-95 disabled:opacity-50 bg-primary text-white shadow-[inset_0_-2px_0_rgba(0,0,0,0.25),0_2px_5px_2px_rgba(0,0,0,0.2),0_10px_24px_6px_rgba(0,0,0,0.24)]'
 
 /** Settings section for connecting an LLM app (Claude, v1) to this
  * household's data via a static bearer token — see mcp-connector-plan.md.
@@ -41,13 +36,13 @@ export function McpTokenSettings() {
           placeholder={t('mcpTokenLabelPlaceholder')}
           className="h-12 flex-1 px-4"
         />
-        <button
+        <Button
           onClick={() => generate.mutate(label, { onSuccess: () => setLabel('') })}
           disabled={generate.isPending}
-          className={`flex h-12 flex-none items-center justify-center px-3 text-sm ${primaryButtonClass}`}
+          className="h-12 flex-none px-3 text-sm"
         >
           {t('mcpGenerateToken')}
-        </button>
+        </Button>
       </div>
 
       <TokenList tokens={tokens.data ?? []} onRevoke={(id) => revoke.mutate(id)} />

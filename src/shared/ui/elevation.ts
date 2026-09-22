@@ -30,7 +30,7 @@ export const buttonShadow =
  * generates no CSS — the two soft-shadow constants below duplicate the same
  * numbers instead of sharing them through JS. */
 export const softButtonShadow =
-  'shadow-[inset_0_-2px_0_rgba(0,0,0,0.25),0_2px_5px_rgba(0,0,0,0.2),0_10px_24px_rgba(0,0,0,0.24)]'
+  'shadow-[inset_0_-2px_0_rgba(0,0,0,0.25),0_2px_5px_2px_rgba(0,0,0,0.2),0_10px_24px_6px_rgba(0,0,0,0.24)]'
 
 /** Input.tsx's fieldClass shadow (resting) with the same softened
  * contact/ambient pair as softButtonShadow in place of its original heavier
