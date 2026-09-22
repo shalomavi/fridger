@@ -9,14 +9,10 @@ import { Surface } from '@/shared/ui/Surface'
 import { Input } from '@/shared/ui/Input'
 import { TrashIcon } from '@/shared/ui/FormIcons'
 
-// Same shadow as Input's softFieldShadow, but with each layer's opacity
-// raised — against Input's near-white fill, softFieldShadow's black reads
-// clearly; against this button's solid bg-primary teal fill, the same
-// opacity blends into the fill instead of standing out, so the shadow needs
-// to be darker here to read as a distinct edge rather than melting into the
-// button's own color.
+// Same shape as Input's softFieldShadow, opacity tuned down further for
+// this button's solid bg-primary fill.
 const darkButtonShadow =
-  'shadow-[inset_0_-2px_0_rgba(0,0,0,0.4),0_2px_5px_rgba(0,0,0,0.25),0_10px_24px_rgba(0,0,0,0.28)]'
+  'shadow-[inset_0_-2px_0_rgba(0,0,0,0.15),0_2px_5px_rgba(0,0,0,0.1),0_10px_24px_rgba(0,0,0,0.1)]'
 
 /** Settings section for connecting an LLM app (Claude, v1) to this
  * household's data via a static bearer token — see mcp-connector-plan.md.
