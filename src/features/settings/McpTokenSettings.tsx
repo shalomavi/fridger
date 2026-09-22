@@ -3,6 +3,7 @@ import type { McpToken } from './mcpTokens'
 import { useMcpTokens } from './useMcpTokens'
 import { useHousehold } from '@/features/household/useHousehold'
 import { useLanguage } from '@/features/household/useLanguage'
+import { useConfirm } from '@/shared/alerts/ConfirmContext'
 import { useToast } from '@/shared/alerts/ToastContext'
 import { Surface } from '@/shared/ui/Surface'
 
@@ -70,18 +71,26 @@ function JustCreatedToken({ token }: { token: string }) {
 
 function TokenList({ tokens, onRevoke }: { tokens: McpToken[]; onRevoke: (id: string) => void }) {
   const { t } = useLanguage()
+  const confirm = useConfirm()
   const active = tokens.filter((token) => !token.revoked_at)
   if (active.length === 0) return <p className="text-xs text-text-muted">{t('mcpNoTokens')}</p>
+
+  const handleRevoke = async (id: string) => {
+    const confirmed = await confirm({
+      message: t('mcpConfirmRevoke'),
+      confirmLabel: t('mcpRevoke'),
+      cancelLabel: t('cancel'),
+      destructive: true,
+    })
+    if (confirmed) onRevoke(id)
+  }
 
   return (
     <ul className="space-y-1">
       {active.map((token) => (
         <li key={token.id} className="flex items-center justify-between text-sm">
           <span>{token.label}</span>
-          <button
-            onClick={() => confirm(t('mcpConfirmRevoke')) && onRevoke(token.id)}
-            className="text-xs text-red-500 underline"
-          >
+          <button onClick={() => handleRevoke(token.id)} className="text-xs text-red-500 underline">
             {t('mcpRevoke')}
           </button>
         </li>
