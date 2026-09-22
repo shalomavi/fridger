@@ -14,9 +14,9 @@ import { TrashIcon } from '@/shared/ui/FormIcons'
 // utility), and the contact/ambient layers given an explicit spread radius
 // with darker opacity so the shadow reads clearly against the solid fill.
 const primaryFieldShadow =
-  'shadow-[inset_0_-2px_0_rgba(0,0,0,0.35),0_2px_5px_2px_rgba(0,0,0,0.4),0_10px_24px_6px_rgba(0,0,0,0.4)]'
+  'shadow-[inset_0_-2px_0_rgba(0,0,0,0.35),0_2px_5px_2px_rgba(0,0,0,0.3),0_10px_24px_6px_rgba(0,0,0,0.3)]'
 const primaryFieldFocusShadow =
-  'focus:shadow-[inset_0_-2px_0_rgba(0,0,0,0.35),0_2px_5px_2px_rgba(0,0,0,0.4),0_10px_24px_6px_rgba(0,0,0,0.4),0_0_0_2px_var(--color-primary)]'
+  'focus:shadow-[inset_0_-2px_0_rgba(0,0,0,0.35),0_2px_5px_2px_rgba(0,0,0,0.3),0_10px_24px_6px_rgba(0,0,0,0.3),0_0_0_2px_var(--color-primary)]'
 const primaryFieldClass =
   `rounded-lg bg-primary text-white outline-none ${primaryFieldShadow} backdrop-blur-sm backdrop-saturate-150 ${primaryFieldFocusShadow}`
 
