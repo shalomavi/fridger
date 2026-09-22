@@ -16,7 +16,7 @@ import { TrashIcon } from '@/shared/ui/FormIcons'
 // to be darker here to read as a distinct edge rather than melting into the
 // button's own color.
 const darkButtonShadow =
-  'shadow-[inset_0_-2px_0_rgba(0,0,0,0.5),0_2px_5px_rgba(0,0,0,0.35),0_10px_24px_rgba(0,0,0,0.4)]'
+  'shadow-[inset_0_-2px_0_rgba(0,0,0,0.4),0_2px_5px_rgba(0,0,0,0.25),0_10px_24px_rgba(0,0,0,0.28)]'
 
 /** Settings section for connecting an LLM app (Claude, v1) to this
  * household's data via a static bearer token — see mcp-connector-plan.md.
