@@ -8,14 +8,16 @@ import { useToast } from '@/shared/alerts/ToastContext'
 import { Surface } from '@/shared/ui/Surface'
 import { Input } from '@/shared/ui/Input'
 import { TrashIcon } from '@/shared/ui/FormIcons'
-import { softFieldShadow, softFieldFocusShadow } from '@/shared/ui/elevation'
-
 // Same glass treatment as Input's fieldClass, but with bg-primary in place
-// of bg-surface/5 — fieldClass's background is baked into one literal
+// of bg-surface/5 (fieldClass's background is baked into one literal
 // string, so it can't be safely overridden by appending another bg-*
-// utility (Tailwind's cascade order isn't guaranteed by className order).
+// utility) and a darker shadow so it still reads against the solid fill.
+const primaryFieldShadow =
+  'shadow-[inset_0_-2px_3px_0_rgba(0,0,0,0.55),0_2px_5px_2px_rgba(0,0,0,0.4),0_10px_24px_6px_rgba(0,0,0,0.45)]'
+const primaryFieldFocusShadow =
+  'focus:shadow-[inset_0_-2px_3px_0_rgba(0,0,0,0.55),0_2px_5px_2px_rgba(0,0,0,0.4),0_10px_24px_6px_rgba(0,0,0,0.45),0_0_0_2px_var(--color-primary)]'
 const primaryFieldClass =
-  `rounded-lg bg-primary text-white outline-none ${softFieldShadow} backdrop-blur-sm backdrop-saturate-150 ${softFieldFocusShadow}`
+  `rounded-lg bg-primary text-white outline-none ${primaryFieldShadow} backdrop-blur-sm backdrop-saturate-150 ${primaryFieldFocusShadow}`
 
 /** Settings section for connecting an LLM app (Claude, v1) to this
  * household's data via a static bearer token — see mcp-connector-plan.md.
