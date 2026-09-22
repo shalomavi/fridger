@@ -8,7 +8,13 @@ import { useToast } from '@/shared/alerts/ToastContext'
 import { Surface } from '@/shared/ui/Surface'
 import { Input } from '@/shared/ui/Input'
 import { TrashIcon } from '@/shared/ui/FormIcons'
-import { softFieldShadow } from '@/shared/ui/elevation'
+
+// Same bottom bevel as Input's softFieldShadow, but with a much tighter
+// contact shadow instead of its wide ambient spread — on the input's
+// translucent glass fill that spread stays subtle, but on this button's
+// solid bg-primary fill it reads as a dark blob hanging off the bottom
+// edge, making the button look taller than the input beside it.
+const buttonShadow = 'shadow-[inset_0_-2px_0_rgba(0,0,0,0.35),0_1px_2px_rgba(0,0,0,0.2)]'
 
 /** Settings section for connecting an LLM app (Claude, v1) to this
  * household's data via a static bearer token — see mcp-connector-plan.md.
@@ -39,7 +45,7 @@ export function McpTokenSettings() {
         <button
           onClick={() => generate.mutate(label, { onSuccess: () => setLabel('') })}
           disabled={generate.isPending}
-          className={`flex h-12 flex-none items-center justify-center rounded-lg bg-primary px-3 text-sm font-medium text-white outline-none transition-transform duration-300 active:scale-95 disabled:opacity-50 ${softFieldShadow}`}
+          className={`flex h-12 flex-none items-center justify-center rounded-lg bg-primary px-3 text-sm font-medium text-white outline-none transition-transform duration-300 active:scale-95 disabled:opacity-50 ${buttonShadow}`}
         >
           {t('mcpGenerateToken')}
         </button>
