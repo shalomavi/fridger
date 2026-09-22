@@ -8,17 +8,18 @@ import { useToast } from '@/shared/alerts/ToastContext'
 import { Surface } from '@/shared/ui/Surface'
 import { Input } from '@/shared/ui/Input'
 import { TrashIcon } from '@/shared/ui/FormIcons'
-// Same glass treatment as Input's fieldClass, but with bg-primary in place
-// of bg-surface/5 (fieldClass's background is baked into one literal
-// string, so it can't be safely overridden by appending another bg-*
-// utility), and the contact/ambient layers given an explicit spread radius
-// with darker opacity so the shadow reads clearly against the solid fill.
+// Same glass treatment as Input's fieldClass, but tinted primary instead of
+// bg-surface/5 (fieldClass's background is baked into one literal string,
+// so it can't be safely overridden by appending another bg-* utility) —
+// translucent + a stronger blur so it reads as see-through glass rather
+// than a flat fill, and the contact/ambient shadow layers given an explicit
+// spread radius with darker opacity so the shadow still reads clearly.
 const primaryFieldShadow =
   'shadow-[inset_0_-2px_0_rgba(0,0,0,0.35),0_2px_5px_2px_rgba(0,0,0,0.3),0_10px_24px_6px_rgba(0,0,0,0.3)]'
 const primaryFieldFocusShadow =
   'focus:shadow-[inset_0_-2px_0_rgba(0,0,0,0.35),0_2px_5px_2px_rgba(0,0,0,0.3),0_10px_24px_6px_rgba(0,0,0,0.3),0_0_0_2px_var(--color-primary)]'
 const primaryFieldClass =
-  `rounded-lg bg-primary text-white outline-none ${primaryFieldShadow} backdrop-blur-sm backdrop-saturate-150 ${primaryFieldFocusShadow}`
+  `rounded-lg bg-primary/70 text-white outline-none ${primaryFieldShadow} backdrop-blur-md backdrop-saturate-150 ${primaryFieldFocusShadow}`
 
 /** Settings section for connecting an LLM app (Claude, v1) to this
  * household's data via a static bearer token — see mcp-connector-plan.md.
