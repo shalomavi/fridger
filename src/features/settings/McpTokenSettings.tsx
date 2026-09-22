@@ -6,8 +6,16 @@ import { useLanguage } from '@/features/household/useLanguage'
 import { useConfirm } from '@/shared/alerts/ConfirmContext'
 import { useToast } from '@/shared/alerts/ToastContext'
 import { Surface } from '@/shared/ui/Surface'
-import { Input, fieldClass } from '@/shared/ui/Input'
+import { Input } from '@/shared/ui/Input'
 import { TrashIcon } from '@/shared/ui/FormIcons'
+import { softFieldShadow, softFieldFocusShadow } from '@/shared/ui/elevation'
+
+// Same glass treatment as Input's fieldClass, but with bg-primary in place
+// of bg-surface/5 — fieldClass's background is baked into one literal
+// string, so it can't be safely overridden by appending another bg-*
+// utility (Tailwind's cascade order isn't guaranteed by className order).
+const primaryFieldClass =
+  `rounded-lg bg-primary text-white outline-none ${softFieldShadow} backdrop-blur-sm backdrop-saturate-150 ${softFieldFocusShadow}`
 
 /** Settings section for connecting an LLM app (Claude, v1) to this
  * household's data via a static bearer token — see mcp-connector-plan.md.
@@ -38,7 +46,7 @@ export function McpTokenSettings() {
         <button
           onClick={() => generate.mutate(label, { onSuccess: () => setLabel('') })}
           disabled={generate.isPending}
-          className={`flex h-12 flex-none items-center justify-center px-3 text-sm font-medium transition-transform duration-300 active:scale-95 disabled:opacity-50 ${fieldClass}`}
+          className={`flex h-12 flex-none items-center justify-center px-3 text-sm font-medium transition-transform duration-300 active:scale-95 disabled:opacity-50 ${primaryFieldClass}`}
         >
           {t('mcpGenerateToken')}
         </button>
