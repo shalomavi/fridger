@@ -239,6 +239,30 @@ discovery sequence instead of the web UI's static front-end check that's
 blocking this. Worth trying before assuming Gemini is unreachable
 entirely — cheap to test, no server-side changes needed either way.
 
+Confirmed against the CLI's own docs (not just inference): `mcpServers`
+entries support `httpUrl` + `authProviderType: "dynamic_discovery"` (the
+default when omitted), which detects a 401, discovers OAuth endpoints from
+server metadata, and performs dynamic client registration if supported —
+exactly the RFC 8414 + DCR + PKCE flow this server already implements.
+Tokens are cached in `~/.gemini/mcp-oauth-tokens.json`. No
+`authProviderType` override needed; minimal config:
+
+```json
+{
+  "mcpServers": {
+    "fridger": {
+      "httpUrl": "https://fridger-app.netlify.app/mcp"
+    }
+  }
+}
+```
+
+Requires a machine with Node.js (the CLI is an npm package) — not
+runnable from this phone environment (see `CLAUDE.md`/no-npm rule). Try
+from a laptop/Cloud Shell whenever there's a reason to chase Gemini
+further. Docs: [MCP servers with the Gemini
+CLI](https://google-gemini.github.io/gemini-cli/docs/tools/mcp-server.html).
+
 ---
 
 ## 9. OAuth 2.1 authorization server (built for §7b/§7c)
