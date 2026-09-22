@@ -8,18 +8,12 @@ import { useToast } from '@/shared/alerts/ToastContext'
 import { Surface } from '@/shared/ui/Surface'
 import { Input } from '@/shared/ui/Input'
 import { TrashIcon } from '@/shared/ui/FormIcons'
-// Same glass treatment as Input's fieldClass, but tinted primary instead of
-// bg-surface/5 (fieldClass's background is baked into one literal string,
-// so it can't be safely overridden by appending another bg-* utility) —
-// translucent + a stronger blur so it reads as see-through glass rather
-// than a flat fill, and the contact/ambient shadow layers given an explicit
-// spread radius with darker opacity so the shadow still reads clearly.
-const primaryFieldShadow =
-  'shadow-[inset_0_-2px_0_rgba(0,0,0,0.35),0_2px_5px_2px_rgba(0,0,0,0.3),0_10px_24px_6px_rgba(0,0,0,0.3)]'
-const primaryFieldFocusShadow =
-  'focus:shadow-[inset_0_-2px_0_rgba(0,0,0,0.35),0_2px_5px_2px_rgba(0,0,0,0.3),0_10px_24px_6px_rgba(0,0,0,0.3),0_0_0_2px_var(--color-primary)]'
-const primaryFieldClass =
-  `rounded-lg bg-primary/85 brightness-90 text-white outline-none ${primaryFieldShadow} backdrop-blur-lg backdrop-saturate-150 ${primaryFieldFocusShadow}`
+
+// Same as Button.tsx's primary variant (solid bg-primary, softButtonShadow)
+// — the look AddItemInput's submit button uses — but with an explicit
+// spread radius added to the contact/ambient shadow layers.
+const primaryButtonClass =
+  'rounded-lg font-medium transition-transform duration-300 active:scale-95 disabled:opacity-50 bg-primary text-white shadow-[inset_0_-2px_0_rgba(0,0,0,0.25),0_2px_5px_2px_rgba(0,0,0,0.2),0_10px_24px_6px_rgba(0,0,0,0.24)]'
 
 /** Settings section for connecting an LLM app (Claude, v1) to this
  * household's data via a static bearer token — see mcp-connector-plan.md.
@@ -50,7 +44,7 @@ export function McpTokenSettings() {
         <button
           onClick={() => generate.mutate(label, { onSuccess: () => setLabel('') })}
           disabled={generate.isPending}
-          className={`flex h-12 flex-none items-center justify-center px-3 text-sm font-medium transition-transform duration-300 active:scale-95 disabled:opacity-50 ${primaryFieldClass}`}
+          className={`flex h-12 flex-none items-center justify-center px-3 text-sm ${primaryButtonClass}`}
         >
           {t('mcpGenerateToken')}
         </button>
