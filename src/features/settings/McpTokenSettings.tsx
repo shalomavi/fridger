@@ -6,6 +6,8 @@ import { useLanguage } from '@/features/household/useLanguage'
 import { useConfirm } from '@/shared/alerts/ConfirmContext'
 import { useToast } from '@/shared/alerts/ToastContext'
 import { Surface } from '@/shared/ui/Surface'
+import { Input } from '@/shared/ui/Input'
+import { Button } from '@/shared/ui/Button'
 import { TrashIcon } from '@/shared/ui/FormIcons'
 
 /** Settings section for connecting an LLM app (Claude, v1) to this
@@ -28,19 +30,19 @@ export function McpTokenSettings() {
       {generate.data && <JustCreatedToken token={generate.data} />}
 
       <div className="flex gap-2">
-        <input
+        <Input
           value={label}
           onChange={(e) => setLabel(e.target.value)}
           placeholder={t('mcpTokenLabelPlaceholder')}
-          className="flex-1 rounded-lg border border-border bg-surface px-3 py-2 text-sm"
+          className="flex-1 px-4 py-3"
         />
-        <button
+        <Button
           onClick={() => generate.mutate(label, { onSuccess: () => setLabel('') })}
           disabled={generate.isPending}
-          className="rounded-lg bg-primary px-3 py-2 text-sm text-white disabled:opacity-50"
+          className="px-3 py-2 text-sm"
         >
           {t('mcpGenerateToken')}
-        </button>
+        </Button>
       </div>
 
       <TokenList tokens={tokens.data ?? []} onRevoke={(id) => revoke.mutate(id)} />
