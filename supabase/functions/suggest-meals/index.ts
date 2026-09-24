@@ -5,7 +5,7 @@ import '@supabase/functions-js/edge-runtime.d.ts'
 import { createClient } from '@supabase/supabase-js'
 import { callGemini } from './gemini.ts'
 import { FALLBACK_MEALS } from './fallbackMeals.ts'
-import { SuggestionsSchema, pantryHash, isExpiringSoon } from './schema.ts'
+import { SuggestionsSchema, pantryHash, isExpiringSoon, reconcileMissingWithPantry } from './schema.ts'
 import { parseRequestBody, type RequestBody } from './request.ts'
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
@@ -13,7 +13,7 @@ const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY')!
 
 const DAILY_LIMIT = 20
-const PANTRY_CAP = 60
+const PANTRY_CAP = 150
 
 // The browser calls this cross-origin (the app's own domain -> the
 // functions.supabase.co domain), so every response — including the
@@ -130,7 +130,7 @@ Deno.serve(async (req) => {
       mode,
     )
     const parsed = SuggestionsSchema.parse(raw)
-    payload = { meals: parsed.meals, fallback: false }
+    payload = { meals: reconcileMissingWithPantry(parsed.meals, pantryNames), fallback: false }
   } catch (err) {
     console.error('Gemini call/parse failed, falling back:', err)
     payload = { meals: FALLBACK_MEALS[lang], fallback: true }

@@ -106,6 +106,22 @@ export function isExpiringSoon(expiresAt: string | null, now = new Date()): bool
   return diffDays <= EXPIRING_SOON_DAYS
 }
 
+/** Gemini writes "missing" itself from the pantry list as plain text, and
+ * despite the prompt's explicit instruction to check the pantry first (see
+ * prompt.ts), it sometimes lists something already there (e.g. "מלח" when
+ * the pantry has an exact "מלח" row). This is a deterministic backstop: drop
+ * any "missing" entry whose name exactly matches a pantry name after
+ * normalizing — same normalizeName rule as everywhere else, so it only
+ * catches exact matches, not near-misses like "מלח" vs "מלח גס" (that's
+ * still on the model, per the prompt instruction). */
+export function reconcileMissingWithPantry(meals: Meal[], pantryNames: string[]): Meal[] {
+  const pantrySet = new Set(pantryNames.map(normalizeName))
+  return meals.map((meal) => ({
+    ...meal,
+    missing: meal.missing.filter((item) => !pantrySet.has(normalizeName(item.name))),
+  }))
+}
+
 /** Cache key: the sorted set of normalized pantry names, the language,
  * preferences, meal types, and suggestion mode — buying one onion or a date
  * ticking closer to expiry shouldn't invalidate every suggestion (expiry is
