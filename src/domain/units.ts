@@ -35,14 +35,12 @@ export function formatNumber(value: number): string {
   return Number(value.toFixed(2)).toString()
 }
 
-/** Compact one-string display: "×2" for a whole count, "1.5 kg" etc for a
- * unit. A fractional count (e.g. half a lemon) reads as "×0.5" if forced
- * through the same "×N" shorthand, so it falls back to the "N unitLabel"
- * form used by real units instead. `unitLabel` is passed in (already
- * translated) rather than read from i18n here, keeping this file free of
- * app-level imports. */
+/** Compact one-string display: "× 2" for a plain count, "1.5 kg" etc for a
+ * unit. The × needs its own trailing space — without one it visually fuses
+ * with the digit next to RTL (Hebrew) text. `unitLabel` is passed in
+ * (already translated) rather than read from i18n here, keeping this file
+ * free of app-level imports. */
 export function formatQuantity(quantity: number, unit: Unit, unitLabel: string): string {
   const trimmed = formatNumber(quantity)
-  if (unit === 'count' && Number.isInteger(quantity)) return `×${trimmed}`
-  return `${trimmed} ${unitLabel}`
+  return unit === 'count' ? `× ${trimmed}` : `${trimmed} ${unitLabel}`
 }

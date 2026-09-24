@@ -62,12 +62,9 @@ describe('formatNumber', () => {
 })
 
 describe('formatQuantity', () => {
-  it('shows a whole count with a × prefix, ignoring the unit label', () => {
-    expect(formatQuantity(2, 'count', 'Count')).toBe('×2')
-  })
-
-  it('shows a fractional count with the unit label instead of ×N', () => {
-    expect(formatQuantity(0.5, 'count', 'Count')).toBe('0.5 Count')
+  it('shows a plain count with a × prefix and a space, ignoring the unit label', () => {
+    expect(formatQuantity(2, 'count', 'Count')).toBe('× 2')
+    expect(formatQuantity(0.5, 'count', 'Count')).toBe('× 0.5')
   })
 
   it('shows the given unit label and trims trailing zeros', () => {
