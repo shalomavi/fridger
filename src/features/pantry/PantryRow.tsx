@@ -107,7 +107,7 @@ export function PantryRow({
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
         style={{ transform: `translateX(${dragX}px)` }}
-        className={`relative flex touch-pan-y flex-col gap-1.5 px-4 py-3 transition-transform duration-300 ${
+        className={`relative flex touch-pan-y flex-col gap-1.5 rounded-lg px-4 py-3 transition-transform duration-300 ${
           soon ? 'bg-surface ring-1 ring-inset ring-warning-ring/40' : 'bg-surface'
         }`}
       >
