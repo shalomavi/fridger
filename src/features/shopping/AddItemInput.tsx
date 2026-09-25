@@ -7,6 +7,7 @@ import { PlusIcon, HashIcon, NotesIcon, RulerIcon, TagIcon } from '@/shared/ui/F
 import { SuggestionList } from '@/shared/ui/SuggestionList'
 import { AddToPantryCheckbox } from './AddToPantryCheckbox'
 import { CATEGORIES, type Category } from '@/shared/categories'
+import { CATEGORY_ICONS } from '@/shared/ui/CategoryIcons'
 import { UNITS, type Unit } from '@/domain/units'
 
 /** Name is required; quantity + unit default to 1/count and merge by
@@ -112,7 +113,7 @@ export function AddItemInput({
           options={CATEGORIES.map((c) => ({ value: c, label: t(`category_${c}`) }))}
           placeholder={t('categoryPlaceholder')}
           ariaLabel={t('categoryPlaceholder')}
-          leadingIcon={TagIcon}
+          leadingIcon={category ? CATEGORY_ICONS[category] : TagIcon}
           className="flex-1"
         />
         <Button
