@@ -6,10 +6,10 @@ import type { Language } from '@/shared/i18n'
 export type RecipeIngredient = { name: string; quantity: number; unit: Unit; category: Category }
 export type RecipeSource = 'suggestion' | 'text' | 'image' | 'url'
 
-// What parse-recipe returns for a pasted-text import (image/url land in
-// later slices, adding their own parseRecipe... variants). isRecipe: false
-// means the input genuinely wasn't a recipe — an honest result, not an
-// error — so the UI can say so instead of showing a broken preview.
+// What parse-recipe returns for any import source (url lands in a later
+// slice, adding its own parseRecipe... variant). isRecipe: false means the
+// input genuinely wasn't a recipe — an honest result, not an error — so the
+// UI can say so instead of showing a broken preview.
 export type ParsedRecipe =
   | { isRecipe: true; name: string; ingredients: RecipeIngredient[]; steps: string[] }
   | { isRecipe: false }
@@ -21,6 +21,20 @@ export async function parseRecipeFromText(
 ): Promise<ParsedRecipe> {
   const { data, error } = await supabase.functions.invoke('parse-recipe', {
     body: { householdId, lang, input: { type: 'text', text } },
+  })
+  if (error) throw error
+  return data
+}
+
+/** `imageBase64` has no `data:` prefix — see resizeImage.ts, which is what
+ * produces it. */
+export async function parseRecipeFromImage(
+  householdId: string,
+  lang: Language,
+  imageBase64: string,
+): Promise<ParsedRecipe> {
+  const { data, error } = await supabase.functions.invoke('parse-recipe', {
+    body: { householdId, lang, input: { type: 'image', imageBase64, mimeType: 'image/jpeg' } },
   })
   if (error) throw error
   return data

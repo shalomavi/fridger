@@ -24,8 +24,8 @@ describe('formatMealShareText', () => {
       [
         'Shakshuka',
         '',
-        'Uses: eggs ×2, tomatoes ×3',
-        "You'll also need: bread ×1",
+        'Uses: eggs × 2, tomatoes × 3',
+        "You'll also need: bread × 1",
         '',
         '1. Fry onions',
         '2. Add tomatoes and eggs',

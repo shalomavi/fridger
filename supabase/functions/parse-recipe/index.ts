@@ -36,7 +36,7 @@ Deno.serve(async (req) => {
   try {
     body = await parseRequestBody(req)
   } catch {
-    return json({ error: 'Expected JSON body with householdId and input.text' }, 400)
+    return json({ error: 'Expected JSON body with householdId and input (text or image)' }, 400)
   }
   const { householdId, lang, input } = body
 
@@ -76,7 +76,7 @@ Deno.serve(async (req) => {
 
   let raw: unknown
   try {
-    raw = await callGemini(GEMINI_API_KEY, input.text, lang)
+    raw = await callGemini(GEMINI_API_KEY, input, lang)
   } catch (err) {
     console.error('Gemini call failed:', err)
     // Counts toward the daily limit even though it failed — it still cost a

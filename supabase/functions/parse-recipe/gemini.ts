@@ -1,5 +1,6 @@
-import { SYSTEM_INSTRUCTION, buildPrompt } from './prompt.ts'
+import { SYSTEM_INSTRUCTION, buildTextPrompt, buildImagePrompt } from './prompt.ts'
 import type { Language } from './schema.ts'
+import type { RequestBody } from './request.ts'
 
 const MODEL = 'gemini-2.5-flash'
 
@@ -48,15 +49,20 @@ const RESPONSE_SCHEMA = {
  * the model to valid JSON instead of parsing prose. Throws on any network/
  * API failure or non-2xx; the caller (index.ts) decides what to do with
  * that (there's no fallback engine here, unlike suggest-meals). */
-export async function callGemini(apiKey: string, rawText: string, lang: Language): Promise<unknown> {
+export async function callGemini(apiKey: string, input: RequestBody['input'], lang: Language): Promise<unknown> {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`
+
+  const parts =
+    input.type === 'image'
+      ? [{ text: buildImagePrompt(lang) }, { inlineData: { mimeType: input.mimeType, data: input.imageBase64 } }]
+      : [{ text: buildTextPrompt(input.text, lang) }]
 
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
     body: JSON.stringify({
       systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
-      contents: [{ parts: [{ text: buildPrompt(rawText, lang) }] }],
+      contents: [{ parts }],
       generationConfig: {
         responseMimeType: 'application/json',
         responseSchema: RESPONSE_SCHEMA,

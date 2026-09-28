@@ -2,15 +2,15 @@ import { useState } from 'react'
 import { useRecipes } from './useRecipes'
 import { RecipeCard } from './RecipeCard'
 import { useAddIngredientsToShopping } from './useAddIngredientsToShopping'
-import { ImportTextSheet } from './ImportTextSheet'
+import { ImportRecipeSheet } from './ImportRecipeSheet'
 import { RecipeImportModal } from './RecipeImportModal'
-import type { ParsedRecipe, RecipeIngredient } from './api'
+import type { ParsedRecipe, RecipeIngredient, RecipeSource } from './api'
 import { useLanguage } from '@/features/household/useLanguage'
 import { useToast } from '@/shared/alerts/ToastContext'
 import { Button } from '@/shared/ui/Button'
 import { ScrollToTopButton } from '@/shared/ui/ScrollToTopButton'
 
-type ImportedRecipe = ParsedRecipe & { isRecipe: true }
+type ImportedRecipe = (ParsedRecipe & { isRecipe: true }) & { source: RecipeSource }
 
 export function RecipesScreen({ householdId }: { householdId: string }) {
   const { t } = useLanguage()
@@ -44,7 +44,7 @@ export function RecipesScreen({ householdId }: { householdId: string }) {
           name: imported.name,
           ingredients: imported.ingredients,
           steps: imported.steps,
-          source: 'text',
+          source: imported.source,
         })
       }
       if (destinations.toShopping) {
@@ -88,12 +88,12 @@ export function RecipesScreen({ householdId }: { householdId: string }) {
       <ScrollToTopButton label={t('scrollToTop')} />
 
       {importSheetOpen && (
-        <ImportTextSheet
+        <ImportRecipeSheet
           householdId={householdId}
           onClose={() => setImportSheetOpen(false)}
-          onParsed={(recipe) => {
+          onParsed={(recipe, source) => {
             setImportSheetOpen(false)
-            setImported(recipe)
+            setImported({ ...recipe, source })
           }}
         />
       )}

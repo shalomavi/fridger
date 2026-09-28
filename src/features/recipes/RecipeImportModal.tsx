@@ -7,7 +7,7 @@ import { Button } from '@/shared/ui/Button'
  * Preview of a just-parsed recipe (import or, later, other non-suggestion
  * sources) with the three-way destination choice the plan calls for: save
  * to Recipes, add to the shopping list, or both. Same overlay shell as
- * ConfirmDialog/ImportTextSheet.
+ * ConfirmDialog/ImportRecipeSheet.
  */
 export function RecipeImportModal({
   recipe,
