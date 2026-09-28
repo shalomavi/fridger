@@ -12,21 +12,25 @@ React + Vite + TypeScript + Tailwind v4. TanStack Query for server state
 (polling via `refetchInterval`, not Supabase Realtime), persisted to
 localStorage via `@tanstack/react-query-persist-client` so the last-fetched
 data renders offline/on cold start — reads only; writes still need a live
-connection. Supabase for Postgres + Auth + RLS. Two Supabase Edge Functions
+connection. Supabase for Postgres + Auth + RLS. Three Supabase Edge Functions
 are the only server-side code in this project: `supabase/functions/suggest-meals`
-(holds the Gemini key, does the LLM call) and `supabase/functions/mcp` (MCP
-protocol server exposing shopping list/pantry tools to connected LLM apps
-like Claude, plus household MCP-token issuance). No FastAPI, no separate
-backend framework, no third function without updating this file.
+(holds the Gemini key, does the meal-suggestion LLM call),
+`supabase/functions/parse-recipe` (holds the Gemini key, turns pasted text/a
+picture/a website link into a structured recipe for the Recipes tab), and
+`supabase/functions/mcp` (MCP protocol server exposing shopping list/pantry
+tools to connected LLM apps like Claude, plus household MCP-token issuance).
+No FastAPI, no separate backend framework, no fourth function without
+updating this file.
 
 ## The two boundaries that matter
 
 1. **`src/domain/` imports nothing from React, Supabase, or any framework.**
    Plain TypeScript, pure functions, unit-tested with Vitest. This is where
    `normalizeName`, `purchaseItem`, `pantryHash`, etc. live.
-2. **Every LLM prompt string lives in `supabase/functions/suggest-meals/prompt.ts`.**
-   Nowhere else. The Gemini adapter is swappable — don't hardcode a provider
-   assumption outside that function.
+2. **Every LLM prompt string lives in its function's `prompt.ts`**
+   (`suggest-meals/prompt.ts`, `parse-recipe/prompt.ts`). Nowhere else. The
+   Gemini adapter is swappable — don't hardcode a provider assumption
+   outside these functions.
 
 If you only enforce two things in review, enforce these.
 
@@ -40,9 +44,9 @@ If you only enforce two things in review, enforce these.
 - `npx supabase ...` — CLI for migrations/functions (once linked).
 - `npm run build && netlify deploy --prod --dir=dist` — deploy to production
   (https://fridger-app.netlify.app). Frontend only; the Edge Functions
-  deploy separately via `npx supabase functions deploy suggest-meals` and
-  `npx supabase functions deploy mcp`, and migrations via `npx supabase db
-  push`.
+  deploy separately via `npx supabase functions deploy suggest-meals`,
+  `npx supabase functions deploy parse-recipe`, and `npx supabase functions
+  deploy mcp`, and migrations via `npx supabase db push`.
 - `python3 scripts/sync-icon-color.py '#rrggbb'` — after changing
   `--color-primary` in `src/index.css`, run this with the same hex to
   recolor `favicon.svg`, the three PWA icon PNGs, `index.html`'s

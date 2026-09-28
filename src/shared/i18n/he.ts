@@ -118,4 +118,13 @@ export const he: Record<keyof typeof en, string> = {
   recipeSaved: 'נשמר ✓',
   recipesEmpty: 'אין עדיין מתכונים. שמרו הצעת ארוחה כדי להתחיל.',
   ingredientsLabel: 'מרכיבים:',
+  importRecipe: 'ייבוא מתכון',
+  importRecipeFromText: 'הדבקת מתכון',
+  importRecipeTextPlaceholder: 'הדביקו כאן את טקסט המתכון…',
+  importRecipeParse: 'ייבוא',
+  notARecipeError: 'זה לא נראה כמו מתכון. נסו להדביק את המרכיבים והשלבים.',
+  importRecipeChooseDestination: 'לאן להוסיף את זה?',
+  importRecipeSaveOnly: 'שמירה למתכונים',
+  importRecipeShoppingOnly: 'הוספה לרשימת קניות',
+  importRecipeBoth: 'לשניהם',
 }

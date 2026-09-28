@@ -1,9 +1,30 @@
 import { supabase } from '@/shared/supabase'
 import type { Unit } from '@/domain/units'
 import type { Category } from '@/shared/categories'
+import type { Language } from '@/shared/i18n'
 
 export type RecipeIngredient = { name: string; quantity: number; unit: Unit; category: Category }
 export type RecipeSource = 'suggestion' | 'text' | 'image' | 'url'
+
+// What parse-recipe returns for a pasted-text import (image/url land in
+// later slices, adding their own parseRecipe... variants). isRecipe: false
+// means the input genuinely wasn't a recipe — an honest result, not an
+// error — so the UI can say so instead of showing a broken preview.
+export type ParsedRecipe =
+  | { isRecipe: true; name: string; ingredients: RecipeIngredient[]; steps: string[] }
+  | { isRecipe: false }
+
+export async function parseRecipeFromText(
+  householdId: string,
+  lang: Language,
+  text: string,
+): Promise<ParsedRecipe> {
+  const { data, error } = await supabase.functions.invoke('parse-recipe', {
+    body: { householdId, lang, input: { type: 'text', text } },
+  })
+  if (error) throw error
+  return data
+}
 
 export type Recipe = {
   id: string

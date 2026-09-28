@@ -2,17 +2,25 @@ import { useState } from 'react'
 import { useRecipes } from './useRecipes'
 import { RecipeCard } from './RecipeCard'
 import { useAddIngredientsToShopping } from './useAddIngredientsToShopping'
-import type { RecipeIngredient } from './api'
+import { ImportTextSheet } from './ImportTextSheet'
+import { RecipeImportModal } from './RecipeImportModal'
+import type { ParsedRecipe, RecipeIngredient } from './api'
 import { useLanguage } from '@/features/household/useLanguage'
 import { useToast } from '@/shared/alerts/ToastContext'
+import { Button } from '@/shared/ui/Button'
 import { ScrollToTopButton } from '@/shared/ui/ScrollToTopButton'
+
+type ImportedRecipe = ParsedRecipe & { isRecipe: true }
 
 export function RecipesScreen({ householdId }: { householdId: string }) {
   const { t } = useLanguage()
-  const { data: recipes, isLoading, remove } = useRecipes(householdId)
+  const { data: recipes, isLoading, save, remove } = useRecipes(householdId)
   const addIngredientsToShopping = useAddIngredientsToShopping(householdId)
   const { notify } = useToast()
   const [addingId, setAddingId] = useState<string | null>(null)
+  const [importSheetOpen, setImportSheetOpen] = useState(false)
+  const [imported, setImported] = useState<ImportedRecipe | null>(null)
+  const [applying, setApplying] = useState(false)
 
   function onAddMissing(recipeId: string, ingredients: RecipeIngredient[]) {
     setAddingId(recipeId)
@@ -24,8 +32,39 @@ export function RecipesScreen({ householdId }: { householdId: string }) {
     })
   }
 
+  // The three-way destination choice from the import preview modal — save,
+  // add to shopping, or both, run one after another (not Promise.all) so a
+  // "both" failure on one half doesn't race the toast for the other.
+  async function applyImport(destinations: { toRecipes: boolean; toShopping: boolean }) {
+    if (!imported) return
+    setApplying(true)
+    try {
+      if (destinations.toRecipes) {
+        await save.mutateAsync({
+          name: imported.name,
+          ingredients: imported.ingredients,
+          steps: imported.steps,
+          source: 'text',
+        })
+      }
+      if (destinations.toShopping) {
+        const addedCount = await addIngredientsToShopping.mutateAsync(imported.ingredients)
+        notify(addedCount > 0 ? t('addedMissingToShoppingList') : t('missingAlreadyTracked'), 'success')
+      }
+      setImported(null)
+    } catch {
+      notify(t('actionFailed'), 'error')
+    } finally {
+      setApplying(false)
+    }
+  }
+
   return (
     <div className="space-y-6">
+      <Button onClick={() => setImportSheetOpen(true)} className="w-full py-3">
+        {t('importRecipe')}
+      </Button>
+
       {isLoading && <p className="text-text-subtle">{t('loading')}</p>}
 
       {!isLoading && (!recipes || recipes.length === 0) && (
@@ -47,6 +86,28 @@ export function RecipesScreen({ householdId }: { householdId: string }) {
       )}
 
       <ScrollToTopButton label={t('scrollToTop')} />
+
+      {importSheetOpen && (
+        <ImportTextSheet
+          householdId={householdId}
+          onClose={() => setImportSheetOpen(false)}
+          onParsed={(recipe) => {
+            setImportSheetOpen(false)
+            setImported(recipe)
+          }}
+        />
+      )}
+
+      {imported && (
+        <RecipeImportModal
+          recipe={imported}
+          busy={applying}
+          onClose={() => setImported(null)}
+          onSaveToRecipes={() => applyImport({ toRecipes: true, toShopping: false })}
+          onAddToShopping={() => applyImport({ toRecipes: false, toShopping: true })}
+          onBoth={() => applyImport({ toRecipes: true, toShopping: true })}
+        />
+      )}
     </div>
   )
 }

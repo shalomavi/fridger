@@ -114,4 +114,13 @@ export const en = {
   recipeSaved: 'Saved ✓',
   recipesEmpty: 'No recipes yet. Save a meal suggestion to get started.',
   ingredientsLabel: 'Ingredients:',
+  importRecipe: 'Import a recipe',
+  importRecipeFromText: 'Paste a recipe',
+  importRecipeTextPlaceholder: 'Paste the recipe text here…',
+  importRecipeParse: 'Import',
+  notARecipeError: "That doesn't look like a recipe. Try pasting the ingredients and steps.",
+  importRecipeChooseDestination: 'Where should this go?',
+  importRecipeSaveOnly: 'Save to recipes',
+  importRecipeShoppingOnly: 'Add to shopping list',
+  importRecipeBoth: 'Both',
 } as const
