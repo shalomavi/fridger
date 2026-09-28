@@ -5,7 +5,7 @@ import type { ParsedRecipe, RecipeSource } from './api'
 import { useLanguage } from '@/features/household/useLanguage'
 import { useToast } from '@/shared/alerts/ToastContext'
 import { Button } from '@/shared/ui/Button'
-import { CameraIcon } from '@/shared/ui/FormIcons'
+import { ImageIcon } from '@/shared/ui/FormIcons'
 import { cancelButtonClass } from './importButtonClass'
 
 export function ImportPictureTab({
@@ -66,7 +66,6 @@ export function ImportPictureTab({
         ref={inputRef}
         type="file"
         accept="image/*"
-        capture="environment"
         className="hidden"
         onChange={onFileChange}
       />
@@ -79,7 +78,7 @@ export function ImportPictureTab({
           onClick={() => inputRef.current?.click()}
           className="flex w-full items-center justify-center gap-2 rounded-md border border-dashed border-primary py-6 text-sm text-text-soft"
         >
-          <CameraIcon className="text-primary" />
+          <ImageIcon className="text-primary" />
           {t('importRecipePickPhoto')}
         </button>
       )}
