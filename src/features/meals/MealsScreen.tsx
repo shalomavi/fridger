@@ -3,6 +3,9 @@ import { useSuggestions } from './useSuggestions'
 import { SuggestionCard } from './SuggestionCard'
 import { MealLoader } from './MealLoader'
 import { SUGGESTION_MODES, type Meal, type SuggestionMode } from './api'
+import { useRecipes } from '@/features/recipes/useRecipes'
+import { mealToRecipeIngredients } from '@/domain/mealToRecipe'
+import { isSameIngredient } from '@/domain/normalize'
 import { useLanguage } from '@/features/household/useLanguage'
 import { useHousehold } from '@/features/household/useHousehold'
 import { useToast } from '@/shared/alerts/ToastContext'
@@ -21,10 +24,25 @@ export function MealsScreen({ householdId }: { householdId: string }) {
   const { theme } = useTheme()
   const { data: household } = useHousehold()
   const { suggestion, suggest, cookedThis, addMissingToShoppingList } = useSuggestions(householdId)
+  const { data: recipes, save: saveRecipe } = useRecipes(householdId)
   const { notify } = useToast()
   const [mode, setMode] = useState<SuggestionMode>('pantry')
   const [cookedName, setCookedName] = useState<string | null>(null)
   const [addingName, setAddingName] = useState<string | null>(null)
+  const [savingName, setSavingName] = useState<string | null>(null)
+
+  function onSave(meal: Meal) {
+    setSavingName(meal.name)
+    saveRecipe.mutate(
+      {
+        name: meal.name,
+        ingredients: mealToRecipeIngredients(meal),
+        steps: meal.steps,
+        source: 'suggestion',
+      },
+      { onSettled: () => setSavingName(null) },
+    )
+  }
 
   function onCookedThis(meal: Meal) {
     setCookedName(meal.name)
@@ -103,6 +121,9 @@ export function MealsScreen({ householdId }: { householdId: string }) {
               cooking={cookedThis.isPending && cookedName === meal.name}
               onAddMissing={() => onAddMissing(meal)}
               addingMissing={addMissingToShoppingList.isPending && addingName === meal.name}
+              onSave={() => onSave(meal)}
+              saving={saveRecipe.isPending && savingName === meal.name}
+              saved={(recipes ?? []).some((r) => isSameIngredient(r.name, meal.name))}
             />
           ))}
         </ul>

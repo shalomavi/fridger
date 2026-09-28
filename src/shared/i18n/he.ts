@@ -8,6 +8,7 @@ export const he: Record<keyof typeof en, string> = {
   tabShopping: 'רשימת קניות',
   tabPantry: 'מזווה',
   tabMeals: 'ארוחות',
+  tabRecipes: 'מתכונים',
   invitePartner: 'הזמנת בן/בת הזוג',
   inviteShareHint: 'שתפו את הקוד הזה (בתוקף ל-7 ימים)',
   addItemPlaceholder: 'הוספת פריט…',
@@ -113,4 +114,8 @@ export const he: Record<keyof typeof en, string> = {
   connectedAppsDisconnect: 'נתק',
   connectedAppsConfirmDisconnect: 'לנתק את האפליקציה הזו? היא תאבד גישה באופן מיידי.',
   connectedAppsDisconnected: 'נותק',
+  saveRecipe: 'שמירה',
+  recipeSaved: 'נשמר ✓',
+  recipesEmpty: 'אין עדיין מתכונים. שמרו הצעת ארוחה כדי להתחיל.',
+  ingredientsLabel: 'מרכיבים:',
 }

@@ -7,13 +7,14 @@ import { HouseholdSetup } from '@/features/household/HouseholdSetup'
 import { LanguageToggle } from '@/features/household/LanguageToggle'
 import { ThemeToggle } from '@/shared/ui/ThemeToggle'
 import { AppLoader } from '@/shared/ui/AppLoader'
-import { ShoppingCartIcon, PantryIcon, MealsIcon, SettingsIcon } from '@/shared/ui/TabIcons'
+import { ShoppingCartIcon, PantryIcon, MealsIcon, RecipesIcon, SettingsIcon } from '@/shared/ui/TabIcons'
 import { elevationShadow, inactiveElevationShadow } from '@/shared/ui/elevation'
 import { titleTextClass, titleGlow } from '@/shared/ui/titleGlow'
 import { useTheme, type Theme } from '@/shared/useTheme'
 import { ShoppingList } from '@/features/shopping/ShoppingList'
 import { PantryList } from '@/features/pantry/PantryList'
 import { MealsScreen } from '@/features/meals/MealsScreen'
+import { RecipesScreen } from '@/features/recipes/RecipesScreen'
 import { SettingsScreen } from '@/features/settings/SettingsScreen'
 import { OAuthConsentScreen } from '@/features/oauthConsent/OAuthConsentScreen'
 
@@ -71,6 +72,9 @@ function Layout({ household, email }: { household: Household; email: string | un
         <NavLink to="/meals" className={navTabClass} aria-label={t('tabMeals')}>
           <MealsIcon />
         </NavLink>
+        <NavLink to="/recipes" className={navTabClass} aria-label={t('tabRecipes')}>
+          <RecipesIcon />
+        </NavLink>
         <NavLink to="/settings" className={navTabClass} aria-label={t('tabSettings')}>
           <SettingsIcon />
         </NavLink>
@@ -102,6 +106,7 @@ function HomeScreen({ email }: { email: string | undefined }) {
           <Route path="/" element={<ShoppingList householdId={household.id} />} />
           <Route path="/pantry" element={<PantryList householdId={household.id} />} />
           <Route path="/meals" element={<MealsScreen householdId={household.id} />} />
+          <Route path="/recipes" element={<RecipesScreen householdId={household.id} />} />
           <Route path="/settings" element={<SettingsScreen />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>

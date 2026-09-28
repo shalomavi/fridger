@@ -4,6 +4,7 @@ export const en = {
   tabShopping: 'Shopping list',
   tabPantry: 'Pantry',
   tabMeals: 'Meals',
+  tabRecipes: 'Recipes',
   invitePartner: 'Invite your partner',
   inviteShareHint: 'Share this code (valid 7 days)',
   addItemPlaceholder: 'Add an item…',
@@ -109,4 +110,8 @@ export const en = {
   connectedAppsDisconnect: 'Disconnect',
   connectedAppsConfirmDisconnect: 'Disconnect this app? It will lose access immediately.',
   connectedAppsDisconnected: 'Disconnected',
+  saveRecipe: 'Save',
+  recipeSaved: 'Saved ✓',
+  recipesEmpty: 'No recipes yet. Save a meal suggestion to get started.',
+  ingredientsLabel: 'Ingredients:',
 } as const

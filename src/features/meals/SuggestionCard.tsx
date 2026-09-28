@@ -11,18 +11,33 @@ export function SuggestionCard({
   cooking,
   onAddMissing,
   addingMissing,
+  onSave,
+  saving,
+  saved,
 }: {
   meal: Meal
   onCookedThis: () => void
   cooking: boolean
   onAddMissing: () => void
   addingMissing: boolean
+  onSave: () => void
+  saving: boolean
+  saved: boolean
 }) {
   const { t, lang } = useLanguage()
 
   return (
     <Surface as="li" className="space-y-3 p-4">
-      <h3 className="text-lg font-medium text-primary-accent">{meal.name}</h3>
+      <div className="flex items-start justify-between gap-2">
+        <h3 className="text-lg font-medium text-primary-accent">{meal.name}</h3>
+        <button
+          onClick={onSave}
+          disabled={saving || saved}
+          className="flex-none rounded-md bg-surface-muted px-2 py-1 text-xs text-text-soft transition-transform duration-300 active:scale-95 disabled:opacity-50"
+        >
+          {saved ? t('recipeSaved') : saving ? '…' : t('saveRecipe')}
+        </button>
+      </div>
 
       {meal.uses.length > 0 && (
         <p className="text-sm text-text-muted">
