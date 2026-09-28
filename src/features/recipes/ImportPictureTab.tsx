@@ -76,7 +76,7 @@ export function ImportPictureTab({
       ) : (
         <button
           onClick={() => inputRef.current?.click()}
-          className="w-full rounded-md border border-dashed border-surface-muted py-6 text-sm text-text-soft"
+          className="w-full rounded-md border border-dashed border-primary py-6 text-sm text-text-soft"
         >
           {t('importRecipePickPhoto')}
         </button>
