@@ -1,12 +1,13 @@
 import type { Language } from './schema.ts'
 
-// 'input.type' distinguishes the import source. 'url' (link import) lands
-// in a later slice, adding its own field here without disturbing this
-// shape.
+// 'input.type' distinguishes the import source.
 export type RequestBody = {
   householdId: string
   lang: Language
-  input: { type: 'text'; text: string } | { type: 'image'; imageBase64: string; mimeType: string }
+  input:
+    | { type: 'text'; text: string }
+    | { type: 'image'; imageBase64: string; mimeType: string }
+    | { type: 'url'; url: string }
 }
 
 // Base64 is ~4/3 the size of the decoded bytes, so this caps the decoded
@@ -29,6 +30,12 @@ export async function parseRequestBody(req: Request): Promise<RequestBody> {
     if (imageBase64.length > MAX_IMAGE_BASE64_LENGTH) throw new Error('image too large')
     const mimeType = typeof body.input.mimeType === 'string' ? body.input.mimeType : 'image/jpeg'
     return { householdId, lang, input: { type: 'image', imageBase64, mimeType } }
+  }
+
+  if (body.input?.type === 'url') {
+    const url = typeof body.input.url === 'string' ? body.input.url.trim() : ''
+    if (!url) throw new Error('missing input.url')
+    return { householdId, lang, input: { type: 'url', url } }
   }
 
   const text = typeof body.input?.text === 'string' ? body.input.text.trim() : ''

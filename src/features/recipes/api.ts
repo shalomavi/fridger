@@ -26,6 +26,22 @@ export async function parseRecipeFromText(
   return data
 }
 
+/** Unlike text/image import, a bad URL has a specific, honest reason to
+ * surface (fetch failed, or the site needs a login — see scrape.ts) rather
+ * than a generic failure toast, so this reads the Edge Function's JSON body
+ * off a non-2xx response instead of just rethrowing `error`. */
+export async function parseRecipeFromUrl(householdId: string, lang: Language, url: string): Promise<ParsedRecipe> {
+  const { data, error } = await supabase.functions.invoke('parse-recipe', {
+    body: { householdId, lang, input: { type: 'url', url } },
+  })
+  if (error) {
+    const context = (error as { context?: Response }).context
+    const body = await context?.json().catch(() => null)
+    throw new Error(typeof body?.error === 'string' ? body.error : error.message)
+  }
+  return data
+}
+
 /** `imageBase64` has no `data:` prefix — see resizeImage.ts, which is what
  * produces it. */
 export async function parseRecipeFromImage(

@@ -123,6 +123,8 @@ export const he: Record<keyof typeof en, string> = {
   importRecipeTextPlaceholder: 'הדביקו כאן את טקסט המתכון…',
   importRecipeTabText: 'טקסט',
   importRecipeTabPicture: 'תמונה',
+  importRecipeTabLink: 'קישור',
+  importRecipeLinkPlaceholder: 'הדביקו כאן קישור למתכון…',
   importRecipePickPhoto: 'בחרו תמונה',
   importRecipeParse: 'ייבוא',
   notARecipeError: 'זה לא נראה כמו מתכון. נסו להדביק את המרכיבים והשלבים.',

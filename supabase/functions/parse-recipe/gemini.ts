@@ -1,6 +1,5 @@
-import { SYSTEM_INSTRUCTION, buildTextPrompt, buildImagePrompt } from './prompt.ts'
+import { SYSTEM_INSTRUCTION, buildTextPrompt, buildImagePrompt, buildUrlPrompt } from './prompt.ts'
 import type { Language } from './schema.ts'
-import type { RequestBody } from './request.ts'
 
 const MODEL = 'gemini-2.5-flash'
 
@@ -45,17 +44,29 @@ const RESPONSE_SCHEMA = {
   required: ['isRecipe'],
 }
 
+// index.ts scrapes url inputs itself (see scrape.ts) and passes the result
+// here as scrapedText, rather than this file doing its own fetch — keeps
+// network access to one place. This is deliberately its own type rather
+// than RequestBody['input'] directly: gemini.ts never sees a raw url, only
+// already-scraped text.
+export type GeminiInput =
+  | { type: 'text'; text: string }
+  | { type: 'image'; imageBase64: string; mimeType: string }
+  | { type: 'scraped-url'; scrapedText: string }
+
 /** Same structured-output approach as suggest-meals/gemini.ts — constrains
  * the model to valid JSON instead of parsing prose. Throws on any network/
  * API failure or non-2xx; the caller (index.ts) decides what to do with
  * that (there's no fallback engine here, unlike suggest-meals). */
-export async function callGemini(apiKey: string, input: RequestBody['input'], lang: Language): Promise<unknown> {
+export async function callGemini(apiKey: string, input: GeminiInput, lang: Language): Promise<unknown> {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`
 
   const parts =
     input.type === 'image'
       ? [{ text: buildImagePrompt(lang) }, { inlineData: { mimeType: input.mimeType, data: input.imageBase64 } }]
-      : [{ text: buildTextPrompt(input.text, lang) }]
+      : input.type === 'scraped-url'
+        ? [{ text: buildUrlPrompt(input.scrapedText, lang) }]
+        : [{ text: buildTextPrompt(input.text, lang) }]
 
   const res = await fetch(url, {
     method: 'POST',

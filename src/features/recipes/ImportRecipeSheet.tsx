@@ -1,15 +1,21 @@
 import { useState } from 'react'
 import { ImportTextTab } from './ImportTextTab'
 import { ImportPictureTab } from './ImportPictureTab'
+import { ImportLinkTab } from './ImportLinkTab'
 import type { ParsedRecipe, RecipeSource } from './api'
 import { useLanguage } from '@/features/household/useLanguage'
 
-type Tab = 'text' | 'picture'
+type Tab = 'text' | 'picture' | 'url'
+
+const TAB_LABEL_KEY = {
+  text: 'importRecipeTabText',
+  picture: 'importRecipeTabPicture',
+  url: 'importRecipeTabLink',
+} as const
 
 /**
  * Recipe import — a centered overlay, same shell as ConfirmDialog, with
- * tabs for each import source. Link import (a later slice) adds a third
- * tab here without touching Text or Picture.
+ * tabs for each import source.
  */
 export function ImportRecipeSheet({
   householdId,
@@ -18,7 +24,7 @@ export function ImportRecipeSheet({
 }: {
   householdId: string
   onClose: () => void
-  onParsed: (recipe: ParsedRecipe & { isRecipe: true }, source: RecipeSource) => void
+  onParsed: (recipe: ParsedRecipe & { isRecipe: true }, source: RecipeSource, sourceUrl?: string) => void
 }) {
   const { t, lang } = useLanguage()
   const [tab, setTab] = useState<Tab>('text')
@@ -34,7 +40,7 @@ export function ImportRecipeSheet({
       >
         <p className="text-base font-medium text-text">{t('importRecipe')}</p>
         <div className="flex gap-1 rounded-md bg-surface-muted/50 p-1">
-          {(['text', 'picture'] as const).map((tabId) => (
+          {(['text', 'picture', 'url'] as const).map((tabId) => (
             <button
               key={tabId}
               onClick={() => setTab(tabId)}
@@ -42,13 +48,14 @@ export function ImportRecipeSheet({
                 tab === tabId ? 'bg-surface text-text shadow-sm' : 'text-text-soft'
               }`}
             >
-              {t(tabId === 'text' ? 'importRecipeTabText' : 'importRecipeTabPicture')}
+              {t(TAB_LABEL_KEY[tabId])}
             </button>
           ))}
         </div>
 
         {tab === 'text' && <ImportTextTab householdId={householdId} onClose={onClose} onParsed={onParsed} />}
         {tab === 'picture' && <ImportPictureTab householdId={householdId} onClose={onClose} onParsed={onParsed} />}
+        {tab === 'url' && <ImportLinkTab householdId={householdId} onClose={onClose} onParsed={onParsed} />}
       </div>
     </div>
   )

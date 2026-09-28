@@ -3,9 +3,10 @@
 
 import '@supabase/functions-js/edge-runtime.d.ts'
 import { createClient } from '@supabase/supabase-js'
-import { callGemini } from './gemini.ts'
+import { callGemini, type GeminiInput } from './gemini.ts'
 import { ParseResultSchema } from './schema.ts'
 import { parseRequestBody, type RequestBody } from './request.ts'
+import { scrapeRecipePage } from './scrape.ts'
 
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!
 const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
@@ -74,9 +75,30 @@ Deno.serve(async (req) => {
     return json({ error: 'Daily import limit reached, try again tomorrow' }, 429)
   }
 
+  let geminiInput: GeminiInput
+  if (input.type === 'url') {
+    try {
+      const scraped = await scrapeRecipePage(input.url)
+      geminiInput = { type: 'scraped-url', scrapedText: scraped.text }
+    } catch (err) {
+      console.error('Scrape failed:', err)
+      // No Gemini call was made, so this doesn't count toward the daily
+      // limit — it didn't cost anything.
+      return json(
+        {
+          error:
+            "Couldn't fetch that page. Some sites (like Instagram or TikTok) require a login and can't be imported this way.",
+        },
+        422,
+      )
+    }
+  } else {
+    geminiInput = input
+  }
+
   let raw: unknown
   try {
-    raw = await callGemini(GEMINI_API_KEY, input, lang)
+    raw = await callGemini(GEMINI_API_KEY, geminiInput, lang)
   } catch (err) {
     console.error('Gemini call failed:', err)
     // Counts toward the daily limit even though it failed — it still cost a

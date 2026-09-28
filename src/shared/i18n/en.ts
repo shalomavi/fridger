@@ -119,6 +119,8 @@ export const en = {
   importRecipeTextPlaceholder: 'Paste the recipe text here…',
   importRecipeTabText: 'Text',
   importRecipeTabPicture: 'Picture',
+  importRecipeTabLink: 'Link',
+  importRecipeLinkPlaceholder: 'Paste a recipe link…',
   importRecipePickPhoto: 'Choose a photo',
   importRecipeParse: 'Import',
   notARecipeError: "That doesn't look like a recipe. Try pasting the ingredients and steps.",

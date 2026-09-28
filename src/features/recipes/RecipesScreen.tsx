@@ -10,7 +10,7 @@ import { useToast } from '@/shared/alerts/ToastContext'
 import { Button } from '@/shared/ui/Button'
 import { ScrollToTopButton } from '@/shared/ui/ScrollToTopButton'
 
-type ImportedRecipe = (ParsedRecipe & { isRecipe: true }) & { source: RecipeSource }
+type ImportedRecipe = (ParsedRecipe & { isRecipe: true }) & { source: RecipeSource; sourceUrl?: string }
 
 export function RecipesScreen({ householdId }: { householdId: string }) {
   const { t } = useLanguage()
@@ -45,6 +45,7 @@ export function RecipesScreen({ householdId }: { householdId: string }) {
           ingredients: imported.ingredients,
           steps: imported.steps,
           source: imported.source,
+          sourceUrl: imported.sourceUrl,
         })
       }
       if (destinations.toShopping) {
@@ -91,9 +92,9 @@ export function RecipesScreen({ householdId }: { householdId: string }) {
         <ImportRecipeSheet
           householdId={householdId}
           onClose={() => setImportSheetOpen(false)}
-          onParsed={(recipe, source) => {
+          onParsed={(recipe, source, sourceUrl) => {
             setImportSheetOpen(false)
-            setImported({ ...recipe, source })
+            setImported({ ...recipe, source, sourceUrl })
           }}
         />
       )}

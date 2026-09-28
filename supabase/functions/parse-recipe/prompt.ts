@@ -1,7 +1,6 @@
 // Every prompt string for this feature lives in this one file — see
-// CLAUDE.md. Text (slice B) and picture (slice C) each build the same
-// instructions block onto their own source-specific opener; link import
-// (slice D) will do the same with scraped page text.
+// CLAUDE.md. Text (slice B), picture (slice C), and link (slice D) each
+// build the same instructions block onto their own source-specific opener.
 
 import { CATEGORIES, type Language } from './schema.ts'
 
@@ -46,6 +45,18 @@ ${buildInstructions(lang)}`
 export function buildImagePrompt(lang: Language): string {
   return `Here is a picture the household took, which should show a cooking recipe (e.g. a cookbook page, a
 handwritten recipe card, or a recipe shown on a screen). Read whatever text is visible in it.
+
+${buildInstructions(lang)}`
+}
+
+export function buildUrlPrompt(scrapedText: string, lang: Language): string {
+  return `Here is content fetched from a web page the household linked to, which should be a cooking recipe. It may
+be raw structured recipe data (JSON) or plain text extracted from the page — either way, read through any
+surrounding site clutter (navigation, ads, comments, related-recipe links) to find the actual recipe.
+
+"""
+${scrapedText}
+"""
 
 ${buildInstructions(lang)}`
 }
