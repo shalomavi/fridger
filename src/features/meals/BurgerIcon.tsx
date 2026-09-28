@@ -9,6 +9,10 @@ const GRADIENT_ID: Record<Variant, string> = {
   active: 'burgerBunGradActive',
 }
 
+// viewBox is cropped tight to the burger's actual bounding box (the source
+// art sits inside a much bigger 380x320 canvas) so it fills the icon box at
+// roughly the same scale as the pizza/salad instead of rendering small with
+// a lot of empty margin around it — same reasoning as PizzaIcon's viewBox.
 export function BurgerIcon({ variant, animationMs }: { variant: Variant; animationMs?: number }) {
   const gradientId = GRADIENT_ID[variant]
   const style =
@@ -17,7 +21,7 @@ export function BurgerIcon({ variant, animationMs }: { variant: Variant; animati
       : { animation: `icon-fill ${animationMs}ms linear forwards` }
 
   return (
-    <svg viewBox="0 0 380 320" className="absolute inset-0 h-full w-full" style={style}>
+    <svg viewBox="34 58 312 238" className="absolute inset-0 h-full w-full" style={style}>
       <defs>
         <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#e8a03c" />
