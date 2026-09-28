@@ -3,9 +3,13 @@ import type { Language } from './schema.ts'
 
 const MODEL = 'gemini-2.5-flash'
 
-// isRecipe is the only always-required field — when it's false the rest are
-// simply omitted by the model, so they stay optional here (see schema.ts's
-// zod union, which is what actually enforces the two valid shapes).
+// Gemini's responseSchema can't express "these fields are required only
+// when isRecipe is true" (no conditional/if-then support), so every field
+// is marked required here to stop the model from silently omitting one
+// (seen in practice: isRecipe: true with no ingredients array at all, which
+// then failed schema.ts's zod union). When isRecipe is false the model just
+// fills the rest with an empty name/array — schema.ts's union is what
+// actually enforces the two valid shapes; this only pins down JSON keys.
 const RESPONSE_SCHEMA = {
   type: 'object',
   properties: {
@@ -41,7 +45,7 @@ const RESPONSE_SCHEMA = {
     },
     steps: { type: 'array', items: { type: 'string' } },
   },
-  required: ['isRecipe'],
+  required: ['isRecipe', 'name', 'ingredients', 'steps'],
 }
 
 // index.ts scrapes url inputs itself (see scrape.ts) and passes the result

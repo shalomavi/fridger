@@ -15,7 +15,8 @@ garbled/incomplete to make out a dish), say so honestly instead of forcing somet
 
 function buildInstructions(lang: Language): string {
   return `First decide: is this actually a recipe (a dish with ingredients and steps to make it), even if messily
-formatted, translated, or missing minor details? If not, reply with isRecipe: false and nothing else.
+formatted, translated, or missing minor details? If not, reply with isRecipe: false, an empty string for name, and
+empty arrays for ingredients and steps.
 
 If it is a recipe, reply with isRecipe: true and:
 - name: the dish's name, in ${LANGUAGE_NAME[lang]} (translate if the source is in another language)
