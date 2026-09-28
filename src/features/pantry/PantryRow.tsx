@@ -6,7 +6,7 @@ import { QuantityEditor } from '@/shared/ui/QuantityEditor'
 import { CategoryPicker } from '@/shared/ui/CategoryPicker'
 import { ExpiryEditor } from '@/shared/ui/ExpiryEditor'
 import { isExpiringSoon } from '@/domain/expiry'
-import { glowShadow } from '@/shared/ui/elevation'
+import { glowShadow, softButtonShadow } from '@/shared/ui/elevation'
 import type { Category } from '@/shared/categories'
 import type { Unit } from '@/domain/units'
 
@@ -119,7 +119,7 @@ export function PantryRow({
           <button
             onClick={startConsume}
             onPointerDown={(e) => e.stopPropagation()}
-            className="ms-auto flex-none rounded-md bg-surface-muted px-2 py-1 text-xs text-text-soft transition-transform duration-300 active:scale-95"
+            className={`ms-auto flex-none rounded-md bg-surface-muted px-2 py-1 text-xs text-text-soft transition-transform duration-300 active:scale-95 ${softButtonShadow}`}
           >
             {t('used')}
           </button>
