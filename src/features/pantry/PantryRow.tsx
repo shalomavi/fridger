@@ -6,6 +6,7 @@ import { QuantityEditor } from '@/shared/ui/QuantityEditor'
 import { CategoryPicker } from '@/shared/ui/CategoryPicker'
 import { ExpiryEditor } from '@/shared/ui/ExpiryEditor'
 import { isExpiringSoon } from '@/domain/expiry'
+import { isHebrewText } from '@/domain/script'
 import { glowShadow, softButtonShadow } from '@/shared/ui/elevation'
 import type { Category } from '@/shared/categories'
 import type { Unit } from '@/domain/units'
@@ -33,7 +34,7 @@ export function PantryRow({
   onUpdateCategory: (category: Category | null) => void
   onUpdateExpiry: (expiresAt: string | null) => void
 }) {
-  const { t, lang } = useLanguage()
+  const { t } = useLanguage()
   const [dragX, setDragX] = useState(0)
   const [leaving, setLeaving] = useState(false)
   const dragging = useRef<{ startX: number } | null>(null)
@@ -113,7 +114,7 @@ export function PantryRow({
       >
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
           <span
-            className={`text-xl font-bold text-text ${lang === 'he' ? 'font-list-he' : 'font-list-en'}`}
+            className={`text-xl font-bold text-text ${isHebrewText(item.name) ? 'font-list-he' : 'font-list-en'}`}
           >
             {item.name}
           </span>

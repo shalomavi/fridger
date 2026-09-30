@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { DeleteButton } from './DeleteButton'
 import type { ShoppingItem } from './api'
-import { useLanguage } from '@/features/household/useLanguage'
+import { isHebrewText } from '@/domain/script'
 import { DetailsEditor } from '@/shared/ui/DetailsEditor'
 import { QuantityEditor } from '@/shared/ui/QuantityEditor'
 import { CategoryPicker } from '@/shared/ui/CategoryPicker'
@@ -31,7 +31,6 @@ export function ShoppingRow({
   deleteLabel: string
   confirmDeleteMessage: string
 }) {
-  const { lang } = useLanguage()
   // item-out (index.css) is the reverse of the item-in entrance below, so a
   // row leaving — whether deleted or checked off/on, moving it to the other
   // section — plays the mirror image of how it arrived, instead of each
@@ -102,7 +101,7 @@ export function ShoppingRow({
             </svg>
           </span>
           <span
-            className={`text-xl font-bold transition-colors duration-300 ${lang === 'he' ? 'font-list-he' : 'font-list-en'} ${
+            className={`text-xl font-bold transition-colors duration-300 ${isHebrewText(item.name) ? 'font-list-he' : 'font-list-en'} ${
               purchased ? 'text-text-subtle line-through' : 'text-text'
             }`}
           >
