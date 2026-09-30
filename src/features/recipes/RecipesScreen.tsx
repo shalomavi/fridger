@@ -8,6 +8,7 @@ import type { ParsedRecipe, RecipeIngredient, RecipeSource } from './api'
 import { useLanguage } from '@/features/household/useLanguage'
 import { useToast } from '@/shared/alerts/ToastContext'
 import { Button } from '@/shared/ui/Button'
+import { CheckCircleIcon } from '@/shared/ui/FormIcons'
 import { ScrollToTopButton } from '@/shared/ui/ScrollToTopButton'
 
 type ImportedRecipe = (ParsedRecipe & { isRecipe: true }) & { source: RecipeSource; sourceUrl?: string }
@@ -50,7 +51,7 @@ export function RecipesScreen({ householdId }: { householdId: string }) {
           source: imported.source,
           sourceUrl: imported.sourceUrl,
         })
-        notify(`${imported.name} — ${t('recipeSaved')}`, 'success')
+        notify(`${imported.name} — ${t('recipeSaved')}`, 'success', <CheckCircleIcon className="text-primary" />)
       }
       if (destinations.toShopping) {
         const addedCount = await addIngredientsToShopping.mutateAsync(imported.ingredients)

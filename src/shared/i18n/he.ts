@@ -117,7 +117,7 @@ export const he: Record<keyof typeof en, string> = {
   connectedAppsConfirmDisconnect: 'לנתק את האפליקציה הזו? היא תאבד גישה באופן מיידי.',
   connectedAppsDisconnected: 'נותק',
   saveRecipe: 'שמירה',
-  recipeSaved: 'נשמר ✓',
+  recipeSaved: 'נשמר',
   recipesEmpty: 'אין עדיין מתכונים. שמרו הצעת ארוחה כדי להתחיל.',
   ingredientsLabel: 'מרכיבים:',
   importRecipe: 'ייבוא מתכון',

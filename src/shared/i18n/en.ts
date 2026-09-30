@@ -113,7 +113,7 @@ export const en = {
   connectedAppsConfirmDisconnect: 'Disconnect this app? It will lose access immediately.',
   connectedAppsDisconnected: 'Disconnected',
   saveRecipe: 'Save',
-  recipeSaved: 'Saved ✓',
+  recipeSaved: 'Saved',
   recipesEmpty: 'No recipes yet. Save a meal suggestion to get started.',
   ingredientsLabel: 'Ingredients:',
   importRecipe: 'Import a recipe',

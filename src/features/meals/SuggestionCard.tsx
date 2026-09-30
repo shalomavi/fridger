@@ -4,6 +4,7 @@ import { formatQuantity } from '@/domain/units'
 import { useLanguage } from '@/features/household/useLanguage'
 import { Surface } from '@/shared/ui/Surface'
 import { Button } from '@/shared/ui/Button'
+import { CheckCircleIcon } from '@/shared/ui/FormIcons'
 
 export function SuggestionCard({
   meal,
@@ -33,8 +34,9 @@ export function SuggestionCard({
         <button
           onClick={onSave}
           disabled={saving || saved}
-          className="flex-none rounded-md bg-surface-muted px-2 py-1 text-xs text-text-soft transition-transform duration-300 active:scale-95 disabled:opacity-50"
+          className="flex flex-none items-center gap-1 rounded-md bg-surface-muted px-2 py-1 text-xs text-text-soft transition-transform duration-300 active:scale-95 disabled:opacity-50"
         >
+          {saved && <CheckCircleIcon className="text-primary" />}
           {saved ? t('recipeSaved') : saving ? '…' : t('saveRecipe')}
         </button>
       </div>
