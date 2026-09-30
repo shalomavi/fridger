@@ -102,7 +102,7 @@ export function ShoppingRow({
             </svg>
           </span>
           <span
-            className={`text-lg font-bold transition-colors duration-300 ${lang === 'he' ? 'font-list-he' : 'font-list-en'} ${
+            className={`text-xl font-bold transition-colors duration-300 ${lang === 'he' ? 'font-list-he' : 'font-list-en'} ${
               purchased ? 'text-text-subtle line-through' : 'text-text'
             }`}
           >

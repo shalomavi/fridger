@@ -113,7 +113,7 @@ export function PantryRow({
       >
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
           <span
-            className={`text-lg font-bold text-text ${lang === 'he' ? 'font-list-he' : 'font-list-en'}`}
+            className={`text-xl font-bold text-text ${lang === 'he' ? 'font-list-he' : 'font-list-en'}`}
           >
             {item.name}
           </span>
