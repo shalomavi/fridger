@@ -34,7 +34,7 @@ export function RecipeCard({
     <Surface as="li" className="space-y-3 p-4">
       <div className="flex items-start justify-between gap-2">
         <h3 className="text-lg font-medium text-primary-accent">
-          <SourceIcon className="me-1 inline h-[1em] w-[1em] align-[-0.15em] text-surface-muted" />
+          <SourceIcon className="me-1 inline h-[1em] w-[1em] align-[-0.15em] text-text-subtle" />
           {recipe.name}
         </h3>
         <DeleteButton onDelete={onDelete} label={t('deleteItem')} confirmMessage={t('confirmDeleteItem')} />
