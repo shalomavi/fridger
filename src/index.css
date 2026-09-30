@@ -23,9 +23,9 @@
   /* fonts — UI chrome vs. list-item text, per language (see index.html for
    * the Google Fonts <link>). Auth/setup screens are English-only, so they
    * use --font-ui-en directly rather than switching on household language. */
-  --font-ui-he: 'Assistant', sans-serif;
+  --font-ui-he: 'Varela Round', sans-serif;
   --font-list-he: 'Gveret Levin', cursive;
-  --font-ui-en: 'Ubuntu', sans-serif;
+  --font-ui-en: 'Varela Round', sans-serif;
   --font-list-en: 'Caveat', cursive;
 }
 
