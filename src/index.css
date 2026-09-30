@@ -1,5 +1,14 @@
 @import 'tailwindcss';
 
+/* Self-hosted (not on Google Fonts) — the Hebrew list-item cursive font. */
+@font-face {
+  font-family: 'Dana Yad AlefAlefAlef';
+  src: url('./assets/fonts/DanaYadAlefAlefAlef-Normal.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Semantic color tokens, aliased to Tailwind's built-in slate/teal/amber/rose
  * scales so there's one source of truth. Values are declared once here as
  * token *names* to generate utilities (bg-bg, text-text, bg-primary,
@@ -21,10 +30,11 @@
   --color-danger-fill: var(--color-rose-700);
 
   /* fonts — UI chrome vs. list-item text, per language (see index.html for
-   * the Google Fonts <link>). Auth/setup screens are English-only, so they
+   * the Google Fonts <link>, and the @font-face above for the self-hosted
+   * Hebrew cursive font). Auth/setup screens are English-only, so they
    * use --font-ui-en directly rather than switching on household language. */
   --font-ui-he: 'Varela Round', sans-serif;
-  --font-list-he: 'Gveret Levin', cursive;
+  --font-list-he: 'Dana Yad AlefAlefAlef', cursive;
   --font-ui-en: 'Varela Round', sans-serif;
   --font-list-en: 'Caveat', cursive;
 }
