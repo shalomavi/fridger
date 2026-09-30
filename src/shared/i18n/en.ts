@@ -90,7 +90,7 @@ export const en = {
   mcpTokensLabel: 'Connect an AI assistant',
   mcpTokensHint: 'Generate a token to let Claude read and update this household’s shopping list and pantry.',
   mcpTokenLabelPlaceholder: 'Label (e.g. "My phone")',
-  mcpGenerateToken: 'Generate token',
+  mcpGenerateToken: 'Create token',
   mcpTokenShownOnce: 'Copy this now — you won’t be able to see it again.',
   mcpCopyToken: 'Copy',
   mcpCopied: 'Copied',
