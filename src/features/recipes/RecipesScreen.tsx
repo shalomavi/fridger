@@ -22,11 +22,14 @@ export function RecipesScreen({ householdId }: { householdId: string }) {
   const [imported, setImported] = useState<ImportedRecipe | null>(null)
   const [applying, setApplying] = useState(false)
 
-  function onAddMissing(recipeId: string, ingredients: RecipeIngredient[]) {
+  function onAddMissing(recipeId: string, recipeName: string, ingredients: RecipeIngredient[]) {
     setAddingId(recipeId)
     addIngredientsToShopping.mutate(ingredients, {
       onSuccess: (addedCount) =>
-        notify(addedCount > 0 ? t('addedMissingToShoppingList') : t('missingAlreadyTracked'), 'success'),
+        notify(
+          `${recipeName} — ${addedCount > 0 ? t('addedMissingToShoppingList') : t('missingAlreadyTracked')}`,
+          'success',
+        ),
       onError: () => notify(t('actionFailed'), 'error'),
       onSettled: () => setAddingId(null),
     })
@@ -47,11 +50,14 @@ export function RecipesScreen({ householdId }: { householdId: string }) {
           source: imported.source,
           sourceUrl: imported.sourceUrl,
         })
-        notify(t('recipeSaved'), 'success')
+        notify(`${imported.name} — ${t('recipeSaved')}`, 'success')
       }
       if (destinations.toShopping) {
         const addedCount = await addIngredientsToShopping.mutateAsync(imported.ingredients)
-        notify(addedCount > 0 ? t('addedMissingToShoppingList') : t('missingAlreadyTracked'), 'success')
+        notify(
+          `${imported.name} — ${addedCount > 0 ? t('addedMissingToShoppingList') : t('missingAlreadyTracked')}`,
+          'success',
+        )
       }
       setImported(null)
     } catch {
@@ -79,7 +85,7 @@ export function RecipesScreen({ householdId }: { householdId: string }) {
             <RecipeCard
               key={recipe.id}
               recipe={recipe}
-              onAddMissing={() => onAddMissing(recipe.id, recipe.ingredients)}
+              onAddMissing={() => onAddMissing(recipe.id, recipe.name, recipe.ingredients)}
               addingMissing={addIngredientsToShopping.isPending && addingId === recipe.id}
               onDelete={() => remove.mutate(recipe.id)}
             />

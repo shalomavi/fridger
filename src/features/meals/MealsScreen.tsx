@@ -50,7 +50,7 @@ export function MealsScreen({ householdId }: { householdId: string }) {
   function onCookedThis(meal: Meal) {
     setCookedName(meal.name)
     cookedThis.mutate(meal, {
-      onSuccess: () => notify(t('cookedThisSuccess'), 'success'),
+      onSuccess: () => notify(`${meal.name} — ${t('cookedThisSuccess')}`, 'success'),
       onError: () => notify(t('actionFailed'), 'error'),
       onSettled: () => setCookedName(null),
     })
@@ -60,7 +60,10 @@ export function MealsScreen({ householdId }: { householdId: string }) {
     setAddingName(meal.name)
     addMissingToShoppingList.mutate(meal, {
       onSuccess: (addedCount) =>
-        notify(addedCount > 0 ? t('addedMissingToShoppingList') : t('missingAlreadyTracked'), 'success'),
+        notify(
+          `${meal.name} — ${addedCount > 0 ? t('addedMissingToShoppingList') : t('missingAlreadyTracked')}`,
+          'success',
+        ),
       onError: () => notify(t('actionFailed'), 'error'),
       onSettled: () => setAddingName(null),
     })
