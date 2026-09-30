@@ -5,14 +5,15 @@ import { useLanguage } from '@/features/household/useLanguage'
 import { Surface } from '@/shared/ui/Surface'
 import { Button } from '@/shared/ui/Button'
 import { DeleteButton } from '@/features/shopping/DeleteButton'
+import { SparklesIcon, NotesIcon, ImageIcon, LinkIcon } from '@/shared/ui/FormIcons'
 
-// One small glyph per import source, so a card reads at a glance where it
+// One small icon per import source, so a card reads at a glance where it
 // came from without spelling it out in text every time.
-const SOURCE_ICON: Record<RecipeSource, string> = {
-  suggestion: '✨',
-  text: '📝',
-  image: '📷',
-  url: '🔗',
+const SOURCE_ICON: Record<RecipeSource, (props: { className?: string }) => React.JSX.Element> = {
+  suggestion: SparklesIcon,
+  text: NotesIcon,
+  image: ImageIcon,
+  url: LinkIcon,
 }
 
 export function RecipeCard({
@@ -27,12 +28,14 @@ export function RecipeCard({
   onDelete: () => void
 }) {
   const { t, lang } = useLanguage()
+  const SourceIcon = SOURCE_ICON[recipe.source]
 
   return (
     <Surface as="li" className="space-y-3 p-4">
       <div className="flex items-start justify-between gap-2">
-        <h3 className="text-lg font-medium text-primary-accent">
-          <span aria-hidden="true">{SOURCE_ICON[recipe.source]}</span> {recipe.name}
+        <h3 className="flex items-center gap-1.5 text-lg font-medium text-primary-accent">
+          <SourceIcon className="flex-none text-primary-accent/70" />
+          {recipe.name}
         </h3>
         <DeleteButton onDelete={onDelete} label={t('deleteItem')} confirmMessage={t('confirmDeleteItem')} />
       </div>
