@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query'
 import { setHouseholdPreferences } from '@/features/household/api'
 import { useHousehold, useInvalidateHousehold } from '@/features/household/useHousehold'
 import { useLanguage } from '@/features/household/useLanguage'
+import { useToast } from '@/shared/alerts/ToastContext'
 import { Button } from '@/shared/ui/Button'
 import { fieldClass } from '@/shared/ui/Input'
 
@@ -10,6 +11,7 @@ export function HouseholdPreferences() {
   const { t } = useLanguage()
   const { data: household } = useHousehold()
   const invalidate = useInvalidateHousehold()
+  const { notify } = useToast()
   const [value, setValue] = useState('')
   const [dirty, setDirty] = useState(false)
 
@@ -24,7 +26,9 @@ export function HouseholdPreferences() {
     onSuccess: () => {
       invalidate()
       setDirty(false)
+      notify(t('preferencesSaved'), 'success')
     },
+    onError: () => notify(t('actionFailed'), 'error'),
   })
 
   if (!household) return null

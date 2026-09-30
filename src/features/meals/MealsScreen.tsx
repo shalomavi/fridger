@@ -40,13 +40,20 @@ export function MealsScreen({ householdId }: { householdId: string }) {
         steps: meal.steps,
         source: 'suggestion',
       },
-      { onSettled: () => setSavingName(null) },
+      {
+        onError: () => notify(t('actionFailed'), 'error'),
+        onSettled: () => setSavingName(null),
+      },
     )
   }
 
   function onCookedThis(meal: Meal) {
     setCookedName(meal.name)
-    cookedThis.mutate(meal, { onSettled: () => setCookedName(null) })
+    cookedThis.mutate(meal, {
+      onSuccess: () => notify(t('cookedThisSuccess'), 'success'),
+      onError: () => notify(t('actionFailed'), 'error'),
+      onSettled: () => setCookedName(null),
+    })
   }
 
   function onAddMissing(meal: Meal) {

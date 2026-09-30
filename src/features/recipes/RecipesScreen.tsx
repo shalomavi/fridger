@@ -47,6 +47,7 @@ export function RecipesScreen({ householdId }: { householdId: string }) {
           source: imported.source,
           sourceUrl: imported.sourceUrl,
         })
+        notify(t('recipeSaved'), 'success')
       }
       if (destinations.toShopping) {
         const addedCount = await addIngredientsToShopping.mutateAsync(imported.ingredients)
