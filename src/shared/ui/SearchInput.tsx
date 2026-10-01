@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { SearchIcon } from '@/shared/ui/FormIcons'
 import { Input } from '@/shared/ui/Input'
 import { SuggestionList } from '@/shared/ui/SuggestionList'
@@ -33,14 +33,26 @@ export function SearchInput({
   placeholder: string
   suggestions?: string[]
 }) {
+  // "focused" here means "dropdown allowed to show", not DOM focus: a click on
+  // the already-focused field closes the list without blurring it.
   const [focused, setFocused] = useState(false)
+  const wasFocusedOnPress = useRef(false)
   return (
     <div className="sticky top-2 z-10 -mx-6 bg-surface/5 px-6">
       <div className="relative">
         <Input
           type="search"
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => {
+            onChange(e.target.value)
+            setFocused(true)
+          }}
+          onMouseDown={(e) => {
+            wasFocusedOnPress.current = document.activeElement === e.currentTarget
+          }}
+          onClick={() => {
+            if (wasFocusedOnPress.current) setFocused(false)
+          }}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
           placeholder={placeholder}
