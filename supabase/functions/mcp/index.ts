@@ -8,6 +8,7 @@ import { handleCreateToken } from './tokens.ts'
 import { registerShoppingListTools } from './tools/shoppingList.ts'
 import { registerPurchaseTool } from './tools/purchase.ts'
 import { registerPantryTools } from './tools/pantry.ts'
+import { registerRecipeTools } from './tools/recipes.ts'
 import { authorizationServerMetadata, protectedResourceMetadata } from './oauth/metadata.ts'
 import { handleRegister, handleClientInfo } from './oauth/register.ts'
 import { handleAuthorizeRequest, handleAuthorizeApprove } from './oauth/authorize.ts'
@@ -37,6 +38,7 @@ const mcpHandler = createMcpHandler(({ authInfo }) => {
   registerShoppingListTools(server, householdId)
   registerPurchaseTool(server, householdId)
   registerPantryTools(server, householdId)
+  registerRecipeTools(server, householdId)
 
   return server
 })

@@ -86,6 +86,7 @@ speaking the MCP Streamable HTTP protocol instead of a one-shot POST.
 | `get_pantry` | `listPantryItems` |
 | `update_pantry_item` | edit name/details/category/quantity/unit on an existing pantry item |
 | `consume_pantry_item` | `consumeItem` |
+| `get_recipes` / `add_recipe` / `update_recipe` / `delete_recipe` | CRUD on the `recipes` table |
 | `suggest_meals` | proxies to `suggest-meals` |
 
 `src/domain/` is plain framework-free TypeScript (no React, no Supabase
