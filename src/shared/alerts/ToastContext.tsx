@@ -23,7 +23,7 @@ type ToastContextValue = {
 }
 
 const ToastContext = createContext<ToastContextValue | null>(null)
-export const TOAST_DURATION_MS = 2000
+export const TOAST_DURATION_MS = 3000
 
 export function ToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<Toast[]>([])
