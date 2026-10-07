@@ -7,6 +7,8 @@ import { createContext, useCallback, useContext, useState, type ReactNode } from
  * `icon` is a free-form slot (see shared/alerts/itemAddedToast.tsx) — the
  * context/container stay unaware of what any particular toast's icon means.
  */
+/** Where a toast's "go to" button navigates — the page the item landed on. */
+export type ToastDestination = '/' | '/pantry'
 export type ToastVariant = 'success' | 'error' | 'info'
 export type Toast = {
   id: string
@@ -14,11 +16,18 @@ export type Toast = {
   message: string
   icon?: ReactNode
   onUndo?: () => void
+  to?: ToastDestination
 }
 
 type ToastContextValue = {
   toasts: Toast[]
-  notify: (message: string, variant?: ToastVariant, icon?: ReactNode, onUndo?: () => void) => void
+  notify: (
+    message: string,
+    variant?: ToastVariant,
+    icon?: ReactNode,
+    onUndo?: () => void,
+    to?: ToastDestination,
+  ) => void
   dismiss: (id: string) => void
 }
 
@@ -35,12 +44,12 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   // Same message already showing (e.g. a mutation error firing twice) is a
   // no-op, not a second stacked toast.
   const notify = useCallback(
-    (message: string, variant: ToastVariant = 'info', icon?: ReactNode, onUndo?: () => void) => {
+    (message: string, variant: ToastVariant = 'info', icon?: ReactNode, onUndo?: () => void, to?: ToastDestination) => {
       setToasts((current) => {
         if (current.some((toast) => toast.message === message)) return current
         const id = crypto.randomUUID()
         setTimeout(() => dismiss(id), TOAST_DURATION_MS)
-        return [...current, { id, variant, message, icon, onUndo }]
+        return [...current, { id, variant, message, icon, onUndo, to }]
       })
     },
     [dismiss],

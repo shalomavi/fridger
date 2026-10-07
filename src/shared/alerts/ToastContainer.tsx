@@ -1,3 +1,4 @@
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useToast, TOAST_DURATION_MS, type ToastVariant } from './ToastContext'
 import { useLanguage } from '@/features/household/useLanguage'
 
@@ -22,6 +23,8 @@ const variantBarClass: Record<ToastVariant, string> = {
 export function ToastContainer() {
   const { toasts, dismiss } = useToast()
   const { t, lang } = useLanguage()
+  const navigate = useNavigate()
+  const { pathname } = useLocation()
 
   return (
     <div
@@ -43,6 +46,17 @@ export function ToastContainer() {
               {toast.icon}
               {toast.message}
             </button>
+            {toast.to && toast.to !== pathname && (
+              <button
+                onClick={() => {
+                  navigate(toast.to!)
+                  dismiss(toast.id)
+                }}
+                className="flex-none rounded-md bg-surface-muted px-3 py-1.5 text-sm font-medium text-primary transition-transform duration-300 active:scale-95"
+              >
+                {t(toast.to === '/' ? 'goToShopping' : 'goToPantry')}
+              </button>
+            )}
             {toast.onUndo && (
               <button
                 onClick={() => {

@@ -30,6 +30,9 @@ export function RecipesScreen({ householdId }: { householdId: string }) {
         notify(
           `${recipeName} — ${addedCount > 0 ? t('addedMissingToShoppingList') : t('missingAlreadyTracked')}`,
           'success',
+          undefined,
+          undefined,
+          '/',
         ),
       onError: () => notify(t('actionFailed'), 'error'),
       onSettled: () => setAddingId(null),
@@ -58,6 +61,9 @@ export function RecipesScreen({ householdId }: { householdId: string }) {
         notify(
           `${imported.name} — ${addedCount > 0 ? t('addedMissingToShoppingList') : t('missingAlreadyTracked')}`,
           'success',
+          undefined,
+          undefined,
+          '/',
         )
       }
       setImported(null)

@@ -63,6 +63,9 @@ export function MealsScreen({ householdId }: { householdId: string }) {
         notify(
           `${meal.name} — ${addedCount > 0 ? t('addedMissingToShoppingList') : t('missingAlreadyTracked')}`,
           'success',
+          undefined,
+          undefined,
+          '/',
         ),
       onError: () => notify(t('actionFailed'), 'error'),
       onSettled: () => setAddingName(null),

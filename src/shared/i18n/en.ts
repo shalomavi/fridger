@@ -76,6 +76,8 @@ export const en = {
   movedToShoppingList: 'Moved to shopping list',
   deleted: 'Deleted',
   undo: 'Undo',
+  goToShopping: 'Go to list',
+  goToPantry: 'Go to pantry',
   mealTypeLabel: 'Meal type',
   mealType_healthy: 'Healthy',
   mealType_fast: 'Fast',

@@ -56,7 +56,7 @@ export function useAddAndPurchase(householdId: string, key: QueryKey) {
     },
     onSuccess: (trimmedName) => {
       const { message, icon } = itemMovedToastContent(trimmedName, 'pantry', t)
-      notify(message, 'success', icon)
+      notify(message, 'success', icon, undefined, '/pantry')
     },
     onError: () => notify(t('actionFailed'), 'error'),
     onSettled: () => {

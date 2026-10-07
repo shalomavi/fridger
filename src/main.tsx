@@ -4,6 +4,7 @@ import { QueryClient } from '@tanstack/react-query'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
 import { AppRoutes } from '@/app/routes'
+import { BrowserRouter } from 'react-router-dom'
 import { ToastProvider } from '@/shared/alerts/ToastContext'
 import { ToastContainer } from '@/shared/alerts/ToastContainer'
 import { ConfirmProvider } from '@/shared/alerts/ConfirmContext'
@@ -50,13 +51,15 @@ createRoot(document.getElementById('root')!).render(
       }}
     >
       <ThemeProvider>
-        <ToastProvider>
-          <ConfirmProvider>
-            <AppRoutes />
-            <ToastContainer />
-            <ConfirmDialog />
-          </ConfirmProvider>
-        </ToastProvider>
+        <BrowserRouter>
+          <ToastProvider>
+            <ConfirmProvider>
+              <AppRoutes />
+              <ToastContainer />
+              <ConfirmDialog />
+            </ConfirmProvider>
+          </ToastProvider>
+        </BrowserRouter>
       </ThemeProvider>
     </PersistQueryClientProvider>
   </StrictMode>,

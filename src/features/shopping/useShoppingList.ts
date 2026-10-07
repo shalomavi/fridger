@@ -16,7 +16,7 @@ import { pantryQueryKey } from '@/features/pantry/usePantry'
 import type { Category } from '@/shared/categories'
 import type { Unit } from '@/domain/units'
 import { useLanguage } from '@/features/household/useLanguage'
-import { useToast } from '@/shared/alerts/ToastContext'
+import { useToast, type ToastDestination } from '@/shared/alerts/ToastContext'
 import { undoAction } from '@/shared/query/undoAction'
 import { itemMovedToastContent } from '@/shared/alerts/itemMovedToast'
 import { itemDeletedToastContent } from '@/shared/alerts/itemDeletedToast'
@@ -33,8 +33,8 @@ export function useShoppingList(householdId: string) {
     if (context?.previous) queryClient.setQueryData(key, context.previous)
     notify(t('actionFailed'), 'error')
   }
-  const fireToast = (c: { message: string; icon: ReactNode }, onUndo?: () => void) =>
-    notify(c.message, 'success', c.icon, onUndo)
+  const fireToast = (c: { message: string; icon: ReactNode }, onUndo?: () => void, to?: ToastDestination) =>
+    notify(c.message, 'success', c.icon, onUndo, to)
 
   const query = useQuery({ queryKey: key, queryFn: () => listShoppingItems(householdId) })
   // Stop in-flight refetches, then snapshot for rollback — shared by every mutation's onMutate.
@@ -63,6 +63,7 @@ export function useShoppingList(householdId: string) {
         // Undo re-toggles: passing the post-toggle status flips it straight back the other way.
         fireToast(itemMovedToastContent(item.name, item.status === 'pending' ? 'pantry' : 'shopping-list', t), () =>
           toggleItem.mutate({ ...item, status: nextStatus, silent: true }),
+          item.status === 'pending' ? '/pantry' : '/',
         )
       }
       return { previous }

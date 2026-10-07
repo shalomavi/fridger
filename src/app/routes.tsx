@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate, NavLink, Outlet } from 'react-router-dom'
+import { Routes, Route, Navigate, NavLink, Outlet } from 'react-router-dom'
 import { useSession, signOut } from '@/features/auth/useSession'
 import { LoginForm } from '@/features/auth/LoginForm'
 import { useHousehold, type Household } from '@/features/household/useHousehold'
@@ -126,9 +126,5 @@ export function AppRoutes() {
     return <LoginForm />
   }
 
-  return (
-    <BrowserRouter>
-      <HomeScreen email={session.user.email} />
-    </BrowserRouter>
-  )
+  return <HomeScreen email={session.user.email} />
 }
