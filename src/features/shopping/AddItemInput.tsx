@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useRef, useState, type FormEvent } from 'react'
 import { useLanguage } from '@/features/household/useLanguage'
 import { Button } from '@/shared/ui/Button'
 import { Input } from '@/shared/ui/Input'
@@ -35,7 +35,10 @@ export function AddItemInput({
   const [details, setDetails] = useState('')
   const [category, setCategory] = useState<Category | ''>('')
   const [addToPantry, setAddToPantry] = useState(false)
+  // "focused" means "dropdown allowed to show", not DOM focus — see SearchInput.tsx,
+  // which does the same: pressing the already-focused field closes the list.
   const [nameFocused, setNameFocused] = useState(false)
+  const wasFocusedOnPress = useRef(false)
 
   function onSubmit(e: FormEvent) {
     e.preventDefault()
@@ -56,7 +59,16 @@ export function AddItemInput({
       <div className="relative">
         <Input
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => {
+            setName(e.target.value)
+            setNameFocused(true)
+          }}
+          onMouseDown={(e) => {
+            wasFocusedOnPress.current = document.activeElement === e.currentTarget
+          }}
+          onClick={() => {
+            if (wasFocusedOnPress.current) setNameFocused(false)
+          }}
           onFocus={() => setNameFocused(true)}
           onBlur={() => setNameFocused(false)}
           placeholder={t('addItemPlaceholder')}
