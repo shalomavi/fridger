@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useSuggestions } from './useSuggestions'
 import { SuggestionCard } from './SuggestionCard'
 import { MealLoader } from './MealLoader'
+import { SkeletonList } from '@/shared/ui/SkeletonCard'
 import { SUGGESTION_MODES, type Meal, type SuggestionMode } from './api'
 import { useRecipes } from '@/features/recipes/useRecipes'
 import { mealToRecipeIngredients } from '@/domain/mealToRecipe'
@@ -124,7 +125,9 @@ export function MealsScreen({ householdId }: { householdId: string }) {
         </p>
       )}
 
-      {suggestion.data && (
+      {suggest.isPending && <SkeletonList count={3} />}
+
+      {suggestion.data && !suggest.isPending && (
         <ul className="space-y-3">
           {suggestion.data.meals.map((meal) => (
             <SuggestionCard

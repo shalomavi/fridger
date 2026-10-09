@@ -1,3 +1,4 @@
+import { SkeletonList } from '@/shared/ui/SkeletonCard'
 import { useState } from 'react'
 import { useRecipes } from './useRecipes'
 import { RecipeCard } from './RecipeCard'
@@ -80,7 +81,7 @@ export function RecipesScreen({ householdId }: { householdId: string }) {
         {t('importRecipe')}
       </Button>
 
-      {isLoading && <p className="text-text-subtle">{t('loading')}</p>}
+      {isLoading && <SkeletonList count={2} />}
 
       {!isLoading && (!recipes || recipes.length === 0) && (
         <p className="text-text-subtle">{t('recipesEmpty')}</p>

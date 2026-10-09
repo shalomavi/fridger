@@ -1,3 +1,4 @@
+import { SkeletonCard } from '@/shared/ui/SkeletonCard'
 import { useRef, useState } from 'react'
 import { resizeImage } from './resizeImage'
 import { useParseRecipeFromImage } from './useParseRecipe'
@@ -82,6 +83,7 @@ export function ImportPictureTab({
           {t('importRecipePickPhoto')}
         </button>
       )}
+      {parseRecipe.isPending && <SkeletonCard />}
       <div className="flex justify-end gap-2">
         <button onClick={onClose} className={cancelButtonClass}>
           {t('cancel')}

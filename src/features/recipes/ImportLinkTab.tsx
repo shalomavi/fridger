@@ -1,3 +1,4 @@
+import { SkeletonCard } from '@/shared/ui/SkeletonCard'
 import { useState } from 'react'
 import { useParseRecipeFromUrl } from './useParseRecipe'
 import type { ParsedRecipe, RecipeSource } from './api'
@@ -50,6 +51,7 @@ export function ImportLinkTab({
         placeholder={t('importRecipeLinkPlaceholder')}
         className={`w-full px-3 py-2 text-sm ${fieldClass}`}
       />
+      {parseRecipe.isPending && <SkeletonCard />}
       <div className="flex justify-end gap-2">
         <button onClick={onClose} className={cancelButtonClass}>
           {t('cancel')}
