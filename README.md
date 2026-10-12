@@ -6,7 +6,9 @@ Shared shopping list → pantry → LLM meal suggestions, for a 2-person househo
 
 ## Promo
 
-[Watch the promo (dark and light themes)](docs/promo/fridger-promo-both.mp4)
+[![Fridger promo, dark and light themes](docs/promo/fridger-promo-preview.gif)](docs/promo/fridger-promo-both.mp4)
+
+Click the preview to watch the full video with sound.
 
 Separate versions: [dark](docs/promo/fridger-promo-dark.mp4), [light](docs/promo/fridger-promo-light.mp4)
 
