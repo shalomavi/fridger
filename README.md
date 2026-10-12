@@ -6,8 +6,9 @@ Shared shopping list → pantry → LLM meal suggestions, for a 2-person househo
 
 ## Promo
 
-- [Dark theme](docs/promo/fridger-promo-dark.mp4)
-- [Light theme](docs/promo/fridger-promo-light.mp4)
+[Watch the promo (dark and light themes)](docs/promo/fridger-promo-both.mp4)
+
+Separate versions: [dark](docs/promo/fridger-promo-dark.mp4), [light](docs/promo/fridger-promo-light.mp4)
 
 See `fridge-app-plan.md` for the architecture rationale and `CLAUDE.md` for the rules enforced during development.
 
