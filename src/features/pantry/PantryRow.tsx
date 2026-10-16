@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import type { PantryItem } from './api'
 import { useLanguage } from '@/features/household/useLanguage'
 import { DetailsEditor } from '@/shared/ui/DetailsEditor'
@@ -13,7 +13,6 @@ import type { Category } from '@/shared/categories'
 import type { Unit } from '@/domain/units'
 
 const SWIPE_THRESHOLD = 72
-const ROW_GAP = 12 // gap-x-3 in the name row
 
 /**
  * Swipe left to consume, or tap the "Used" button — the swipe alone isn't
@@ -44,34 +43,6 @@ export function PantryRow({
   const dragging = useRef<{ startX: number } | null>(null)
   const consumed = useRef(false)
   const soon = isExpiringSoon(item.expires_at)
-
-  // The action buttons share the name/quantity row when they fit beside it;
-  // when they don't, they join the category/expiry/details row instead of
-  // wrapping onto a line of their own. CSS can't pick between two rows, so
-  // this measures: name + quantity + buttons against the row's width.
-  const [buttonsInline, setButtonsInline] = useState(true)
-  const nameRowRef = useRef<HTMLDivElement>(null)
-  const nameRef = useRef<HTMLSpanElement>(null)
-  const quantityRef = useRef<HTMLSpanElement>(null)
-  const buttonsRef = useRef<HTMLDivElement>(null)
-  const buttonsWidth = useRef(72)
-  useLayoutEffect(() => {
-    const row = nameRowRef.current
-    const name = nameRef.current
-    const quantity = quantityRef.current
-    if (!row || !name || !quantity) return
-    function measure() {
-      if (buttonsRef.current) buttonsWidth.current = buttonsRef.current.offsetWidth
-      const needed = name!.offsetWidth + quantity!.offsetWidth + buttonsWidth.current + ROW_GAP * 2
-      setButtonsInline(needed <= row!.clientWidth)
-    }
-    measure()
-    const observer = new ResizeObserver(measure)
-    observer.observe(row)
-    observer.observe(name)
-    observer.observe(quantity)
-    return () => observer.disconnect()
-  }, [])
 
   function fireConsume() {
     if (consumed.current) return
@@ -118,7 +89,7 @@ export function PantryRow({
   }
 
   const actionButtons = (
-    <div ref={buttonsRef} className="ms-auto flex flex-none gap-2">
+    <div className="flex flex-none flex-col gap-2">
       <button
         onClick={onMoveToShopping}
         onPointerDown={(e) => e.stopPropagation()}
@@ -163,36 +134,34 @@ export function PantryRow({
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
         style={{ transform: `translateX(${dragX}px)` }}
-        className={`relative flex touch-pan-y flex-col gap-1.5 rounded-lg px-4 py-3 transition-transform duration-300 ${
+        className={`relative flex touch-pan-y items-stretch gap-3 rounded-lg px-4 py-3 transition-transform duration-300 ${
           soon ? 'bg-surface ring-1 ring-inset ring-warning-ring/40' : 'bg-surface'
         }`}
       >
-        <div ref={nameRowRef} className="flex flex-wrap items-center gap-x-3 gap-y-1">
-          <span
-            ref={nameRef}
-            className={`text-xl font-bold text-text ${isHebrewText(item.name) ? 'font-list-he' : 'font-list-en'}`}
-          >
-            {item.name}
-          </span>
-          <span ref={quantityRef} className="flex">
+        <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <span
+              className={`text-xl font-bold text-text ${isHebrewText(item.name) ? 'font-list-he' : 'font-list-en'}`}
+            >
+              {item.name}
+            </span>
             <QuantityEditor quantity={item.quantity} unit={item.unit} onSave={onUpdateQuantity} />
-          </span>
-          {buttonsInline && actionButtons}
+          </div>
+          <div className="flex items-center gap-3">
+            <CategoryPicker category={item.category} onSave={onUpdateCategory} />
+            <ExpiryEditor
+              expiresAt={item.expires_at}
+              onSave={onUpdateExpiry}
+              placeholder={t('expiryPlaceholder')}
+            />
+            <DetailsEditor
+              details={item.details}
+              onSave={onUpdateDetails}
+              placeholder={t('detailsPlaceholder')}
+            />
+          </div>
         </div>
-        <div className="flex items-center gap-3">
-          <CategoryPicker category={item.category} onSave={onUpdateCategory} />
-          <ExpiryEditor
-            expiresAt={item.expires_at}
-            onSave={onUpdateExpiry}
-            placeholder={t('expiryPlaceholder')}
-          />
-          <DetailsEditor
-            details={item.details}
-            onSave={onUpdateDetails}
-            placeholder={t('detailsPlaceholder')}
-          />
-          {!buttonsInline && actionButtons}
-        </div>
+        <div className="self-center">{actionButtons}</div>
       </div>
     </li>
   )
