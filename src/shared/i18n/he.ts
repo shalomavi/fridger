@@ -29,6 +29,7 @@ export const he: Record<keyof typeof en, string> = {
   checkedOff: 'סומן',
   pantryEmpty: 'המזווה ריק. קנו משהו וסמנו אותו.',
   used: 'נגמר',
+  moveToShoppingList: 'העבר לרשימת הקניות',
   suggestAMeal: 'הצעת ארוחה',
   thinking: 'חושב…',
   suggestError: 'לא הצלחנו לקבל הצעות כרגע. נסו שוב בעוד רגע.',

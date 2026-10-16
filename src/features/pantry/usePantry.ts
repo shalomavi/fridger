@@ -9,12 +9,14 @@ import {
   updatePantryItemExpiry,
   type PantryItem,
 } from './api'
+import { moveToShoppingList, undoMoveToShoppingList } from './moveToShopping'
 import type { Category } from '@/shared/categories'
 import type { Unit } from '@/domain/units'
 import { useLanguage } from '@/features/household/useLanguage'
 import { useToast } from '@/shared/alerts/ToastContext'
 import { itemConsumedToastContent } from '@/shared/alerts/itemConsumedToast'
 import { undoAction } from '@/shared/query/undoAction'
+import { itemMovedToastContent } from '@/shared/alerts/itemMovedToast'
 
 export const pantryQueryKey = (householdId: string) => ['pantry-items', householdId] as const
 
@@ -49,6 +51,36 @@ export function usePantry(householdId: string) {
     },
     onError: (_err, _id, context) => onMutationError(context),
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
+  })
+
+  // Not "used": the row is deleted (no consumed history) and re-created on
+  // the shopping list. The shopping cache key is spelled out here because
+  // importing shoppingQueryKey from useShoppingList would be a cycle.
+  const moveToShopping = useMutation({
+    mutationFn: (item: PantryItem) => moveToShoppingList(item),
+    onMutate: async (item) => {
+      await queryClient.cancelQueries({ queryKey: key })
+      const previous = queryClient.getQueryData<PantryItem[]>(key)
+      queryClient.setQueryData<PantryItem[]>(key, (items) => items?.filter((i) => i.id !== item.id))
+      return { previous }
+    },
+    onSuccess: (shoppingId, item, context) => {
+      const { message, icon } = itemMovedToastContent(item.name, 'shopping-list', t)
+      const onUndo = () =>
+        undoAction(
+          queryClient,
+          key,
+          context?.previous,
+          () => undoMoveToShoppingList(item, shoppingId),
+          () => notify(t('actionFailed'), 'error'),
+        )
+      notify(message, 'success', icon, onUndo, '/')
+    },
+    onError: (_err, _item, context) => onMutationError(context),
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: key })
+      queryClient.invalidateQueries({ queryKey: ['shopping-items', householdId] })
+    },
   })
 
   const updateDetails = useMutation({
@@ -111,7 +143,7 @@ export function usePantry(householdId: string) {
     onSettled: () => queryClient.invalidateQueries({ queryKey: key }),
   })
 
-  return { ...query, consume, updateDetails, updateQuantity, updateCategory, updateExpiry }
+  return { ...query, consume, moveToShopping, updateDetails, updateQuantity, updateCategory, updateExpiry }
 }
 
 export function useInvalidatePantry(householdId: string) {

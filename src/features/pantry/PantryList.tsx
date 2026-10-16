@@ -16,7 +16,7 @@ import { ScrollToTopButton } from '@/shared/ui/ScrollToTopButton'
 export function PantryList({ householdId }: { householdId: string }) {
   const { t } = useLanguage()
   const { data: household } = useHousehold()
-  const { data: items, isLoading, consume, updateDetails, updateQuantity, updateCategory, updateExpiry } =
+  const { data: items, isLoading, consume, moveToShopping, updateDetails, updateQuantity, updateCategory, updateExpiry } =
     usePantry(householdId)
   const [query, setQuery] = useState('')
 
@@ -57,6 +57,7 @@ export function PantryList({ householdId }: { householdId: string }) {
                   key={item.id}
                   item={item}
                   onConsume={() => consume.mutate(item.id)}
+                  onMoveToShopping={() => moveToShopping.mutate(item)}
                   onUpdateDetails={(details) => updateDetails.mutate({ id: item.id, details })}
                   onUpdateQuantity={(quantity, unit) => updateQuantity.mutate({ id: item.id, quantity, unit })}
                   onUpdateCategory={(category) => updateCategory.mutate({ id: item.id, category })}

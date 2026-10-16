@@ -7,6 +7,7 @@ import { CategoryPicker } from '@/shared/ui/CategoryPicker'
 import { ExpiryEditor } from '@/shared/ui/ExpiryEditor'
 import { isExpiringSoon } from '@/domain/expiry'
 import { isHebrewText } from '@/domain/script'
+import { ShoppingCartIcon } from '@/shared/ui/FormIcons'
 import { glowShadow, softButtonShadow } from '@/shared/ui/elevation'
 import type { Category } from '@/shared/categories'
 import type { Unit } from '@/domain/units'
@@ -22,6 +23,7 @@ const SWIPE_THRESHOLD = 72
 export function PantryRow({
   item,
   onConsume,
+  onMoveToShopping,
   onUpdateDetails,
   onUpdateQuantity,
   onUpdateCategory,
@@ -29,6 +31,7 @@ export function PantryRow({
 }: {
   item: PantryItem
   onConsume: () => void
+  onMoveToShopping: () => void
   onUpdateDetails: (details: string | null) => void
   onUpdateQuantity: (quantity: number, unit: Unit) => void
   onUpdateCategory: (category: Category | null) => void
@@ -120,9 +123,18 @@ export function PantryRow({
           </span>
           <QuantityEditor quantity={item.quantity} unit={item.unit} onSave={onUpdateQuantity} />
           <button
+            onClick={onMoveToShopping}
+            onPointerDown={(e) => e.stopPropagation()}
+            aria-label={t('moveToShoppingList')}
+            title={t('moveToShoppingList')}
+            className={`ms-auto flex-none rounded-md bg-surface-muted px-2 py-1 text-text-soft transition-transform duration-300 active:scale-95 ${softButtonShadow}`}
+          >
+            <ShoppingCartIcon className="size-4" />
+          </button>
+          <button
             onClick={startConsume}
             onPointerDown={(e) => e.stopPropagation()}
-            className={`ms-auto flex-none rounded-md bg-surface-muted px-2 py-1 text-xs text-text-soft transition-transform duration-300 active:scale-95 ${softButtonShadow}`}
+            className={`flex-none rounded-md bg-surface-muted px-2 py-1 text-xs text-text-soft transition-transform duration-300 active:scale-95 ${softButtonShadow}`}
           >
             {t('used')}
           </button>

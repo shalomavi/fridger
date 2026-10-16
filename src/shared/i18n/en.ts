@@ -25,6 +25,7 @@ export const en = {
   checkedOff: 'Checked off',
   pantryEmpty: 'The pantry is empty. Buy something and check it off.',
   used: 'Used',
+  moveToShoppingList: 'Move to shopping list',
   suggestAMeal: 'Suggest a meal',
   thinking: 'Thinking…',
   suggestError: "Couldn't get suggestions right now. Try again in a moment.",
