@@ -7,7 +7,7 @@ import { CategoryPicker } from '@/shared/ui/CategoryPicker'
 import { ExpiryEditor } from '@/shared/ui/ExpiryEditor'
 import { isExpiringSoon } from '@/domain/expiry'
 import { isHebrewText } from '@/domain/script'
-import { ShoppingCartIcon } from '@/shared/ui/FormIcons'
+import { ListChecksIcon, ShoppingCartIcon } from '@/shared/ui/FormIcons'
 import { glowShadow, softButtonShadow } from '@/shared/ui/elevation'
 import type { Category } from '@/shared/categories'
 import type { Unit } from '@/domain/units'
@@ -134,9 +134,11 @@ export function PantryRow({
           <button
             onClick={startConsume}
             onPointerDown={(e) => e.stopPropagation()}
-            className={`flex-none rounded-md bg-surface-muted px-2 py-1 text-xs text-text-soft transition-transform duration-300 active:scale-95 ${softButtonShadow}`}
+            aria-label={t('used')}
+            title={t('used')}
+            className={`flex-none rounded-md bg-surface-muted px-2 py-1 text-text-soft transition-transform duration-300 active:scale-95 ${softButtonShadow}`}
           >
-            {t('used')}
+            <ListChecksIcon className="size-4" />
           </button>
         </div>
         <div className="flex items-center gap-3">
