@@ -64,14 +64,14 @@ export function usePantry(householdId: string) {
       queryClient.setQueryData<PantryItem[]>(key, (items) => items?.filter((i) => i.id !== item.id))
       return { previous }
     },
-    onSuccess: (shoppingId, item, context) => {
+    onSuccess: (result, item, context) => {
       const { message, icon } = itemMovedToastContent(item.name, 'shopping-list', t)
       const onUndo = () =>
         undoAction(
           queryClient,
           key,
           context?.previous,
-          () => undoMoveToShoppingList(item, shoppingId),
+          () => undoMoveToShoppingList(item, result),
           () => notify(t('actionFailed'), 'error'),
         )
       notify(message, 'success', icon, onUndo, '/')
