@@ -205,7 +205,7 @@ export function PackageXIcon({ className }: { className?: string }) {
 // An arrow entering a shopping cart from the right edge: "send to the shopping
 // list". The cart is masked where the arrow crosses it, so the arrow reads
 // clearly at 16px instead of tangling with the cart's lines.
-const CART_ARROW = 'M23 17c0-4-3-6-11-6 M16 7l-4 4 4 4'
+const CART_ARROW = 'M22 16c0-3-2-5-8-5 M17 8l-3 3 3 3'
 
 export function ShoppingCartArrowIcon({ className }: { className?: string }) {
   return (
