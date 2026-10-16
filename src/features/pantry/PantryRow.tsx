@@ -7,7 +7,7 @@ import { CategoryPicker } from '@/shared/ui/CategoryPicker'
 import { ExpiryEditor } from '@/shared/ui/ExpiryEditor'
 import { isExpiringSoon } from '@/domain/expiry'
 import { isHebrewText } from '@/domain/script'
-import { PackageXIcon, ShoppingCartIcon } from '@/shared/ui/FormIcons'
+import { PackageXIcon, ShoppingCartArrowIcon } from '@/shared/ui/FormIcons'
 import { glowShadow, softButtonShadow } from '@/shared/ui/elevation'
 import type { Category } from '@/shared/categories'
 import type { Unit } from '@/domain/units'
@@ -97,7 +97,7 @@ export function PantryRow({
         title={t('moveToShoppingList')}
         className={`flex-none rounded-md bg-surface-muted px-2 py-1 text-text-soft transition-transform duration-300 active:scale-95 ${softButtonShadow}`}
       >
-        <ShoppingCartIcon className="size-4" />
+        <ShoppingCartArrowIcon className="size-4" />
       </button>
       <button
         onClick={startConsume}
