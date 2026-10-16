@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import type { PantryItem } from './api'
 import { useLanguage } from '@/features/household/useLanguage'
 import { DetailsEditor } from '@/shared/ui/DetailsEditor'
@@ -13,6 +13,7 @@ import type { Category } from '@/shared/categories'
 import type { Unit } from '@/domain/units'
 
 const SWIPE_THRESHOLD = 72
+const ROW_GAP = 12 // gap-x-3 in the name row
 
 /**
  * Swipe left to consume, or tap the "Used" button — the swipe alone isn't
@@ -43,6 +44,34 @@ export function PantryRow({
   const dragging = useRef<{ startX: number } | null>(null)
   const consumed = useRef(false)
   const soon = isExpiringSoon(item.expires_at)
+
+  // The action buttons share the name/quantity row when they fit beside it;
+  // when they don't, they join the category/expiry/details row instead of
+  // wrapping onto a line of their own. CSS can't pick between two rows, so
+  // this measures: name + quantity + buttons against the row's width.
+  const [buttonsInline, setButtonsInline] = useState(true)
+  const nameRowRef = useRef<HTMLDivElement>(null)
+  const nameRef = useRef<HTMLSpanElement>(null)
+  const quantityRef = useRef<HTMLSpanElement>(null)
+  const buttonsRef = useRef<HTMLDivElement>(null)
+  const buttonsWidth = useRef(72)
+  useLayoutEffect(() => {
+    const row = nameRowRef.current
+    const name = nameRef.current
+    const quantity = quantityRef.current
+    if (!row || !name || !quantity) return
+    function measure() {
+      if (buttonsRef.current) buttonsWidth.current = buttonsRef.current.offsetWidth
+      const needed = name!.offsetWidth + quantity!.offsetWidth + buttonsWidth.current + ROW_GAP * 2
+      setButtonsInline(needed <= row!.clientWidth)
+    }
+    measure()
+    const observer = new ResizeObserver(measure)
+    observer.observe(row)
+    observer.observe(name)
+    observer.observe(quantity)
+    return () => observer.disconnect()
+  }, [])
 
   function fireConsume() {
     if (consumed.current) return
@@ -88,6 +117,29 @@ export function PantryRow({
     }
   }
 
+  const actionButtons = (
+    <div ref={buttonsRef} className="ms-auto flex flex-none gap-2">
+      <button
+        onClick={onMoveToShopping}
+        onPointerDown={(e) => e.stopPropagation()}
+        aria-label={t('moveToShoppingList')}
+        title={t('moveToShoppingList')}
+        className={`flex-none rounded-md bg-surface-muted px-2 py-1 text-text-soft transition-transform duration-300 active:scale-95 ${softButtonShadow}`}
+      >
+        <ShoppingCartIcon className="size-4" />
+      </button>
+      <button
+        onClick={startConsume}
+        onPointerDown={(e) => e.stopPropagation()}
+        aria-label={t('used')}
+        title={t('used')}
+        className={`flex-none rounded-md bg-surface-muted px-2 py-1 text-text-soft transition-transform duration-300 active:scale-95 ${softButtonShadow}`}
+      >
+        <PackageXIcon className="size-4" />
+      </button>
+    </div>
+  )
+
   return (
     <li
       style={{ animation: leaving ? 'item-out 300ms ease-in forwards' : 'item-in 300ms ease-out' }}
@@ -115,38 +167,17 @@ export function PantryRow({
           soon ? 'bg-surface ring-1 ring-inset ring-warning-ring/40' : 'bg-surface'
         }`}
       >
-        {/* The buttons sit beside the name/quantity group, not inside its
-         * wrap flow: when that group would drop below ~10rem the buttons
-         * shrink and stack vertically instead of wrapping under the text. */}
-        <div className="flex items-start gap-3">
-          <div className="flex min-w-[10rem] flex-1 flex-wrap items-center gap-x-3 gap-y-1">
-            <span
-              className={`text-xl font-bold text-text ${isHebrewText(item.name) ? 'font-list-he' : 'font-list-en'}`}
-            >
-              {item.name}
-            </span>
+        <div ref={nameRowRef} className="flex flex-wrap items-center gap-x-3 gap-y-1">
+          <span
+            ref={nameRef}
+            className={`text-xl font-bold text-text ${isHebrewText(item.name) ? 'font-list-he' : 'font-list-en'}`}
+          >
+            {item.name}
+          </span>
+          <span ref={quantityRef} className="flex">
             <QuantityEditor quantity={item.quantity} unit={item.unit} onSave={onUpdateQuantity} />
-          </div>
-          <div className="flex flex-wrap justify-end gap-2">
-            <button
-              onClick={onMoveToShopping}
-              onPointerDown={(e) => e.stopPropagation()}
-              aria-label={t('moveToShoppingList')}
-              title={t('moveToShoppingList')}
-              className={`flex-none rounded-md bg-surface-muted px-2 py-1 text-text-soft transition-transform duration-300 active:scale-95 ${softButtonShadow}`}
-            >
-              <ShoppingCartIcon className="size-4" />
-            </button>
-            <button
-              onClick={startConsume}
-              onPointerDown={(e) => e.stopPropagation()}
-              aria-label={t('used')}
-              title={t('used')}
-              className={`flex-none rounded-md bg-surface-muted px-2 py-1 text-text-soft transition-transform duration-300 active:scale-95 ${softButtonShadow}`}
-            >
-              <PackageXIcon className="size-4" />
-            </button>
-          </div>
+          </span>
+          {buttonsInline && actionButtons}
         </div>
         <div className="flex items-center gap-3">
           <CategoryPicker category={item.category} onSave={onUpdateCategory} />
@@ -160,6 +191,7 @@ export function PantryRow({
             onSave={onUpdateDetails}
             placeholder={t('detailsPlaceholder')}
           />
+          {!buttonsInline && actionButtons}
         </div>
       </div>
     </li>
