@@ -202,15 +202,19 @@ export function PackageXIcon({ className }: { className?: string }) {
   )
 }
 
-// ShoppingCartIcon with an arrow dropping into the basket: "send to the cart".
+// An arrow pointing at a shopping cart: "send to the shopping list". The
+// arrow sits beside the cart rather than inside the basket, where it was
+// too small to read at 16px.
 export function ShoppingCartArrowIcon({ className }: { className?: string }) {
   return (
-    <svg {...SHARED_PROPS} className={className}>
-      <circle cx="8" cy="21" r="1" />
-      <circle cx="19" cy="21" r="1" />
-      <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
-      <path d="M13.5 5v6" />
-      <path d="m11 9 2.5 2.5L16 9" />
+    <svg {...SHARED_PROPS} width={24} viewBox="0 0 36 24" className={className}>
+      <path d="M2 12h9" />
+      <path d="m7 7 5 5-5 5" />
+      <g transform="translate(12 0)">
+        <circle cx="8" cy="21" r="1" />
+        <circle cx="19" cy="21" r="1" />
+        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+      </g>
     </svg>
   )
 }
