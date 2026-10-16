@@ -7,7 +7,7 @@ import { CategoryPicker } from '@/shared/ui/CategoryPicker'
 import { ExpiryEditor } from '@/shared/ui/ExpiryEditor'
 import { isExpiringSoon } from '@/domain/expiry'
 import { isHebrewText } from '@/domain/script'
-import { ListChecksIcon, ShoppingCartIcon } from '@/shared/ui/FormIcons'
+import { PackageXIcon, ShoppingCartIcon } from '@/shared/ui/FormIcons'
 import { glowShadow, softButtonShadow } from '@/shared/ui/elevation'
 import type { Category } from '@/shared/categories'
 import type { Unit } from '@/domain/units'
@@ -115,31 +115,38 @@ export function PantryRow({
           soon ? 'bg-surface ring-1 ring-inset ring-warning-ring/40' : 'bg-surface'
         }`}
       >
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-          <span
-            className={`text-xl font-bold text-text ${isHebrewText(item.name) ? 'font-list-he' : 'font-list-en'}`}
-          >
-            {item.name}
-          </span>
-          <QuantityEditor quantity={item.quantity} unit={item.unit} onSave={onUpdateQuantity} />
-          <button
-            onClick={onMoveToShopping}
-            onPointerDown={(e) => e.stopPropagation()}
-            aria-label={t('moveToShoppingList')}
-            title={t('moveToShoppingList')}
-            className={`ms-auto flex-none rounded-md bg-surface-muted px-2 py-1 text-text-soft transition-transform duration-300 active:scale-95 ${softButtonShadow}`}
-          >
-            <ShoppingCartIcon className="size-4" />
-          </button>
-          <button
-            onClick={startConsume}
-            onPointerDown={(e) => e.stopPropagation()}
-            aria-label={t('used')}
-            title={t('used')}
-            className={`flex-none rounded-md bg-surface-muted px-2 py-1 text-text-soft transition-transform duration-300 active:scale-95 ${softButtonShadow}`}
-          >
-            <ListChecksIcon className="size-4" />
-          </button>
+        {/* The buttons sit beside the name/quantity group, not inside its
+         * wrap flow: when that group would drop below ~10rem the buttons
+         * shrink and stack vertically instead of wrapping under the text. */}
+        <div className="flex items-start gap-3">
+          <div className="flex min-w-[10rem] flex-1 flex-wrap items-center gap-x-3 gap-y-1">
+            <span
+              className={`text-xl font-bold text-text ${isHebrewText(item.name) ? 'font-list-he' : 'font-list-en'}`}
+            >
+              {item.name}
+            </span>
+            <QuantityEditor quantity={item.quantity} unit={item.unit} onSave={onUpdateQuantity} />
+          </div>
+          <div className="flex flex-wrap justify-end gap-2">
+            <button
+              onClick={onMoveToShopping}
+              onPointerDown={(e) => e.stopPropagation()}
+              aria-label={t('moveToShoppingList')}
+              title={t('moveToShoppingList')}
+              className={`flex-none rounded-md bg-surface-muted px-2 py-1 text-text-soft transition-transform duration-300 active:scale-95 ${softButtonShadow}`}
+            >
+              <ShoppingCartIcon className="size-4" />
+            </button>
+            <button
+              onClick={startConsume}
+              onPointerDown={(e) => e.stopPropagation()}
+              aria-label={t('used')}
+              title={t('used')}
+              className={`flex-none rounded-md bg-surface-muted px-2 py-1 text-text-soft transition-transform duration-300 active:scale-95 ${softButtonShadow}`}
+            >
+              <PackageXIcon className="size-4" />
+            </button>
+          </div>
         </div>
         <div className="flex items-center gap-3">
           <CategoryPicker category={item.category} onSave={onUpdateCategory} />
