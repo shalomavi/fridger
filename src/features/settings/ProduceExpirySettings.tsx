@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { setHouseholdProduceExpiryDays } from '@/features/household/api'
 import { useHousehold, useInvalidateHousehold } from '@/features/household/useHousehold'
@@ -20,29 +20,33 @@ export function ProduceExpirySettings() {
   const invalidate = useInvalidateHousehold()
   const [days, setDays] = useState(0)
   const [text, setText] = useState('0')
-  const [dirty, setDirty] = useState(false)
+  const loaded = useRef(false)
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
 
+  // Take the server value once. After that the local value is the source of
+  // truth: re-syncing on every refetch would snap the stepper back to a stale
+  // value while quick taps are still being saved.
   useEffect(() => {
-    if (household && !dirty) {
+    if (household && !loaded.current) {
+      loaded.current = true
       setDays(household.produce_expiry_days)
       setText(String(household.produce_expiry_days))
     }
-  }, [household, dirty])
+  }, [household])
 
   const save = useMutation({
     mutationFn: (n: number) => setHouseholdProduceExpiryDays(household!.id, n),
-    onSuccess: async () => {
-      await invalidate()
-      setDirty(false)
-    },
+    onSuccess: () => invalidate(),
   })
 
+  // Taps update the display instantly; only the last value after a short
+  // pause is sent, so rapid taps can't race each other to the database.
   function commit(next: number) {
     setText(String(next))
     if (next === days) return
     setDays(next)
-    setDirty(true)
-    save.mutate(next)
+    clearTimeout(timer.current)
+    timer.current = setTimeout(() => save.mutate(next), 400)
   }
 
   function change(delta: -1 | 1) {
