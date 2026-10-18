@@ -45,7 +45,7 @@ export function ProduceExpirySettings() {
   return (
     <div className="flex items-center justify-between gap-4 rounded-lg bg-surface px-4 py-3">
       <div className="min-w-0">
-        <p className="text-text">{t('produceExpiryLabel')}</p>
+        <p className="text-text">{t('category_produce')}</p>
         <p className="text-xs text-text-muted">{t('produceExpiryHint')}</p>
       </div>
       <div className="flex shrink-0 items-center gap-3" dir="ltr">
