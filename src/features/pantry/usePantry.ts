@@ -36,8 +36,11 @@ export function usePantry(householdId: string) {
     mutationFn: consumeItem,
     // Optimistic: the whole point is that removing something feels as fast
     // as the swipe itself, so the list matches reality without a beat of lag.
-    onMutate: async (id) => {
-      await queryClient.cancelQueries({ queryKey: key })
+    // cancelQueries is deliberately not awaited (here and in moveToShopping):
+    // the Supabase fetch ignores abort signals, so awaiting it would hold the
+    // row on screen until an in-flight poll finished its network round trip.
+    onMutate: (id) => {
+      void queryClient.cancelQueries({ queryKey: key })
       const previous = queryClient.getQueryData<PantryItem[]>(key)
       queryClient.setQueryData<PantryItem[]>(key, (items) => items?.filter((i) => i.id !== id))
       const item = previous?.find((i) => i.id === id)
@@ -58,8 +61,8 @@ export function usePantry(householdId: string) {
   // importing shoppingQueryKey from useShoppingList would be a cycle.
   const moveToShopping = useMutation({
     mutationFn: (item: PantryItem) => moveToShoppingList(item),
-    onMutate: async (item) => {
-      await queryClient.cancelQueries({ queryKey: key })
+    onMutate: (item) => {
+      void queryClient.cancelQueries({ queryKey: key })
       const previous = queryClient.getQueryData<PantryItem[]>(key)
       queryClient.setQueryData<PantryItem[]>(key, (items) => items?.filter((i) => i.id !== item.id))
       return { previous }
