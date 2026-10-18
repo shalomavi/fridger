@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   consumeItem,
@@ -9,7 +10,7 @@ import {
   updatePantryItemExpiry,
   type PantryItem,
 } from './api'
-import { moveToShoppingList, undoMoveToShoppingList } from './moveToShopping'
+import { moveToShoppingList, undoMoveToShoppingList, type MoveResult } from './moveToShopping'
 import type { Category } from '@/shared/categories'
 import type { Unit } from '@/domain/units'
 import { useLanguage } from '@/features/household/useLanguage'
@@ -59,25 +60,37 @@ export function usePantry(householdId: string) {
   // Not "used": the row is deleted (no consumed history) and re-created on
   // the shopping list. The shopping cache key is spelled out here because
   // importing shoppingQueryKey from useShoppingList would be a cycle.
+  const moveResults = useRef(new Map<string, Promise<MoveResult>>())
   const moveToShopping = useMutation({
-    mutationFn: (item: PantryItem) => moveToShoppingList(item),
+    mutationFn: (item: PantryItem) => {
+      const result = moveToShoppingList(item)
+      moveResults.current.set(item.id, result)
+      return result
+    },
+    // Row and toast appear on tap; the write (several round trips) finishes
+    // behind them. Undo waits for that write's result if it's still running.
     onMutate: (item) => {
       void queryClient.cancelQueries({ queryKey: key })
       const previous = queryClient.getQueryData<PantryItem[]>(key)
       queryClient.setQueryData<PantryItem[]>(key, (items) => items?.filter((i) => i.id !== item.id))
-      return { previous }
-    },
-    onSuccess: (result, item, context) => {
       const { message, icon } = itemMovedToastContent(item.name, 'shopping-list', t)
-      const onUndo = () =>
-        undoAction(
-          queryClient,
-          key,
-          context?.previous,
-          () => undoMoveToShoppingList(item, result),
-          () => notify(t('actionFailed'), 'error'),
-        )
+      const onUndo = () => {
+        // A failed move already rolled back and toasted; nothing left to undo.
+        moveResults.current
+          .get(item.id)
+          ?.then((r) =>
+            undoAction(
+              queryClient,
+              key,
+              previous,
+              () => undoMoveToShoppingList(item, r),
+              () => notify(t('actionFailed'), 'error'),
+            ),
+          )
+          .catch(() => {})
+      }
       notify(message, 'success', icon, onUndo, '/')
+      return { previous }
     },
     onError: (_err, _item, context) => onMutationError(context),
     onSettled: () => {
