@@ -25,10 +25,11 @@ export type NewPantryItem = {
   quantity: number
   unit: Unit
   source_item_id: string
+  expires_at: string | null
   status: 'available'
 }
 
-export function purchaseItem(item: PurchasableItem): NewPantryItem {
+export function purchaseItem(item: PurchasableItem, expiresAt: string | null = null): NewPantryItem {
   return {
     household_id: item.household_id,
     name: item.name,
@@ -37,6 +38,7 @@ export function purchaseItem(item: PurchasableItem): NewPantryItem {
     quantity: item.quantity,
     unit: item.unit,
     source_item_id: item.id,
+    expires_at: expiresAt,
     status: 'available',
   }
 }

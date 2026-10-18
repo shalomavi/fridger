@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { isExpiringSoon, daysUntil, toDateInputValue, formatDateDisplay } from './expiry'
+import { defaultExpiry, isExpiringSoon, daysUntil, toDateInputValue, formatDateDisplay } from './expiry'
 
 const NOW = new Date('2026-08-21T12:00:00Z')
 
@@ -52,5 +52,22 @@ describe('formatDateDisplay', () => {
 
   it('handles a full timestamptz string the same way', () => {
     expect(formatDateDisplay('2026-09-01T00:00:00+00:00')).toBe('01/09/2026')
+  })
+})
+
+describe('defaultExpiry', () => {
+  const now = new Date(2026, 9, 28, 12)
+
+  it('adds the household days to today for produce', () => {
+    expect(defaultExpiry('produce', 7, now)).toBe('2026-11-04')
+  })
+
+  it('gives nothing to other categories or uncategorised items', () => {
+    expect(defaultExpiry('dairy', 7, now)).toBeNull()
+    expect(defaultExpiry(null, 7, now)).toBeNull()
+  })
+
+  it('is off when days is 0', () => {
+    expect(defaultExpiry('produce', 0, now)).toBeNull()
   })
 })

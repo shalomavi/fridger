@@ -1,4 +1,4 @@
-// Duplicated from src/domain/{normalize,units,mergeQuantity,mergeDetails,purchaseItem}.ts
+// Duplicated from src/domain/{normalize,units,mergeQuantity,mergeDetails,purchaseItem,expiry}.ts
 // and src/shared/categories.ts's CATEGORIES — importing across the module
 // graph boundary doesn't work here: those files (or their siblings, in
 // categories.ts's case, since src/shared/i18n does the same thing) use
@@ -76,7 +76,15 @@ export type PurchasableItem = {
   unit: Unit
 }
 
-export function purchaseItem(item: PurchasableItem) {
+export function defaultExpiry(category: string | null, produceExpiryDays: number, now: Date = new Date()): string | null {
+  if (category !== 'produce' || produceExpiryDays <= 0) return null
+  const d = new Date(now)
+  d.setDate(d.getDate() + produceExpiryDays)
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
+}
+
+export function purchaseItem(item: PurchasableItem, expiresAt: string | null = null) {
   return {
     household_id: item.household_id,
     name: item.name,
@@ -85,6 +93,7 @@ export function purchaseItem(item: PurchasableItem) {
     quantity: item.quantity,
     unit: item.unit,
     source_item_id: item.id,
+    expires_at: expiresAt,
     status: 'available' as const,
   }
 }

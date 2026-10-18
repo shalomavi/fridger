@@ -15,6 +15,20 @@ export function daysUntil(expiresAt: string, now: Date = new Date()): number {
   return Math.ceil(diffMs / (1000 * 60 * 60 * 24))
 }
 
+/** Date-only expiry ('YYYY-MM-DD') for a newly bought item: only produce gets a
+ * default, and only when the household's days setting is above 0. */
+export function defaultExpiry(
+  category: string | null,
+  produceExpiryDays: number,
+  now: Date = new Date(),
+): string | null {
+  if (category !== 'produce' || produceExpiryDays <= 0) return null
+  const d = new Date(now)
+  d.setDate(d.getDate() + produceExpiryDays)
+  const pad = (n: number) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
+}
+
 /** Postgres returns timestamptz as a full ISO string ('2026-09-01T00:00:00+00:00'),
  * but <input type="date"> requires exactly 'YYYY-MM-DD' or it silently shows
  * blank instead of the saved value. Both this and the display format below

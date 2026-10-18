@@ -1,7 +1,7 @@
 import type { McpServer } from '@modelcontextprotocol/server'
 import * as z from 'zod/v4'
 import { admin } from '../auth.ts'
-import { isSameIngredient, mergeQuantity, mergeDetails, purchaseItem, type Unit } from '../domain.ts'
+import { isSameIngredient, mergeQuantity, mergeDetails, purchaseItem, defaultExpiry, type Unit } from '../domain.ts'
 
 /** Mirrors src/features/shopping/purchase.ts's markPurchased with the admin
  * client instead of the user-session client — same merge-into-an-existing-
@@ -42,7 +42,13 @@ export function registerPurchaseTool(server: McpServer, householdId: string) {
           .eq('id', match.id)
         if (error) throw new Error('Could not update pantry')
       } else {
-        const { error } = await admin.from('pantry_items').insert(purchaseItem(item))
+        const { data: household } = await admin
+          .from('households')
+          .select('produce_expiry_days')
+          .eq('id', householdId)
+          .single()
+        const expiresAt = defaultExpiry(item.category, household?.produce_expiry_days ?? 0)
+        const { error } = await admin.from('pantry_items').insert(purchaseItem(item, expiresAt))
         if (error) throw new Error('Could not add to pantry')
       }
 

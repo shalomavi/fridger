@@ -51,6 +51,8 @@ export const he: Record<keyof typeof en, string> = {
   preferencesLabel: 'העדפות משק הבית',
   preferencesPlaceholder: 'אלרגיות, מאכלים שלא אוהבים, כשר/צמחוני, "אין תנור"…',
   save: 'שמירה',
+  produceExpiryLabel: 'תפוגה ברירת מחדל לירקות ופירות (ימים מהקנייה, 0 = ללא)',
+  produceExpirySaved: 'תפוגת ברירת המחדל נשמרה',
   preferencesSaved: 'ההעדפות נשמרו',
   expiryPlaceholder: 'תפוגה +',
   expiresOn: 'בתוקף עד',

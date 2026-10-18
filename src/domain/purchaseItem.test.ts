@@ -21,6 +21,7 @@ describe('purchaseItem', () => {
       quantity: 2,
       unit: 'count',
       source_item_id: 'shop-1',
+      expires_at: null,
       status: 'available',
     })
   })
@@ -37,6 +38,15 @@ describe('purchaseItem', () => {
     })
 
     expect(pantryItem.details).toBeNull()
+  })
+
+  it('stamps the expiry the caller computed', () => {
+    const pantryItem = purchaseItem(
+      { id: 's', household_id: 'h', name: 'Cucumber', details: null, category: 'produce', quantity: 1, unit: 'count' },
+      '2026-10-25',
+    )
+
+    expect(pantryItem.expires_at).toBe('2026-10-25')
   })
 
   it('links back to the shopping item it came from, so undo can find it', () => {

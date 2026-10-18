@@ -1,5 +1,6 @@
 import { supabase } from '@/shared/supabase'
 import { purchaseItem } from '@/domain/purchaseItem'
+import { defaultExpiry } from '@/domain/expiry'
 import { isSameIngredient } from '@/domain/normalize'
 import { mergeDetails } from '@/domain/mergeDetails'
 import { mergeQuantity } from '@/domain/mergeQuantity'
@@ -48,7 +49,13 @@ export async function markPurchased(item: ShoppingItem): Promise<void> {
       .eq('id', match.id)
     if (error) throw error
   } else {
-    const { error: pantryError } = await supabase.from('pantry_items').insert(purchaseItem(item))
+    const { data: household } = await supabase
+      .from('households')
+      .select('produce_expiry_days')
+      .eq('id', item.household_id)
+      .single()
+    const expiresAt = defaultExpiry(item.category, household?.produce_expiry_days ?? 0)
+    const { error: pantryError } = await supabase.from('pantry_items').insert(purchaseItem(item, expiresAt))
     if (pantryError) throw pantryError
   }
 

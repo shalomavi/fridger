@@ -9,9 +9,10 @@ export type Household = {
   preferences: string | null
   category_order: string[] | null
   meal_types: MealType[]
+  produce_expiry_days: number
 }
 
-export const HOUSEHOLD_COLUMNS = 'id, name, language, preferences, category_order, meal_types'
+export const HOUSEHOLD_COLUMNS = 'id, name, language, preferences, category_order, meal_types, produce_expiry_days'
 
 /** The caller's household, or null if they haven't created/joined one yet. */
 export async function getMyHousehold(): Promise<Household | null> {
@@ -58,6 +59,15 @@ export async function setHouseholdCategoryOrder(
   const { error } = await supabase
     .from('households')
     .update({ category_order: categoryOrder })
+    .eq('id', householdId)
+  if (error) throw error
+}
+
+/** Days a bought produce item stays good by default; 0 disables the default expiry. */
+export async function setHouseholdProduceExpiryDays(householdId: string, days: number): Promise<void> {
+  const { error } = await supabase
+    .from('households')
+    .update({ produce_expiry_days: days })
     .eq('id', householdId)
   if (error) throw error
 }

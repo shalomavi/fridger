@@ -47,6 +47,8 @@ export const en = {
   preferencesLabel: 'Household preferences',
   preferencesPlaceholder: 'Allergies, dislikes, kosher/vegetarian, "no oven"…',
   save: 'Save',
+  produceExpiryLabel: 'Default expiry for veggies & fruit (days after buying, 0 = none)',
+  produceExpirySaved: 'Default expiry saved',
   preferencesSaved: 'Preferences saved',
   expiryPlaceholder: 'expiry +',
   expiresOn: 'Expires',
