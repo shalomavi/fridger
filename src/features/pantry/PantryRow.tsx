@@ -8,7 +8,8 @@ import { ExpiryEditor } from '@/shared/ui/ExpiryEditor'
 import { isExpiringSoon } from '@/domain/expiry'
 import { isHebrewText } from '@/domain/script'
 import { PackageXIcon, ShoppingCartArrowIcon } from '@/shared/ui/FormIcons'
-import { glowShadow, softButtonShadow } from '@/shared/ui/elevation'
+import { glowShadow, pantryActionShadow } from '@/shared/ui/elevation'
+import { useTheme } from '@/shared/useTheme'
 import type { Category } from '@/shared/categories'
 import type { Unit } from '@/domain/units'
 
@@ -38,6 +39,7 @@ export function PantryRow({
   onUpdateExpiry: (expiresAt: string | null) => void
 }) {
   const { t } = useLanguage()
+  const { theme } = useTheme()
   const [dragX, setDragX] = useState(0)
   const [leaving, setLeaving] = useState(false)
   const dragging = useRef<{ startX: number } | null>(null)
@@ -95,7 +97,7 @@ export function PantryRow({
         onPointerDown={(e) => e.stopPropagation()}
         aria-label={t('moveToShoppingList')}
         title={t('moveToShoppingList')}
-        className={`flex-none rounded-md bg-action-surface px-2 py-1 text-text-soft transition-transform duration-300 active:scale-95 ${softButtonShadow}`}
+        className={`flex-none rounded-md bg-action-surface px-2 py-1 text-text-soft transition-transform duration-300 active:scale-95 ${pantryActionShadow[theme]}`}
       >
         <ShoppingCartArrowIcon className="size-4" />
       </button>
@@ -104,7 +106,7 @@ export function PantryRow({
         onPointerDown={(e) => e.stopPropagation()}
         aria-label={t('used')}
         title={t('used')}
-        className={`flex-none rounded-md bg-action-surface px-2 py-1 text-text-soft transition-transform duration-300 active:scale-95 ${softButtonShadow}`}
+        className={`flex-none rounded-md bg-action-surface px-2 py-1 text-text-soft transition-transform duration-300 active:scale-95 ${pantryActionShadow[theme]}`}
       >
         <PackageXIcon className="size-4" />
       </button>

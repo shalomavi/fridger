@@ -78,3 +78,12 @@ export const pressedShadow = 'shadow-[inset_0_3px_6px_rgba(0,0,0,0.45),inset_0_1
  * hardcoded teal rgba, so the glow follows the token if it's ever
  * retheme'd instead of silently going stale. */
 export const glowShadow = 'shadow-[0_0_14px_color-mix(in_srgb,var(--color-primary)_35%,transparent)]'
+
+/** softButtonShadow for the PantryRow action buttons: light theme gets a much
+ * lighter outward cast, since the white fill already stands out on the row;
+ * dark keeps softButtonShadow. Full literals for the same Tailwind-scanner
+ * reason as softButtonShadow. */
+export const pantryActionShadow: Record<Theme, string> = {
+  light: 'shadow-[inset_0_-2px_0_rgba(0,0,0,0.12),0_1px_3px_rgba(0,0,0,0.1),0_4px_10px_rgba(0,0,0,0.1)]',
+  dark: softButtonShadow,
+}
