@@ -95,7 +95,7 @@ export function PantryRow({
         onPointerDown={(e) => e.stopPropagation()}
         aria-label={t('moveToShoppingList')}
         title={t('moveToShoppingList')}
-        className={`flex-none rounded-md bg-surface-muted px-2 py-1 text-text-soft transition-transform duration-300 active:scale-95 ${softButtonShadow}`}
+        className={`flex-none rounded-md bg-action-surface px-2 py-1 text-text-soft transition-transform duration-300 active:scale-95 ${softButtonShadow}`}
       >
         <ShoppingCartArrowIcon className="size-4" />
       </button>
@@ -104,7 +104,7 @@ export function PantryRow({
         onPointerDown={(e) => e.stopPropagation()}
         aria-label={t('used')}
         title={t('used')}
-        className={`flex-none rounded-md bg-surface-muted px-2 py-1 text-text-soft transition-transform duration-300 active:scale-95 ${softButtonShadow}`}
+        className={`flex-none rounded-md bg-action-surface px-2 py-1 text-text-soft transition-transform duration-300 active:scale-95 ${softButtonShadow}`}
       >
         <PackageXIcon className="size-4" />
       </button>
